@@ -23,7 +23,7 @@ function observe(el: Element) {
   observer.observe(el);
 }
 
-type Variant = "up" | "fade" | "left" | "scale";
+type Variant = "up" | "fade" | "left" | "right" | "scale";
 
 export default function Reveal({
   children,
@@ -66,6 +66,23 @@ export default function Reveal({
       {children}
     </T>
   );
+}
+
+/** Mark the direct children of an element for a staggered reveal (for components that own their ref). */
+export function revealChildren(el: HTMLElement, variant: Variant = "up", stagger = 90) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};
+  el.classList.add("reveal-group");
+  el.style.setProperty("--stagger", `${stagger}ms`);
+  const pending: HTMLElement[] = [];
+  Array.from(el.children).forEach((k, i) => {
+    const kid = k as HTMLElement;
+    kid.style.setProperty("--i", String(i));
+    if (kid.getBoundingClientRect().top < window.innerHeight * 0.9) return;
+    kid.classList.add("reveal-pending", `reveal-${variant}`);
+    observe(kid);
+    pending.push(kid);
+  });
+  return () => pending.forEach((k) => observer?.unobserve(k));
 }
 
 /** Observes its own direct children; each gets an --i index for CSS stagger via .reveal-group. */

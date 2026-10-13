@@ -5,6 +5,7 @@ import FAQ from "@/components/FAQ";
 import JsonLd from "@/components/JsonLd";
 import MomentsRow from "@/components/MomentsRow";
 import OwnersList from "@/components/OwnersList";
+import Parallax from "@/components/Parallax";
 import Picture, { pictureAttrs } from "@/components/Picture";
 import Reveal, { RevealGroup } from "@/components/Reveal";
 import WorkStrips from "@/components/WorkStrips";
@@ -32,15 +33,18 @@ export default function Home() {
       <section className="hero relative overflow-x-clip bg-bg">
         <div className="hero-stage wrap grid12 items-end">
           <div className="hero-photo" aria-hidden="true">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              {...pictureAttrs(heroPhoto)}
-              sizes="100vw"
-              alt=""
-              fetchPriority="high"
-              decoding="async"
-              className="h-full w-full object-cover object-[50%_35%]"
-            />
+            <Parallax />
+            <div className="hero-photo-move">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                {...pictureAttrs(heroPhoto)}
+                sizes="100vw"
+                alt=""
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover object-[50%_35%]"
+              />
+            </div>
           </div>
           {/* The door is the lit object; its threshold rests on the page, its top stands in the photograph. */}
           <div className="relative col-span-12 flex justify-center lg:col-span-5 lg:col-start-6">
@@ -99,7 +103,7 @@ export default function Home() {
           <div key={f.id} className="relative bg-surface md:h-[100svh] md:overflow-hidden">
             <div className="relative h-[62svh] overflow-hidden md:absolute md:inset-0 md:h-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.62) contrast(1.05)" }} />
+              <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="drift-img absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.62) contrast(1.05)" }} />
             </div>
             {/* On the phone the card stands across the bottom edge of the picture, as the door does in the hero. */}
             <div className="wrap relative -mt-[18svh] pb-12 md:mt-0 md:grid md:h-full md:grid-cols-4 md:items-center md:gap-[var(--spacing-gutter)] md:pb-0">

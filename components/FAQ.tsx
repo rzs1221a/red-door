@@ -1,9 +1,10 @@
 import type { Faq } from "@/lib/faq";
+import { RevealGroup } from "./Reveal";
 
 // Questions as an accordion with no lines: 28px of space between rows, a chevron drawn from two strokes.
 export default function FAQ({ items }: { items: Faq[] }) {
   return (
-    <div className="space-y-7">
+    <RevealGroup className="space-y-7" stagger={70}>
       {items.map((f) => (
         <details key={f.q} className="faq" name="faq">
           <summary className="leading-tight">
@@ -17,6 +18,6 @@ export default function FAQ({ items }: { items: Faq[] }) {
           </div>
         </details>
       ))}
-    </div>
+    </RevealGroup>
   );
 }

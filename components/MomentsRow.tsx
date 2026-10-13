@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Picture from "./Picture";
+import { revealChildren } from "./Reveal";
 import { ArrowLeft, ArrowRight } from "./icons";
 import type { Photo } from "@/lib/projects";
 
@@ -29,11 +30,13 @@ export default function MomentsRow({
       setAtEnd(el.scrollLeft > max - 4);
     };
     update();
+    const undo = revealChildren(el, "up", 80);
     el.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     return () => {
       el.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
+      undo();
     };
   }, []);
 

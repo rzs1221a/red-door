@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Photo } from "@/lib/projects";
 import { pictureAttrs } from "./Picture";
+import { revealChildren } from "./Reveal";
 
 type Owner = { name: string; service: string; text: string; photo: Photo };
 
@@ -12,6 +13,8 @@ export default function OwnersList({ heading, owners }: { heading: string; owner
   const [active, setActive] = useState(0);
   const rows = useRef<(HTMLLIElement | null)[]>([]);
   const hovering = useRef(false);
+  const list = useRef<HTMLUListElement>(null);
+  useEffect(() => (list.current ? revealChildren(list.current, "up", 70) : undefined), []);
 
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return;
@@ -49,7 +52,7 @@ export default function OwnersList({ heading, owners }: { heading: string; owner
           </div>
         </div>
         <div className="col-span-12 pt-10 md:col-span-5 md:col-start-7 md:row-start-2 md:pt-0">
-          <ul onMouseEnter={() => (hovering.current = true)} onMouseLeave={() => (hovering.current = false)}>
+          <ul ref={list} onMouseEnter={() => (hovering.current = true)} onMouseLeave={() => (hovering.current = false)}>
             {owners.map((o, i) => (
               <li
                 key={o.name}
@@ -65,7 +68,7 @@ export default function OwnersList({ heading, owners }: { heading: string; owner
                   onClick={() => setActive(i)}
                   onFocus={() => setActive(i)}
                   aria-expanded={i === active}
-                  className={`flex w-full flex-col items-start gap-0.5 text-left md:flex-row md:items-baseline md:justify-between md:gap-6 ${i === active ? "text-ink" : "text-muted"}`}
+                  className={`flex w-full flex-col items-start gap-0.5 text-left transition-colors duration-200 md:flex-row md:items-baseline md:justify-between md:gap-6 ${i === active ? "text-ink" : "text-muted"}`}
                 >
                   <span className="lead">{o.name}</span>
                   <span className="small shrink-0 text-muted md:text-right">{o.service}</span>

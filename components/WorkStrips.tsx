@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { revealChildren } from "./Reveal";
 import type { Strip } from "@/lib/home";
 import { pictureAttrs } from "./Picture";
 
@@ -8,6 +9,8 @@ import { pictureAttrs } from "./Picture";
 export default function WorkStrips({ strips, title ="Projects" }: { strips: Strip[]; title?: string }) {
   const [filter, setFilter] = useState<"all" |"residential" |"commercial">("all");
   const shown = strips.filter((s) => filter ==="all" || s.kind === filter);
+  const list = useRef<HTMLDivElement>(null);
+  useEffect(() => (list.current ? revealChildren(list.current, "right", 110) : undefined), []);
   const filters: { id: typeof filter; label: string }[] = [
     { id: "all", label: "All" },
     { id: "residential", label: "Residential" },
@@ -33,7 +36,7 @@ export default function WorkStrips({ strips, title ="Projects" }: { strips: Stri
           </p>
         </div>
       </div>
-      <div className="strips space-y-11 overflow-hidden">
+      <div ref={list} className="strips space-y-11 overflow-hidden">
         {shown.map((s) => (
           <article key={s.name} className="strip-row">
             <div className="strip ph">

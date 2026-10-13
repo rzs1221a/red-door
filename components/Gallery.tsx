@@ -89,7 +89,7 @@ export default function Gallery({
           if (e.target === dialogRef.current) close();
         }}
         aria-label="Photo viewer"
-        className="m-auto h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-ink"
+        className="viewer m-auto h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-ink"
       >
         {current && (
           <div className="flex h-full flex-col">

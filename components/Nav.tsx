@@ -66,7 +66,7 @@ export default function Nav() {
         aria-label="Menu"
         onClose={onClose}
         onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
-        className="m-0 h-dvh max-h-none w-full max-w-none bg-bg p-0 text-ink"
+        className="sheet m-0 h-dvh max-h-none w-full max-w-none bg-bg p-0 text-ink"
       >
         <div className="wrap flex h-full flex-col pb-8 pt-4">
           <div className="flex h-16 items-center justify-between">

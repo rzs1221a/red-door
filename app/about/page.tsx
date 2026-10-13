@@ -1,5 +1,6 @@
 import JsonLd from "@/components/JsonLd";
 import Picture from "@/components/Picture";
+import CountUp from "@/components/CountUp";
 import Reveal, { RevealGroup } from "@/components/Reveal";
 import { ButtonLink, TextLink } from "@/components/ui";
 import { site } from "@/lib/site";
@@ -49,7 +50,7 @@ export default function About() {
             { n: "2", t: "renovation-of-the-year awards" },
           ].map((s) => (
             <div key={s.t}>
-              <p className="display max-w-none" style={{ fontSize: "clamp(4.5rem, 2rem + 8vw, 9rem)" }}>{s.n}</p>
+              <CountUp value={s.n} className="display max-w-none" style={{ fontSize: "clamp(4.5rem, 2rem + 8vw, 9rem)" }} />
               <p className="mt-3 max-w-[22ch] text-muted">{s.t}</p>
             </div>
           ))}

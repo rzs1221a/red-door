@@ -195,6 +195,10 @@ b {
 @media (hover: hover) and (pointer: fine) {
   .btn:hover {
     background: var(--color-accent-strong);
+    transform: translateY(-1px);
+  }
+  .btn:hover:active {
+    transform: scale(0.97);
   }
   .btn--light:hover,
   .btn--ink:hover {
@@ -209,16 +213,23 @@ b {
   color: inherit;
   text-decoration: underline;
   text-decoration-color: transparent;
-  transition: text-decoration-color 180ms ease;
+  text-underline-offset: 0.42em;
+  text-decoration-thickness: 0.07em;
+  transition:
+    text-decoration-color 180ms ease,
+    text-underline-offset 240ms var(--ease-out),
+    color 180ms ease;
 }
 @media (hover: hover) and (pointer: fine) {
   .link:hover {
     text-decoration-color: currentColor;
+    text-underline-offset: 0.2em;
   }
 }
 .link-on,
 .link:active {
   text-decoration-color: currentColor;
+  text-underline-offset: 0.2em;
 }
 a,
 button {
@@ -248,8 +259,22 @@ button {
   cursor: pointer;
   transition: transform 140ms var(--ease-out), background-color 180ms ease;
 }
+.square-btn svg {
+  transition: transform 180ms var(--ease-out);
+}
 .square-btn:active {
   transform: scale(0.95);
+}
+@media (hover: hover) and (pointer: fine) {
+  .square-btn:not(:disabled):hover {
+    background: #ffffff;
+  }
+  .square-btn[aria-label^="Later"]:not(:disabled):hover svg {
+    transform: translateX(3px);
+  }
+  .square-btn[aria-label^="Earlier"]:not(:disabled):hover svg {
+    transform: translateX(-3px);
+  }
 }
 .square-btn:disabled {
   background: var(--color-surface);
@@ -267,6 +292,12 @@ button {
   padding: 0.85em 1em;
   font: inherit;
   font-size: var(--text-body);
+}
+.field {
+  transition: background-color 180ms ease, outline-color 180ms ease;
+}
+.field:focus-visible {
+  background: #223236;
 }
 .field::placeholder {
   color: var(--color-muted);
@@ -528,6 +559,124 @@ body.scroll-locked {
       to {
         transform: translateY(5%) scale(1.1);
       }
+    }
+  }
+}
+
+/* ---------- Motion: feedback under the hand, pictures that answer, pages that arrive ---------- */
+/* Pictures inside links, buttons, strips and the drag row settle closer when hovered. */
+.ph img {
+  transition: transform 700ms var(--ease-soft), opacity 300ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  a .ph img,
+  button .ph img,
+  .row-scroll li:hover .ph img {
+    transform: scale(1);
+  }
+  a:hover .ph img,
+  button:hover .ph img,
+  .row-scroll li:hover .ph img,
+  .strip-row:hover .strip img {
+    transform: scale(1.035);
+  }
+}
+.strip img {
+  transition: opacity 300ms ease, transform 700ms var(--ease-soft);
+}
+/* The door's caption crosses over when the room changes. */
+.door-caption-line {
+  display: block;
+  animation: fade-in 700ms ease both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* The hero picture answers the pointer by a few pixels, and sinks as the first screen leaves. */
+.hero-photo-move {
+  position: absolute;
+  inset: -3%;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  .hero-photo-move {
+    transform: translate3d(calc(var(--px, 0) * -14px), calc(var(--py, 0) * -10px), 0);
+    transition: transform 900ms var(--ease-soft);
+  }
+  /* Every page arrives with a short fade. */
+  .js .page-enter {
+    animation: page-in 500ms var(--ease-out) both;
+  }
+  @keyframes page-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  /* Sheets and the viewer open from where they came. */
+  dialog.sheet[open] {
+    transform-origin: top right;
+    animation: sheet-in 320ms var(--ease-out) both;
+  }
+  dialog.viewer[open] {
+    animation: viewer-in 320ms var(--ease-out) both;
+  }
+  dialog[open]::backdrop {
+    animation: fade-in 320ms ease both;
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97) translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes viewer-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .reveal-pending.reveal-right {
+    transform: translateX(32px);
+  }
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-photo img {
+      animation: hero-sink linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100svh;
+    }
+    @keyframes hero-sink {
+      from {
+        transform: translateY(0) scale(1.04);
+      }
+      to {
+        transform: translateY(10%) scale(1.04);
+      }
+    }
+    .drift-img {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
     }
   }
 }

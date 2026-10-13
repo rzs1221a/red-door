@@ -221,7 +221,11 @@ export default function DoorScene({
           </div>
           <div className="door-threshold" aria-hidden="true" />
         </div>
-        {caption && <figcaption className="door-caption small">{line}</figcaption>}
+        {caption && (
+          <figcaption className="door-caption small">
+            <span key={room} className="door-caption-line">{line}</span>
+          </figcaption>
+        )}
       </figure>
     </div>
   );

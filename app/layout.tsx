@@ -34,7 +34,7 @@ export const viewport: Viewport = { themeColor: "#141f22", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={boska.variable} suppressHydrationWarning>
+    <html lang="en" className={boska.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body>
         {/* Motion recipes only hide things when script runs: see globals.css (.js [data-rise]). */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />

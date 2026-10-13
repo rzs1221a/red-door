@@ -72,7 +72,7 @@ export default function BeforeAfter({
         {/* Divider + handle */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-y-0" style={{ left: `${pos}%` }}>
           <div className="absolute inset-y-0 -left-px w-[3px] bg-ink" />
-          <div className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ink text-light-ink">
+          <div className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ink text-light-ink transition-transform duration-200 ease-out group-hover:scale-110 group-active:scale-95">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 6l-5 6 5 6M15 6l5 6-5 6" />
             </svg>
