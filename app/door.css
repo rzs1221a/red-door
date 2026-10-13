@@ -1,0 +1,444 @@
+/* The red door, from the supplied preview (Red-Door-Preview.html), ported to plain class names.
+   It is the one drawn object on the site, so its own gradients and shadows live here, rooted on
+   [data-ui] so the page rules around it stay flat. --door-angle (0–100) drives the swing. */
+
+[data-ui].door {
+  --door-angle: 54; /* 0 closed … 100 fully open; 54 ≈ the preview's resting -38deg */
+  --door-deg: calc(var(--door-angle) * -0.7deg);
+  --door-open: calc(var(--door-angle) / 100);
+  width: 100%;
+  max-width: 410px;
+  margin: 0;
+  position: relative;
+  isolation: isolate;
+}
+[data-ui].door .door-scene {
+  position: relative;
+  height: 490px;
+  perspective: 1200px;
+  perspective-origin: 50% 46%;
+}
+[data-ui].door .door-halo {
+  position: absolute;
+  inset: 0 -15% -4%;
+  background: radial-gradient(ellipse at 52% 48%, #d6a76025, transparent 65%); /* taste-skill-ignore */
+  pointer-events: none;
+}
+[data-ui].door .door-floor {
+  position: absolute;
+  width: 92%;
+  height: 80px;
+  left: 4%;
+  bottom: 3px;
+  background: radial-gradient(ellipse, #0008, transparent 68%); /* taste-skill-ignore */
+}
+[data-ui].door .door-floor::after {
+  content: "";
+  position: absolute;
+  inset: -30px 2% 5px;
+  background: linear-gradient(#f8db9a34, transparent); /* taste-skill-ignore */
+  clip-path: polygon(32% 0, 78% 0, 100% 100%, 0 100%);
+  opacity: var(--door-open);
+  transform: scaleX(calc(0.2 + 0.8 * var(--door-open)));
+}
+[data-ui].door .door-portal {
+  position: absolute;
+  width: 238px;
+  height: 426px;
+  left: 50%;
+  top: 21px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #796e5c, #dfd4bd 3%, #aea18a 7%, #f3e8d0 10%, #bbb09c 91%, #e0d4ba 96%, #7f715a); /* taste-skill-ignore */
+  padding: 17px 17px 0;
+  box-shadow: 18px 26px 45px #0005, inset 0 1px 0 #fff5; /* taste-skill-ignore */
+  transform-style: preserve-3d;
+}
+[data-ui].door .door-cornice {
+  position: absolute;
+  top: -7px;
+  left: -9px;
+  right: -9px;
+  height: 13px;
+  background: linear-gradient(#e8dcc2, #b4a68e 46%, #f2e6cf 50%, #c9bba1); /* taste-skill-ignore */
+  box-shadow: 0 5px 5px #0004; /* taste-skill-ignore */
+}
+[data-ui].door .door-transom {
+  height: 48px;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #695f4c, #b9aa8d); /* taste-skill-ignore */
+  box-shadow: 0 0 0 2px #eee0c4, 0 3px 8px #0005; /* taste-skill-ignore */
+}
+[data-ui].door .door-transom span {
+  flex: 1;
+  background: linear-gradient(135deg, #f1e0b9aa, #81918b99 50%, #d4d6bdaa 52%, #6f807977); /* taste-skill-ignore */
+  box-shadow: inset 2px 2px 4px #0005; /* taste-skill-ignore */
+}
+[data-ui].door .door-opening {
+  position: relative;
+  height: 340px;
+  background: #27251c;
+  perspective: 1200px;
+  perspective-origin: 50% 46%;
+  transform-style: preserve-3d;
+}
+[data-ui].door .door-interior {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(145deg, #e8d8ad, #66694f); /* taste-skill-ignore */
+  box-shadow: inset 0 0 16px #0009; /* taste-skill-ignore */
+}
+[data-ui].door .door-interior img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% center;
+  transform: scale(calc(1.12 - 0.09 * var(--door-open)));
+  filter: brightness(calc(0.55 + 0.33 * var(--door-open))) saturate(0.7);
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+[data-ui].door .door-interior img.is-on {
+  opacity: 1;
+}
+[data-ui].door .door-interior::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 12px 0 22px #24160890, inset 0 7px 8px #24160870; /* taste-skill-ignore */
+  background: linear-gradient(0deg, #4e331a55, transparent 35%); /* taste-skill-ignore */
+}
+[data-ui].door .door-reveal-shadow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #160c06ed, #160c0680); /* taste-skill-ignore */
+  opacity: calc(1 - 0.88 * var(--door-open));
+  pointer-events: none;
+}
+[data-ui].door .door-leaf {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 50%;
+  transform: rotateY(var(--door-deg));
+  transform-style: preserve-3d;
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+[data-ui].door .door-face,
+[data-ui].door .door-escutcheon,
+[data-ui].door .door-lever,
+[data-ui].door .door-panels,
+[data-ui].door .door-panels > span {
+  transform-style: preserve-3d;
+}
+[data-ui].door .door-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border: 1px solid #c6504760;
+  box-shadow: inset 3px 0 3px #ef635338, inset -4px 0 4px #350208aa; /* taste-skill-ignore */
+  background:
+    repeating-linear-gradient(91deg, #ffffff03 0 1px, transparent 1px 4px), /* taste-skill-ignore */
+    repeating-linear-gradient(2deg, #20000007 0 1px, transparent 1px 9px), /* taste-skill-ignore */
+    linear-gradient(105deg, #761017, #b42930 38%, #90141e 76%, #570a12); /* taste-skill-ignore */
+}
+[data-ui].door .door-panels {
+  position: absolute;
+  inset: 20px 22px 31px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.75fr 1.55fr 1fr;
+  gap: 17px 16px;
+}
+[data-ui].door .door-panels > span {
+  position: relative;
+}
+[data-ui].door .door-panels i {
+  display: block;
+  position: absolute;
+}
+[data-ui].door .door-panel-well {
+  inset: 4px;
+  transform: translateZ(0.5px);
+  background:
+    repeating-linear-gradient(92deg, #00000009 0 1px, transparent 1px 3px), /* taste-skill-ignore */
+    linear-gradient(125deg, #741019, #9d2029 55%, #84121d); /* taste-skill-ignore */
+  box-shadow: inset 5px 6px 8px #290309a6, inset -2px -2px 3px #ed6b5340; /* taste-skill-ignore */
+}
+[data-ui].door .door-panel-rim {
+  inset: 0;
+  border-color: #d9544e #661019 #520b12 #b93639;
+  border-style: solid;
+  border-width: 3px;
+  transform: translateZ(7px);
+  box-shadow: 0 0 0 1px #4b0a13, 1px 2px 1px #40050b80; /* taste-skill-ignore */
+}
+[data-ui].door .door-panel-top,
+[data-ui].door .door-panel-bottom {
+  left: 3px;
+  right: 3px;
+  height: 9px;
+}
+[data-ui].door .door-panel-top {
+  top: 3px;
+  transform-origin: top;
+  transform: translateZ(7px) rotateX(-48deg);
+  background: linear-gradient(#561019, #7a131e); /* taste-skill-ignore */
+}
+[data-ui].door .door-panel-bottom {
+  bottom: 3px;
+  transform-origin: bottom;
+  transform: translateZ(7px) rotateX(48deg);
+  background: linear-gradient(#e06254, #a32b32); /* taste-skill-ignore */
+}
+[data-ui].door .door-panel-left,
+[data-ui].door .door-panel-right {
+  top: 3px;
+  bottom: 3px;
+  width: 9px;
+}
+[data-ui].door .door-panel-left {
+  left: 3px;
+  transform-origin: left;
+  transform: translateZ(7px) rotateY(48deg);
+  background: linear-gradient(90deg, #63101a, #84212a); /* taste-skill-ignore */
+}
+[data-ui].door .door-panel-right {
+  right: 3px;
+  transform-origin: right;
+  transform: translateZ(7px) rotateY(-48deg);
+  background: linear-gradient(90deg, #a4383a, #cc5149); /* taste-skill-ignore */
+}
+[data-ui].door .door-escutcheon {
+  position: absolute;
+  right: 7px;
+  top: 46%;
+  width: 15px;
+  height: 65px;
+  border-radius: 6px;
+  transform: translateZ(3px);
+  background:
+    repeating-linear-gradient(0deg, #ffffff08 0 1px, transparent 1px 3px), /* taste-skill-ignore */
+    linear-gradient(90deg, #563715, #d1a55c 15%, #f7dda0 42%, #9c6e2e 78%, #543815); /* taste-skill-ignore */
+  box-shadow: 2px 3px 3px #280307cc, inset 0 0 0 1px #f2d493a0; /* taste-skill-ignore */
+}
+[data-ui].door .door-spindle {
+  position: absolute;
+  top: 19px;
+  left: 2px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  transform: translateZ(7px);
+  border: 1px solid #d4b476;
+  background: radial-gradient(circle at 28% 20%, #fff5c4, #cca65f 45%, #765022 85%); /* taste-skill-ignore */
+  box-shadow: 0 0 0 1px #806032, 0 0 0 2px #e3c183, 2px 3px 3px #2516099c; /* taste-skill-ignore */
+}
+[data-ui].door .door-spindle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  transform: translateZ(-5px);
+  background: #9f753a;
+}
+[data-ui].door .door-lever {
+  position: absolute;
+  top: 21px;
+  right: 4px;
+  width: 32px;
+  height: 7px;
+  transform: translateZ(15px);
+  background: linear-gradient(#fff2bd, #d8b570 32%, #9a6b2e 70%, #f0cf89); /* taste-skill-ignore */
+  border: 1px solid #d0aa61;
+  border-radius: 4px 2px 3px 6px;
+  box-shadow: 0 6px 6px #25050766; /* taste-skill-ignore */
+}
+[data-ui].door .door-lever::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -4px;
+  height: 4px;
+  transform-origin: top;
+  transform: rotateX(-90deg);
+  background: #88602c;
+  border-radius: 2px;
+}
+[data-ui].door .door-lever::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -1px;
+  bottom: -1px;
+  width: 4px;
+  transform-origin: right;
+  transform: rotateY(-90deg);
+  background: linear-gradient(#f9e4ac, #9c7036); /* taste-skill-ignore */
+}
+[data-ui].door .door-lever span {
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 6px;
+  height: 8px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #b18744, #fff0bc, #a27534); /* taste-skill-ignore */
+  transform: translateZ(1px);
+}
+[data-ui].door .door-keyhole {
+  position: absolute;
+  bottom: 14px;
+  left: 6px;
+  width: 4px;
+  height: 8px;
+  background: #2d1d0d;
+  box-shadow: 0 1px 0 #fff0b7; /* taste-skill-ignore */
+  transform: translateZ(1px);
+  border-radius: 50%;
+}
+[data-ui].door .door-screw {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #eed8a0 43%, #60401b 46% 56%, #c4a36c 60%); /* taste-skill-ignore */
+  transform: translateZ(1px);
+}
+[data-ui].door .door-screw-bottom {
+  top: auto;
+  bottom: 5px;
+}
+[data-ui].door .door-kickplate {
+  position: absolute;
+  bottom: 3px;
+  left: 5px;
+  right: 5px;
+  height: 16px;
+  opacity: 0.85;
+  transform: translateZ(2px);
+  box-shadow: inset 0 1px 0 #efd6a0; /* taste-skill-ignore */
+  background:
+    repeating-linear-gradient(0deg, #ffffff12 0 1px, transparent 1px 2px), /* taste-skill-ignore */
+    linear-gradient(110deg, #765324, #e0bd76 42%, #97713d); /* taste-skill-ignore */
+}
+[data-ui].door .door-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(112deg, #ffd5a21a, transparent 47%, #0003); /* taste-skill-ignore */
+  transform: translateZ(0.6px);
+  pointer-events: none;
+}
+[data-ui].door .door-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  transform-origin: right;
+  transform: rotateY(-90deg);
+  background:
+    repeating-linear-gradient(0deg, #16020633 0 1px, transparent 1px 5px), /* taste-skill-ignore */
+    linear-gradient(90deg, #35070c, #83202a); /* taste-skill-ignore */
+}
+[data-ui].door .door-latch {
+  position: absolute;
+  top: 47%;
+  left: 3px;
+  width: 8px;
+  height: 35px;
+  border: 1px solid #e1c58c;
+  background: linear-gradient(90deg, #785529, #dbb973, #715028); /* taste-skill-ignore */
+}
+[data-ui].door .door-latch::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 12px;
+  width: 6px;
+  height: 10px;
+  background: linear-gradient(90deg, #e3c183, #775326); /* taste-skill-ignore */
+  transform: translateZ(3px);
+}
+[data-ui].door .door-top-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 14px;
+  transform-origin: top;
+  transform: rotateX(-90deg);
+  background: linear-gradient(#b33a3b, #610b14); /* taste-skill-ignore */
+}
+[data-ui].door .door-hinge {
+  position: absolute;
+  width: 7px;
+  height: 23px;
+  left: -4px;
+  transform: translateZ(5px);
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 6px, #5c421b 6px 7px), /* taste-skill-ignore */
+    linear-gradient(90deg, #62451f, #edd39a 35%, #b8904e 58%, #58401d); /* taste-skill-ignore */
+  box-shadow: 1px 2px 3px #0007; /* taste-skill-ignore */
+}
+[data-ui].door .door-hinge-top {
+  top: 47px;
+}
+[data-ui].door .door-hinge-bottom {
+  bottom: 46px;
+}
+[data-ui].door .door-threshold {
+  position: absolute;
+  bottom: 0;
+  left: -5px;
+  right: -5px;
+  height: 13px;
+  background: linear-gradient(#ab9770, #dfc79b 25%, #9b845e 34%, #4c4537); /* taste-skill-ignore */
+  transform: translateZ(5px);
+  box-shadow: 0 9px 12px #0005; /* taste-skill-ignore */
+}
+
+/* Motion: the leaf eases between angles unless the hand is on it. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-ui].door .door-leaf,
+  [data-ui].door .door-floor::after,
+  [data-ui].door .door-reveal-shadow,
+  [data-ui].door .door-interior img {
+    transition:
+      transform 3.4s cubic-bezier(0.35, 0, 0.15, 1),
+      opacity 3.4s cubic-bezier(0.35, 0, 0.15, 1),
+      filter 3.4s cubic-bezier(0.35, 0, 0.15, 1);
+  }
+  [data-ui].door.is-dragging .door-leaf,
+  [data-ui].door.is-dragging .door-floor::after,
+  [data-ui].door.is-dragging .door-reveal-shadow,
+  [data-ui].door.is-dragging .door-interior img {
+    transition: none;
+  }
+  [data-ui].door .door-interior img {
+    transition-property: opacity, transform, filter;
+    transition-duration: 500ms, 3.4s, 3.4s;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-ui].door .door-scene { height: 550px; }
+  [data-ui].door .door-portal { width: 270px; height: 482px; top: 22px; padding: 19px 19px 0; }
+  [data-ui].door .door-opening { height: 392px; }
+  [data-ui].door .door-transom { height: 49px; }
+  [data-ui].door .door-panels { inset: 23px 25px 34px 23px; gap: 20px 18px; }
+}
+@media (max-width: 639px) {
+  [data-ui].door { max-width: 330px; margin: 0 auto; }
+  [data-ui].door .door-scene { height: 460px; }
+  [data-ui].door .door-portal { top: 13px; }
+}

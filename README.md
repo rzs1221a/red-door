@@ -4,6 +4,8 @@ Website for Red Door Revivals in Fernandina Beach: renovation and project manage
 
 Next.js 15 (static export), TypeScript, Tailwind CSS 4, Netlify Forms. No runtime dependencies beyond React and Next.
 
+The design is a "dark room": one green-black ground, lit photographs, one typeface (Boska, self-hosted in `public/fonts`), the brand red on the single action. The red door in the hero is the supplied CSS door (`app/door.css`, `components/DoorScene.tsx`); it opens on arrival and the visitor can drag it, slide it and choose the room behind it. The art direction sheet and notes live in `.taste-skill/`.
+
 ## Run it
 
 ```bash
@@ -31,7 +33,10 @@ Netlify builds with `npm run build` and publishes `out/` (see `netlify.toml`).
 | Pages | `app/*/page.tsx` |
 | Inquiry form (client side) | `components/ContactForm.tsx` |
 | Inquiry form (Netlify detection copy) | `public/__forms.html` (keep fields in sync) |
-| The door illustration | `components/Door.tsx` |
+| The red door (supplied artwork, ported) | `app/door.css`, `components/DoorScene.tsx` |
+| Home page copy deck (composed from lib/copy.ts) | `lib/home.ts` |
+| Found pictures of Fernandina Beach and their credits | `lib/found.ts`, `lib/credits.json`, `public/images/found/` |
+| Art direction sheet and design notes | `.taste-skill/direction.json`, `.taste-skill/notes.md` |
 | Share preview images | `public/og.png` (home), `public/og/*.jpg` (generated) |
 | Look Book video (opening "25 years" card trimmed off), captions, poster | `public/video/` |
 
@@ -50,6 +55,8 @@ Netlify builds with `npm run build` and publishes `out/` (see `netlify.toml`).
 - **Testimonials**: add real, attributed quotes to `lib/testimonials.ts`. The home page section appears automatically.
 - **FAQ**: edit `lib/faq.ts`. Answers should stay grounded in the positioning copy.
 - **Form fields**: change `components/ContactForm.tsx` and mirror the field in `public/__forms.html`.
+- **Found pictures**: the three Fernandina Beach pictures are Creative Commons (CC BY and CC BY-SA) from Wikimedia Commons and are credited in the footer. Keep the credit if you keep the picture.
+- **Rooms behind the door**: `doorRooms` in `lib/home.ts`.
 
 ## Before launch
 

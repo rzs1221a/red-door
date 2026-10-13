@@ -1,116 +1,101 @@
 import JsonLd from "@/components/JsonLd";
 import Picture from "@/components/Picture";
 import Reveal from "@/components/Reveal";
-import { Container, CtaBand, Dash, Eyebrow, PageIntro } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { positioning, services } from "@/lib/copy";
 import { region, residential } from "@/lib/projects";
+import { found } from "@/lib/found";
 import { pageMeta } from "@/lib/seo";
 import { breadcrumbs, graph, serviceList } from "@/lib/schema";
 
 export const metadata = pageMeta({
   title: "Rental and Investment Property Renovation",
-  description:
-    "Rental property, investment property, whole-property, kitchen, and bathroom renovations in Fernandina Beach, professionally planned and managed by Red Door Revivals.",
+  description: "Rental property, investment property, whole-property, kitchen, and bathroom renovations in Fernandina Beach, professionally planned and managed by Red Door Revivals.",
   path: "/services/",
   image: "/og/services.jpg",
   imageAlt: "White kitchen renovation by Red Door Revivals",
 });
 
-// Photos that fit each service. Bathrooms have no photo yet, so that section is type-led.
-const photos: Record<string, { photo: (typeof residential.gallery)[number]; note: string } | undefined> = {
-  rental: { photo: residential.gallery[5], note: "Living room, Red Door project" },
-  investment: { photo: residential.gallery[0], note: "Restored two-story home, Red Door project" },
-  "whole-property": { photo: residential.gallery[8], note: "Screened porch, Red Door project" },
-  kitchens: { photo: residential.gallery[4], note: "Kitchen, Red Door project" },
+// One lit photograph per service, text beside it, sides alternating.
+const photos: Record<string, (typeof residential.gallery)[number] | undefined> = {
+  rental: residential.gallery[5],
+  investment: residential.gallery[0],"whole-property": residential.gallery[8],
+  kitchens: residential.gallery[4],
+  bathrooms: undefined,
 };
-
-function List({ items }: { items: string[] }) {
-  return (
-    <ul className="mt-4 flex flex-wrap gap-2">
-      {items.map((it) => (
-        <li key={it} className="rounded-full border border-ink/15 bg-paper px-3.5 py-1.5 text-[0.9rem]">
-          {it}
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export default function Services() {
   return (
     <>
-      <PageIntro eyebrow="What we do" title={positioning.title} photo={residential.gallery[3]} photoCaption={`Kitchen, Red Door project, ${region}`}>
-        {positioning.body.map((p) => (
-          <p key={p}>{p}</p>
-        ))}
-      </PageIntro>
-
-      <nav aria-label="Services" className="sticky top-16 z-20 border-b border-line bg-paper/92 backdrop-blur-md lg:top-[72px]">
-        <Container className="flex gap-x-7 overflow-x-auto py-3.5 text-[0.9rem] font-medium whitespace-nowrap">
-          {services.map((s, i) => (
-            <a key={s.id} href={`#${s.id}`} className="link-underline shrink-0 text-ink-soft hover:text-ink">
-              <span className="mr-1.5 text-door">0{i + 1}</span>
-              {s.title}
-            </a>
+      <section className="wrap pt-10 md:pt-16">
+        <h1 className="title max-w-[18ch]" data-rise style={{ "--i": 0 } as React.CSSProperties}>What we do</h1>
+        <p className="lead mt-8 text-muted" data-rise style={{ "--i": 1 } as React.CSSProperties}>{positioning.body[0]}</p>
+        <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 small">
+          {services.map((s) => (
+            <li key={s.id}>
+              <a href={`#${s.id}`} className="link">{s.title}</a>
+            </li>
           ))}
-        </Container>
-      </nav>
+        </ul>
+      </section>
 
       {services.map((s, i) => {
         const ph = photos[s.id];
         const flip = i % 2 === 1;
         return (
-          <section key={s.id} id={s.id} className={`scroll-mt-36 border-b border-line ${flip ? "bg-paper-2" : ""}`}>
-            <Container className={`grid gap-12 py-section-sm md:py-section ${ph ? "lg:grid-cols-[1fr_1fr]" : "lg:grid-cols-[1fr_1.4fr]"} lg:gap-16`}>
-              <Reveal className={ph && flip ? "lg:order-2" : ""}>
-                <Eyebrow>Service 0{i + 1}</Eyebrow>
-                <h2 className="display mt-4 text-display-lg">{s.title}</h2>
+          <section key={s.id} id={s.id} className="wrap mt-section scroll-mt-10" aria-labelledby={`${s.id}-h`}>
+            <div className="grid12 items-center">
+              {ph && (
+                <Reveal className={`shutter col-span-12 md:col-span-6 ${flip ? "md:col-start-7 md:order-2" : ""}`}>
+                  <Picture photo={ph} sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[4/3] overflow-hidden" imgClassName="h-full object-cover" />
+                </Reveal>
+              )}
+              <Reveal delay={120} className={`col-span-12 mt-8 md:mt-0 ${ph ? "md:col-span-5" : "md:col-span-10 md:col-start-2"} ${ph && !flip ? "md:col-start-8" : ""}`}>
+                <h2 id={`${s.id}-h`} className="head">{s.title}</h2>
                 {s.lead.map((l) => (
-                  <p key={l} className="measure mt-5 text-lede text-ink-soft">{l}</p>
+                  <p key={l} className="lead mt-5 text-muted">{l}</p>
                 ))}
-                {ph && (
-                  <figure className="mt-10">
-                    <Picture photo={ph.photo} sizes="(min-width: 1024px) 45vw, 100vw" className="zoom-media aspect-[4/3] overflow-hidden rounded-[3px] shadow-card" imgClassName="h-full object-cover" />
-                    <figcaption className="mt-2.5 text-[0.82rem] text-ink-soft">
-                      {ph.note}, {region}
-                    </figcaption>
-                  </figure>
-                )}
-              </Reveal>
-              <Reveal delay={120} className={`text-[1.05rem] ${ph && flip ? "lg:order-1" : ""} ${ph ? "lg:pt-14" : ""}`}>
                 {s.body && (
-                  <div className="space-y-2 text-ink-soft">
+                  <div className="mt-6 space-y-1">
                     {s.body.map((b) => (
-                      <p key={b} className={b.includes("+") ? "display text-display-sm text-ink" : ""}>{b}</p>
+                      <p key={b} className={b.includes("+") ? "lead text-ink" : "text-muted"}>{b}</p>
                     ))}
                   </div>
                 )}
-                {s.listLead && <p className={`${s.body ? "mt-8" : ""} font-medium`}>{s.listLead}</p>}
-                {s.items && <List items={s.items} />}
+                {s.listLead && <p className="mt-6">{s.listLead}</p>}
+                {s.items && (ph ? <p className="mt-2 max-w-[48ch] text-muted">{s.items.join(", ")}.</p> : <p className="lead mt-4 max-w-none text-muted">{s.items.join(", ")}.</p>)}
                 {s.defs && (
-                  <ol className="mt-4 divide-y divide-line border-y border-line">
-                    {s.defs.map((d, j) => (
-                      <li key={d.term} className="grid gap-1 py-4 sm:grid-cols-[2.5rem_11rem_1fr] sm:gap-6">
-                        <span className="display text-[1.3rem] leading-none text-door">0{j + 1}</span>
-                        <span className="font-semibold">{d.term}</span>
-                        <span className="text-ink-soft">{d.desc}</span>
-                      </li>
+                  <dl className="mt-4 space-y-3">
+                    {s.defs.map((d) => (
+                      <div key={d.term} className="grid gap-x-6 sm:grid-cols-[11rem_1fr]">
+                        <dt>{d.term}</dt>
+                        <dd className="text-muted">{d.desc}</dd>
+                      </div>
                     ))}
-                  </ol>
+                  </dl>
                 )}
                 {s.close?.map((c) => (
-                  <p key={c} className="mt-7 flex gap-3 font-medium">
-                    <Dash />
-                    {c}
-                  </p>
+                  <p key={c} className="mt-6">{c}</p>
                 ))}
+                {ph && <p className="small mt-6 text-muted">Red Door project, {region}.</p>}
               </Reveal>
-            </Container>
+            </div>
           </section>
         );
       })}
 
-      <CtaBand />
+      <section className="wrap mt-section grid12 items-end">
+        <Reveal className="shutter col-span-12 md:col-span-7">
+          <Picture photo={found.centreStreet} sizes="(min-width: 768px) 58vw, 100vw" className="aspect-[16/10] overflow-hidden" imgClassName="h-full object-cover object-[50%_55%]" />
+          <p className="small mt-3 text-muted">Centre Street, Fernandina Beach. Picture via Wikimedia Commons, credited below.</p>
+        </Reveal>
+        <Reveal delay={120} className="col-span-12 mt-8 md:col-span-4 md:col-start-9 md:mt-0">
+          <p className="lead">Tell us about the property. We’ll tell you what we’d do first.</p>
+          <div className="mt-6">
+            <ButtonLink href="/contact/">Request a consultation</ButtonLink>
+          </div>
+        </Reveal>
+      </section>
       <JsonLd data={graph(breadcrumbs([{ name: "What we do", path: "/services/" }]), ...serviceList())} />
     </>
   );

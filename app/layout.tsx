@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { display, sans } from "./fonts";
-import Header from "@/components/Header";
+import { boska } from "./fonts";
+import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import MobileCtaBar from "@/components/MobileCtaBar";
 import JsonLd from "@/components/JsonLd";
 import { site } from "@/lib/site";
 import { graph, organization, website } from "@/lib/schema";
@@ -31,28 +30,22 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: "#e31b23",
-  width: "device-width",
-  initialScale: 1,
-};
+export const viewport: Viewport = { themeColor: "#141f22", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en" className={boska.variable} suppressHydrationWarning>
       <body>
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[3px] focus:bg-white focus:px-4 focus:py-2 focus:shadow-lift"
-        >
+        {/* Motion recipes only hide things when script runs: see globals.css (.js [data-rise]). */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-light-ink">
           Skip to content
         </a>
-        <Header />
+        <Nav />
         <main id="main" tabIndex={-1} className="outline-none">
           {children}
         </main>
         <Footer />
-        <MobileCtaBar />
         <JsonLd data={graph(organization(), website())} />
       </body>
     </html>
