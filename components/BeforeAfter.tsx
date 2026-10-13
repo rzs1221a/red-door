@@ -94,7 +94,7 @@ export default function BeforeAfter({
           value={Math.round(pos)}
           onChange={(e) => setPos(Number(e.target.value))}
           aria-label="Compare before and after"
-          aria-valuetext={`${Math.round(pos)} percent after`}
+          aria-valuetext={`${Math.round(100 - pos)} percent after shown`}
           className="ba-range absolute inset-0 h-full w-full"
         />
       </div>

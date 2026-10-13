@@ -235,11 +235,14 @@ h3 {
 }
 
 @keyframes hero-fade {
-  0%,
-  28% {
+  0% {
+    opacity: 0;
+  }
+  6%,
+  30% {
     opacity: 1;
   }
-  36%,
+  38%,
   100% {
     opacity: 0;
   }
@@ -258,35 +261,30 @@ h3 {
   transform-origin: 50% 60%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .hero-stills--animate .hero-still {
-    animation: hero-fade 21s linear infinite;
-  }
-  .hero-stills--animate .hero-still img {
-    animation: kenburns 21s linear infinite;
-  }
-  .hero-stills--animate .hero-still:nth-child(2),
-  .hero-stills--animate .hero-still:nth-child(2) img {
-    animation-delay: 7s;
-  }
-  .hero-stills--animate .hero-still:nth-child(3),
-  .hero-stills--animate .hero-still:nth-child(3) img {
-    animation-delay: 14s;
-  }
-  .hero-stills--animate .hero-still:nth-child(2),
-  .hero-stills--animate .hero-still:nth-child(3) {
-    animation-fill-mode: backwards;
-  }
-}
-
 .hero-still:first-child {
   opacity: 1;
 }
 
+/* 21s cycle, three slides 7s apart. The first slide starts 1.3s in (past its fade-in) so it is
+   already fully visible when the class is added; the others keep their base opacity: 0 until
+   their delay elapses (no fill-mode, so the 0% keyframe is never applied early). */
 @media (prefers-reduced-motion: no-preference) {
-  .hero-stills--animate .hero-still:first-child {
+  .hero-stills--animate .hero-still {
     opacity: 0;
-    animation-fill-mode: both;
+    animation: hero-fade 21s linear infinite;
+    animation-delay: -1.3s;
+  }
+  .hero-stills--animate .hero-still img {
+    animation: kenburns 21s linear infinite;
+    animation-delay: -1.3s;
+  }
+  .hero-stills--animate .hero-still:nth-child(2),
+  .hero-stills--animate .hero-still:nth-child(2) img {
+    animation-delay: 5.7s;
+  }
+  .hero-stills--animate .hero-still:nth-child(3),
+  .hero-stills--animate .hero-still:nth-child(3) img {
+    animation-delay: 12.7s;
   }
 }
 
