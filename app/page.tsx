@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Door from "@/components/Door";
+import HeroDoor from "@/components/HeroDoor";
 import HeroMedia from "@/components/HeroMedia";
 import TrustStrip from "@/components/TrustStrip";
 import BeforeAfter from "@/components/BeforeAfter";
@@ -66,8 +66,8 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            <div className="hidden justify-end lg:flex">
-              <Door idPrefix="hero" tone="dark" className="w-[58%] max-w-[260px]" />
+            <div className="flex justify-center lg:justify-end">
+              <HeroDoor />
             </div>
           </div>
           <div className="mt-10 flex items-center justify-between text-[0.78rem] text-white/50">
