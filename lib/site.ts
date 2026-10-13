@@ -6,7 +6,7 @@ export const site = {
   name: "Red Door Revivals",
   shortName: "Red Door Revivals Florida",
   // CONFIRM: final Florida domain (RedDoorRevivalsFlorida.com, RedDoorAtTheBeach.com, or a subdomain)
-  url: "https://reddoor2.netlify.app",
+  url: "https://reddoor3.netlify.app",
   tagline: "Clear plans. Clear pricing. Beautiful results.",
   promise: "You own the property. We’ll manage the project.",
   description:
