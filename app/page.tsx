@@ -28,37 +28,36 @@ export default function Home() {
   const heroPhoto = residential.gallery[0];
   return (
     <>
-      {/* ---------- Hero: name under a photograph, the door as the lit object ---------- */}
-      <section className="relative min-h-[100svh] bg-bg">
-        <div className="relative h-[50svh] overflow-clip bg-surface lg:h-[58svh]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            {...pictureAttrs(heroPhoto)}
-            sizes="100vw"
-            alt=""
-            fetchPriority="high"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover object-[50%_35%]"
-            style={{ filter: "brightness(0.5) saturate(0.8)" }}
-          />
-          {/* The door is the lit object; it fits under the navigation at every width. */}
-          <div className="wrap relative flex h-full items-end justify-center pt-16 lg:justify-end lg:pr-[6vw] lg:pt-[72px]">
-            <DoorScene rooms={doorRooms} region={region} className="hero-door" controls="hero-door-controls" />
+      {/* ---------- Hero: the door stands across the edge of the photograph, the name beneath ---------- */}
+      <section className="hero relative overflow-x-clip bg-bg">
+        <div className="hero-stage wrap grid12 items-end">
+          <div className="hero-photo" aria-hidden="true">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              {...pictureAttrs(heroPhoto)}
+              sizes="100vw"
+              alt=""
+              fetchPriority="high"
+              decoding="async"
+              className="h-full w-full object-cover object-[50%_35%]"
+            />
+          </div>
+          {/* The door is the lit object; its threshold rests on the page, its top stands in the photograph. */}
+          <div className="relative col-span-12 flex justify-center lg:col-span-5 lg:col-start-6">
+            <DoorScene rooms={doorRooms} region={region} className="hero-door" caption scroll />
           </div>
         </div>
 
-        <div className="wrap flex min-h-[50svh] flex-col justify-between pb-7 pt-6 lg:min-h-[42svh]">
-          <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-start lg:grid-cols-[minmax(0,44ch)_1fr_auto]">
-            <p className="order-3 max-w-[44ch] md:order-none" data-rise style={{ "--i": 0 } as React.CSSProperties}>
-              {hero.headline} Thirty years of residential and commercial building, now in {site.city}, Florida.
-            </p>
-            {/* Live thing: open the door, choose the room. The controls render here, under the door. */}
-            <div id="hero-door-controls" className="order-1 md:order-none md:col-span-2 lg:col-span-1 lg:justify-self-center" data-rise style={{ "--i": 1 } as React.CSSProperties} />
-            <div data-rise style={{ "--i": 2 } as React.CSSProperties} className="order-2 md:order-none md:col-start-2 md:row-start-1 lg:col-start-3">
+        <div className="hero-band wrap flex flex-col justify-between pb-7">
+          <div className="grid12 items-start gap-y-7">
+            <div data-rise style={{ "--i": 0 } as React.CSSProperties} className="col-span-12 lg:col-span-3 lg:col-start-10 lg:justify-self-end">
               <ButtonLink href="/contact/">Request a consultation</ButtonLink>
             </div>
+            <p className="col-span-12 max-w-[44ch] lg:col-span-5 lg:col-start-1 lg:row-start-1" data-rise style={{ "--i": 1 } as React.CSSProperties}>
+              {hero.headline} Thirty years of residential and commercial building, now in {site.city}, Florida.
+            </p>
           </div>
-          <h1 className="wordmark display mt-16 -ml-[0.04em] md:mt-10" data-rise style={{ "--i": 3 } as React.CSSProperties}>
+          <h1 className="wordmark display mt-14 -ml-[0.04em] md:mt-10" data-rise style={{ "--i": 2 } as React.CSSProperties}>
             <span className="block md:inline">Red Door </span>
             <span className="block md:inline">Revivals</span>
           </h1>

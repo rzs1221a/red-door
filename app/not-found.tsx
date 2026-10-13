@@ -17,8 +17,8 @@ export default function NotFound() {
           <TextLink href="/contact/">Contact</TextLink>
         </div>
       </div>
-      <div className="col-span-12 mt-10 overflow-x-clip md:col-span-5 md:col-start-8 md:mt-0">
-        <DoorScene rooms={doorRooms} />
+      <div className="col-span-12 mt-10 overflow-x-clip pb-14 md:col-span-5 md:col-start-8 md:mt-0">
+        <DoorScene rooms={doorRooms} caption />
       </div>
     </section>
   );

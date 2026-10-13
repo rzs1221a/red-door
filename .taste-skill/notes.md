@@ -30,9 +30,10 @@ Competitor test: another Amelia Island contractor has no red door. The sentence 
 
 ## The live thing
 
-Open the door. The hero door is the visitor's: drag the handle (pointer) or the slider under it
-(thumb, keyboard) to swing the leaf and see what is behind it, and pick which finished Red Door
-room is behind it (three real projects). Without script: the door stands open on the first room.
+The door itself, with nothing beside it. It swings open on arrival, leans with the pointer, opens
+wider as the first screen is scrolled away, and swings if the visitor takes hold of the leaf (pointer
+or thumb). The finished Red Door room behind it changes on its own (three real projects), named in
+the caption under the sill. Without script: the door stands open on the first room.
 
 ## The argument (claims and proof, in page order)
 
@@ -61,7 +62,7 @@ Hero
   name: Red Door Revivals
   supporting: You own the property. We'll manage the project.
   button: Request a consultation
-  door caption (under the control): Open the door. Behind it: [Historic Marietta kitchen / ...]
+  door caption (under the sill): Behind the door, a [kitchen / living room / library] Red Door built in the Atlanta area.
 
 Intro (statement, five lines)
   You shouldn't / have to become / a construction expert / to renovate / your property.

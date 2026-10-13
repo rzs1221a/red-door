@@ -516,21 +516,88 @@ body.scroll-locked {
   }
 }
 
-/* The hero door: scaled to sit under the navigation inside the photograph. */
+/* The hero: the photograph fills the stage down to a line above the door's threshold, so the
+   door stands across the edge of the picture with its sill on the page ground. The door is drawn
+   at a fixed size and scaled from its sill; the negative top margin removes the layout space the
+   scale leaves above it. */
+.hero-stage {
+  position: relative;
+  padding-top: 72px;
+  --hero-sill: 44px; /* how far the threshold sits below the photograph */
+}
+.hero-photo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: var(--hero-sill);
+  width: 100vw;
+  transform: translateX(-50%);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+.hero-photo img {
+  filter: brightness(0.5) saturate(0.8);
+}
 .hero-door {
   width: 100%;
   max-width: 410px;
-  transform-origin: bottom center;
+  --door-s: 0.86;
+  --door-h: 490px;
 }
-@media (max-width: 1023px) {
+.hero-door [data-ui].door {
+  transform-origin: bottom center;
+  transform: scale(var(--door-s));
+  margin-top: calc(-1 * var(--door-h) * (1 - var(--door-s)));
+}
+.door-caption {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.9rem;
+  text-align: center;
+  color: var(--color-muted);
+  max-width: none;
+}
+.hero-door .door-caption {
+  /* undo the scale so the caption reads at text size, hung from the sill */
+  transform: scale(calc(1 / var(--door-s)));
+  transform-origin: top center;
+}
+.hero-band {
+  padding-top: 3.5rem;
+}
+@media (max-width: 639px) {
+  .hero-stage {
+    padding-top: 64px;
+    --hero-sill: 30px;
+  }
   .hero-door {
-    transform: scale(0.72);
-    margin-bottom: -4svh;
+    --door-s: 0.72;
+    --door-h: 460px;
+  }
+  .hero-band {
+    padding-top: 4.5rem;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hero-stage {
+    padding-top: 64px;
+    --hero-sill: 36px;
   }
 }
 @media (min-width: 1024px) {
+  .hero-stage {
+    padding-top: 96px;
+  }
+}
+@media (min-width: 1280px) {
   .hero-door {
-    transform: scale(0.86);
-    margin-bottom: -1svh;
+    --door-h: 550px;
+  }
+}
+@media (min-width: 1024px) and (max-height: 780px) {
+  .hero-door {
+    --door-s: 0.7;
   }
 }

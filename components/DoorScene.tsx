@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 import type { Photo } from "@/lib/projects";
 import { pictureAttrs } from "./Picture";
 
-// The red door from the supplied preview, made live: it swings open on arrival, and the visitor
-// can drag the leaf, move the slider, and choose which finished Red Door room stands behind it.
-// Without script the door stands open on the first room (see the <noscript> style).
+// The red door from the supplied preview, made live without any control beside it: it swings
+// open on arrival, leans with the pointer, opens wider as the page is scrolled into, and swings
+// if the visitor takes hold of the leaf. The finished room behind it changes on its own. Without
+// script the door stands open on the first room (see the <noscript> style).
 
 const OPEN = 54; // the preview's resting angle (≈ -38deg)
+const ARRIVAL_MS = 450;
+const ROOM_MS = 6500;
+
+const clamp = (v: number) => Math.min(100, Math.max(0, v));
 
 function Leaf() {
   return (
@@ -53,71 +57,104 @@ export default function DoorScene({
   initialAngle = OPEN,
   className = "",
   region = "Atlanta area",
-  controls,
+  caption = false,
+  scroll = false,
 }: {
   rooms: { label: string; photo: Photo }[];
   interactive?: boolean;
-  /** Resting angle 0–100 when not interactive (the 404 page shows it shut). */
+  /** Resting angle 0–100 when not interactive. */
   initialAngle?: number;
   className?: string;
   region?: string;
-  /** id of an element to render the controls into (the hero puts them in the band under the door). */
-  controls?: string;
+  /** Name the room behind the door in a caption under it. */
+  caption?: boolean;
+  /** Open the door wider as the first screen is scrolled away (the hero). */
+  scroll?: boolean;
 }) {
   const [angle, setAngle] = useState(interactive ? 0 : initialAngle);
   const [room, setRoom] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const [target, setTarget] = useState<HTMLElement | null>(null);
+  const [settled, setSettled] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const drag = useRef<{ x: number; a: number } | null>(null);
-  const id = useId();
+  // The angle is composed: a rest that follows the scroll, the visitor's own swing, and a lean
+  // that follows the pointer. Kept in refs so the listeners never go stale.
+  const parts = useRef({ rest: OPEN, swing: 0, lean: 0 });
+  const reduced = useRef(false);
 
-  useEffect(() => {
-    if (controls) setTarget(document.getElementById(controls));
-  }, [controls]);
+  const compose = () => {
+    const p = parts.current;
+    setAngle(clamp(p.rest + p.swing + p.lean));
+  };
 
   // Swing open once the page has settled (CSS transitions the leaf from 0 to OPEN).
   useEffect(() => {
     if (!interactive) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = window.setTimeout(() => setAngle(OPEN), reduced ? 0 : 450);
-    return () => window.clearTimeout(t);
+    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const t = window.setTimeout(() => setAngle(OPEN), reduced.current ? 0 : ARRIVAL_MS);
+    const s = window.setTimeout(() => setSettled(true), reduced.current ? 0 : ARRIVAL_MS + 3400);
+    return () => {
+      window.clearTimeout(t);
+      window.clearTimeout(s);
+    };
   }, [interactive]);
 
-  const clamp = (v: number) => Math.min(100, Math.max(0, v));
+  // After arrival: lean with a fine pointer, open with the scroll.
+  useEffect(() => {
+    if (!interactive || !settled || reduced.current) return;
+    let raf = 0;
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    const onMove = (e: PointerEvent) => {
+      if (drag.current || !ref.current) return;
+      const r = ref.current.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+      const dx = (e.clientX - (r.left + r.width / 2)) / window.innerWidth; // -0.5 … 0.5
+      parts.current.lean = Math.max(-14, Math.min(14, dx * 36));
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(compose);
+    };
+    const onScroll = () => {
+      if (drag.current) return;
+      const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.7)));
+      parts.current.rest = OPEN + (100 - OPEN) * p;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(compose);
+    };
+    if (fine) window.addEventListener("pointermove", onMove, { passive: true });
+    if (scroll) {
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [interactive, settled, scroll]);
 
-  const panel = interactive ? (
-    <div className={controls ? "w-full max-w-[360px]" : "mx-auto mt-2 max-w-[410px]"}>
-      <label htmlFor={id} className="block">Open the door</label>
-      <input
-        id={id}
-        type="range"
-        min={0}
-        max={100}
-        value={Math.round(angle)}
-        onChange={(e) => setAngle(Number(e.target.value))}
-        className="range"
-        aria-valuetext={`${Math.round(angle)} percent open`}
-      />
-      <p className="flex max-w-none flex-wrap items-baseline gap-x-4 gap-y-1" aria-label="What stands behind the door">
-        <span className="text-muted">Behind it:</span>
-        {rooms.map((r, i) => (
-          <button
-            key={r.label}
-            type="button"
-            aria-pressed={i === room}
-            onClick={() => {
-              setRoom(i);
-              if (angle < 30) setAngle(OPEN);
-            }}
-            className={`link min-h-[44px] ${i === room ? "link-on" : "text-muted"}`}
-          >
-            {r.label}
-          </button>
-        ))}
-      </p>
-    </div>
-  ) : null;
+  // The room behind the door changes on its own while the door is in view.
+  useEffect(() => {
+    if (!interactive || rooms.length < 2 || !ref.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let timer = 0;
+    const start = () => {
+      stop();
+      timer = window.setInterval(() => setRoom((r) => (r + 1) % rooms.length), ROOM_MS);
+    };
+    const stop = () => window.clearInterval(timer);
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting && !document.hidden ? start() : stop()), { threshold: 0.4 });
+    io.observe(ref.current);
+    const vis = () => (document.hidden ? stop() : start());
+    document.addEventListener("visibilitychange", vis);
+    return () => {
+      stop();
+      io.disconnect();
+      document.removeEventListener("visibilitychange", vis);
+    };
+  }, [interactive, rooms.length]);
+
+  const current = rooms[room];
+  const line = `Behind the door, a ${current.label.toLowerCase()} Red Door built in the ${region}.`;
 
   return (
     <div className={className}>
@@ -127,9 +164,9 @@ export default function DoorScene({
       <figure
         ref={ref}
         data-ui
-        className={`door ${dragging ? "is-dragging" : ""}`}
+        className={`door ${dragging ? "is-dragging" : ""} ${settled ? "is-settled" : ""}`}
         style={{ "--door-angle": angle } as React.CSSProperties}
-        aria-label={`A red front door opening onto a finished ${rooms[room].label.toLowerCase()}, a Red Door Revivals project in the ${region}`}
+        aria-label={caption ? undefined : `A red front door opening onto a finished ${current.label.toLowerCase()}, a Red Door Revivals project in the ${region}`}
       >
         <div className="door-scene">
           <div className="door-halo" aria-hidden="true" />
@@ -152,7 +189,9 @@ export default function DoorScene({
               onPointerMove={(e) => {
                 if (!drag.current) return;
                 const w = ref.current?.getBoundingClientRect().width ?? 300;
-                setAngle(clamp(drag.current.a + ((e.clientX - drag.current.x) / w) * 180));
+                const a = clamp(drag.current.a + ((e.clientX - drag.current.x) / w) * 180);
+                parts.current.swing = a - parts.current.rest - parts.current.lean;
+                setAngle(a);
               }}
               onPointerUp={() => {
                 drag.current = null;
@@ -177,8 +216,8 @@ export default function DoorScene({
           </div>
           <div className="door-threshold" aria-hidden="true" />
         </div>
+        {caption && <figcaption className="door-caption small">{line}</figcaption>}
       </figure>
-      {panel && (controls ? (target ? createPortal(panel, target) : null) : panel)}
     </div>
   );
 }
