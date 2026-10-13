@@ -35,6 +35,8 @@ export const residential = {
     p("res-victorian", 793, 473, "Victorian-style home with a gabled roofline"),
     p("res-library", 632, 468, "Wood-paneled room with a fireplace and chandelier"),
     p("res-porch", 762, 477, "Screened porch with exposed timber brackets"),
+    p("res-colonial", 793, 355, "White Greek Revival home with two-story columns and black shutters"),
+    p("res-kitchen-island", 793, 396, "White kitchen with a dark-topped island, two stools, and pleated pendant lights"),
   ],
 };
 
@@ -113,6 +115,9 @@ export const lookbook = {
   poster: "/video/red-door-lookbook-poster.webp",
   captions: "/video/red-door-lookbook.vtt",
 };
+
+// Home page hero: three stills that crossfade. The first is the LCP image.
+export const heroStills: Photo[] = [residential.gallery[0], residential.feature.after, residential.gallery[3]];
 
 // Home page "Recent work"
 export const featured: { photo: Photo; caption: string }[] = [

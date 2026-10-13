@@ -26,6 +26,9 @@ export const positioning = {
   // Steve's recommended line from the same document.
   uncertainty:
     "Too many renovation projects leave owners wondering what’s happening next. Red Door Revivals eliminates that uncertainty with professional planning, detailed scopes, design support, and disciplined project management.",
+  // The "complete package" line used under the uncertainty statement on the home page.
+  package:
+    "Qualified contractors are hard to find, and most offer one piece of the job at a time. We bring the whole package: 30+ years of residential and commercial building, award-winning design, and disciplined project management.",
 };
 
 export const promise = {

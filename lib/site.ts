@@ -8,7 +8,7 @@ export const site = {
   // CONFIRM: final Florida domain (RedDoorRevivalsFlorida.com, RedDoorAtTheBeach.com, or a subdomain)
   url: "https://reddoor2.netlify.app",
   tagline: "Clear plans. Clear pricing. Beautiful results.",
-  promise: "You own the property. We'll manage the project.",
+  promise: "You own the property. We’ll manage the project.",
   description:
     "Renovation, restoration, and turnkey project management for rental owners and residential investors in Fernandina Beach and Amelia Island. 30+ years of residential and commercial experience.",
 

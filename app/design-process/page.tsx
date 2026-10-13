@@ -1,78 +1,116 @@
-import type { Metadata } from "next";
-import { Container, CtaBand, Img, PageIntro } from "@/components/ui";
-import { residential } from "@/lib/projects";
+import JsonLd from "@/components/JsonLd";
+import Picture from "@/components/Picture";
+import Reveal from "@/components/Reveal";
+import FAQ from "@/components/FAQ";
+import Door from "@/components/Door";
+import { Container, CtaBand, Dash, Eyebrow, PageIntro, SectionHead } from "@/components/ui";
+import { region, residential } from "@/lib/projects";
 import { steps } from "@/lib/process";
 import { positioning, why } from "@/lib/copy";
+import { faqs } from "@/lib/faq";
+import { pageMeta } from "@/lib/seo";
+import { breadcrumbs, graph } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "The Red Door Process",
   description:
     "Consultation, property assessment, design, a detailed project plan, project management, communication, and completion: how Red Door Revivals runs a renovation.",
-  alternates: { canonical: "/design-process/" },
-};
+  path: "/design-process/",
+  image: "/og/design-process.jpg",
+  imageAlt: "Kitchen with painted cabinets and dark ceiling beams",
+});
 
 const designCombined = why.find((w) => w.title === "Design + Construction")!;
+const processFaqs = faqs.filter((f) => /first|decide|designer|project plan|happening|end of the project/.test(f.q));
 
 export default function DesignProcess() {
   return (
     <>
-      <PageIntro title="The Red Door Process">
+      <PageIntro eyebrow="How we work" title="The Red Door Process" photo={residential.gallery[4]} photoCaption={`Kitchen, Red Door project, ${region}`}>
         <p>
           {positioning.differenceLead} {positioning.difference}
         </p>
       </PageIntro>
 
       <section className="border-b border-line">
-        <Container className="py-16 md:py-24">
-          <ol className="space-y-16 md:space-y-20">
+        <Container className="py-section-sm md:py-section">
+          <ol className="relative">
             {steps.map((s, i) => (
-              <li key={s.title} className="grid gap-6 md:grid-cols-[6rem_1fr_1fr] md:gap-10">
-                <span className="display text-[3.5rem] leading-none text-door md:text-[4.5rem]">{i + 1}</span>
-                <div>
-                  <p className="text-[0.82rem] font-medium uppercase tracking-[0.12em] text-ink-soft">Step {i + 1}</p>
-                  <h2 className="display mt-1 text-[2rem] md:text-[2.4rem]">{s.title}</h2>
+              <li key={s.title} className="grid gap-6 border-t border-line py-12 md:grid-cols-[7rem_1fr_1fr] md:gap-10 md:py-16 lg:grid-cols-[9rem_1fr_1fr]">
+                <Reveal className="md:sticky md:top-28 md:self-start">
+                  <span className="display block text-[4rem] leading-none text-door md:text-[5.5rem]">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="eyebrow mt-3">Step {i + 1} of {steps.length}</span>
+                </Reveal>
+                <Reveal delay={80}>
+                  <h2 className="display text-display-md">{s.title}</h2>
                   {s.intro.map((p) => (
-                    <p key={p} className="measure mt-4 text-lg text-ink-soft">{p}</p>
+                    <p key={p} className="measure mt-4 text-lede text-ink-soft">{p}</p>
                   ))}
                   {s.close?.map((c) => (
-                    <p key={c} className="measure mt-4 text-lg font-medium">{c}</p>
+                    <p key={c} className="measure mt-5 flex gap-3 text-[1.05rem] font-medium">
+                      <Dash />
+                      {c}
+                    </p>
                   ))}
-                </div>
-                <div>
-                  {s.listLead && <p className="text-lg text-ink-soft">{s.listLead}</p>}
+                </Reveal>
+                <Reveal delay={160}>
+                  {s.listLead && <p className="text-[1.05rem] text-ink-soft">{s.listLead}</p>}
                   {s.items && (
-                    <ul className={`${s.listLead ? "mt-3" : ""} grid gap-x-6 gap-y-1.5 ${s.items.length > 6 && s.items[0].length < 30 ? "sm:grid-cols-2" : ""}`}>
-                      {s.items.map((it) => (
-                        <li key={it} className="flex gap-3">
-                          <span className="mt-[0.7em] h-px w-3 shrink-0 bg-door" aria-hidden="true" />
-                          <span>{it}</span>
-                        </li>
-                      ))}
+                    <ul className={`${s.listLead ? "mt-4" : ""} ${s.items.length > 6 && s.items[0].length < 30 ? "flex flex-wrap gap-2" : "space-y-2"}`}>
+                      {s.items.map((it) =>
+                        s.items!.length > 6 && s.items![0].length < 30 ? (
+                          <li key={it} className="rounded-full border border-ink/15 px-3.5 py-1.5 text-[0.9rem]">{it}</li>
+                        ) : (
+                          <li key={it} className="flex gap-3 text-[1.02rem]">
+                            <Dash />
+                            <span>{it}</span>
+                          </li>
+                        ),
+                      )}
                     </ul>
                   )}
                   {i === 2 && (
-                    <div className="mt-6">
-                      <Img photo={residential.gallery[3]} sizes="(min-width: 768px) 34vw, 100vw" />
-                    </div>
+                    <figure className="mt-8">
+                      <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 34vw, 100vw" className="zoom-media aspect-[4/3] overflow-hidden rounded-[3px] shadow-card" imgClassName="h-full object-cover" />
+                      <figcaption className="mt-2.5 text-[0.82rem] text-ink-soft">Finishes chosen before construction. Red Door project, {region}.</figcaption>
+                    </figure>
                   )}
-                </div>
+                </Reveal>
               </li>
             ))}
           </ol>
         </Container>
       </section>
 
-      <section className="border-b border-line bg-ink text-white">
-        <Container className="grid gap-10 py-16 md:grid-cols-[1fr_1.3fr] md:py-24">
-          <h2 className="display text-[2.2rem] md:text-[3rem]">{designCombined.title}</h2>
-          <div className="space-y-5 text-lg text-white/80">
-            {designCombined.body.map((b) => <p key={b}>{b}</p>)}
-            <p>{steps[2].close?.[0]}</p>
-          </div>
+      <section className="grain border-b border-line bg-ink-deep text-white">
+        <Container className="grid gap-12 py-section-sm md:py-section lg:grid-cols-[1fr_1.3fr_auto] lg:items-center lg:gap-16">
+          <Reveal>
+            <Eyebrow tone="light">One team</Eyebrow>
+            <h2 className="display mt-4 text-display-lg">{designCombined.title}</h2>
+          </Reveal>
+          <Reveal delay={120} className="space-y-5 text-lede text-white/80">
+            {designCombined.body.map((b) => (
+              <p key={b}>{b}</p>
+            ))}
+            <p className="font-medium text-white">{steps[2].close?.[0]}</p>
+          </Reveal>
+          <Reveal variant="scale" delay={200} className="hidden lg:block">
+            <Door idPrefix="process" tone="dark" className="w-[180px]" />
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="border-b border-line">
+        <Container className="grid gap-12 py-section-sm md:py-section lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+          <SectionHead eyebrow="Questions" title="About the process" />
+          <Reveal delay={120}>
+            <FAQ items={processFaqs} />
+          </Reveal>
         </Container>
       </section>
 
       <CtaBand />
+      <JsonLd data={graph(breadcrumbs([{ name: "Our process", path: "/design-process/" }]))} />
     </>
   );
 }

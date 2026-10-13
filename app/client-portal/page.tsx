@@ -1,45 +1,62 @@
-import type { Metadata } from "next";
-import { ButtonLink, Container, PageIntro } from "@/components/ui";
+import JsonLd from "@/components/JsonLd";
+import { RevealGroup } from "@/components/Reveal";
+import { ButtonLink, Container, PageIntro, SectionHead } from "@/components/ui";
+import { Doc, Speak, Status } from "@/components/icons";
 import { site } from "@/lib/site";
+import { interiors, region } from "@/lib/projects";
+import { pageMeta } from "@/lib/seo";
+import { breadcrumbs, graph } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Client Portal",
   description: "Log in to follow your Red Door Revivals project: schedule, photos, budget, selections, and messages.",
-  alternates: { canonical: "/client-portal/" },
-};
+  path: "/client-portal/",
+  image: "/og/client-portal.jpg",
+  imageAlt: "Creative office interior by Red Door Revivals",
+});
 
 // Portal contents per the scope: documents, messages, and project status (CoConstruct).
 const inside = [
-  { title: "Project status", body: "Where the project stands during the build." },
-  { title: "Messages", body: "Project messages, kept with the project." },
-  { title: "Documents", body: "Project documents in one place." },
+  { title: "Project status", body: "Where the project stands during the build.", icon: Status },
+  { title: "Messages", body: "Project messages, kept with the project.", icon: Speak },
+  { title: "Documents", body: "Project documents in one place.", icon: Doc },
 ];
 
 export default function ClientPortal() {
   return (
     <>
-      <PageIntro title="Your project, from anywhere">
+      <PageIntro
+        eyebrow="Client portal"
+        title="Your project, from anywhere"
+        photo={interiors.photos[2]}
+        photoCaption={`Creative office, Red Door project, ${region}`}
+        actions={
+          <>
+            <ButtonLink href={site.portalUrl} size="lg" icon>Log in to the client portal</ButtonLink>
+            <ButtonLink href="/contact/" variant="secondary" size="lg">Start a project</ButtonLink>
+          </>
+        }
+      >
         <p>
-          Owners receive regular updates throughout the project. Clients and trade partners find documents,
-          messages, and project status in our client portal during a build.
+          Owners receive regular updates throughout the project. Clients and trade partners find documents, messages, and
+          project status in our client portal during a build.
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink href={site.portalUrl}>Log in to the client portal</ButtonLink>
-          <ButtonLink href="/contact/" variant="secondary">Start a project</ButtonLink>
-        </div>
       </PageIntro>
 
-      <section>
-        <Container className="py-16 md:py-24">
-          <h2 className="display text-[2.2rem] md:text-[3rem]">What&rsquo;s inside</h2>
-          <dl className="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-3">
+      <section className="border-b border-line">
+        <Container className="py-section-sm md:py-section">
+          <SectionHead eyebrow="Inside" title="What you'll find" />
+          <RevealGroup className="mt-12 grid gap-5 sm:grid-cols-3">
             {inside.map((item) => (
-              <div key={item.title} className="border-t-2 border-ink pt-4">
-                <dt className="text-xl font-semibold">{item.title}</dt>
-                <dd className="mt-2 text-ink-soft">{item.body}</dd>
+              <div key={item.title} className="rounded-[3px] bg-cream p-7 shadow-card">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-door/10 text-door-deep">
+                  <item.icon size={22} />
+                </span>
+                <p className="mt-5 text-[1.15rem] font-semibold">{item.title}</p>
+                <p className="mt-2 text-ink-soft">{item.body}</p>
               </div>
             ))}
-          </dl>
+          </RevealGroup>
           <p className="measure mt-14 text-ink-soft">
             Can&rsquo;t log in? Call{" "}
             <a href={`tel:${site.phone.tel}`} className="font-medium text-door-deep underline underline-offset-4">
@@ -49,6 +66,7 @@ export default function ClientPortal() {
           </p>
         </Container>
       </section>
+      <JsonLd data={graph(breadcrumbs([{ name: "Client portal", path: "/client-portal/" }]))} />
     </>
   );
 }
