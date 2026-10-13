@@ -258,6 +258,7 @@
   border: 1px solid #d0aa61;
   border-radius: 4px 2px 3px 6px;
   box-shadow: 0 6px 6px #25050766; /* taste-skill-ignore */
+  transform-origin: calc(100% - 3px) 50%;
 }
 [data-ui].door .door-lever::after {
   content: "";
@@ -407,8 +408,25 @@
   box-shadow: 0 9px 12px #0005; /* taste-skill-ignore */
 }
 
-/* Motion: the leaf eases between angles unless the hand is on it. */
+/* Motion: on arrival the brass lever turns about its spindle, then the leaf is released; after
+   that the leaf eases between angles unless the hand is on it. */
 @media (prefers-reduced-motion: no-preference) {
+  [data-ui].door.is-arriving .door-lever {
+    animation: door-handle-press 1.35s cubic-bezier(0.4, 0, 0.2, 1) 0.15s both;
+  }
+  @keyframes door-handle-press {
+    0%,
+    8% {
+      transform: translateZ(15px) rotateZ(0deg);
+    }
+    38%,
+    60% {
+      transform: translateZ(15px) rotateZ(-24deg);
+    }
+    100% {
+      transform: translateZ(15px) rotateZ(0deg);
+    }
+  }
   [data-ui].door .door-leaf,
   [data-ui].door .door-floor::after,
   [data-ui].door .door-reveal-shadow,

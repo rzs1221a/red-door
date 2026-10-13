@@ -10,7 +10,7 @@ import { pictureAttrs } from "./Picture";
 // script the door stands open on the first room (see the <noscript> style).
 
 const OPEN = 54; // the preview's resting angle (≈ -38deg)
-const ARRIVAL_MS = 450;
+const ARRIVAL_MS = 650; // the lever turns first (door.css), then the leaf is released
 const ROOM_MS = 6500;
 
 const clamp = (v: number) => Math.min(100, Math.max(0, v));
@@ -75,6 +75,7 @@ export default function DoorScene({
   const [room, setRoom] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [settled, setSettled] = useState(false);
+  const [arriving, setArriving] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const drag = useRef<{ x: number; a: number } | null>(null);
   // The angle is composed: a rest that follows the scroll, the visitor's own swing, and a lean
@@ -91,8 +92,12 @@ export default function DoorScene({
   useEffect(() => {
     if (!interactive) return;
     reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced.current) setArriving(true);
     const t = window.setTimeout(() => setAngle(OPEN), reduced.current ? 0 : ARRIVAL_MS);
-    const s = window.setTimeout(() => setSettled(true), reduced.current ? 0 : ARRIVAL_MS + 3400);
+    const s = window.setTimeout(() => {
+      setSettled(true);
+      setArriving(false);
+    }, reduced.current ? 0 : ARRIVAL_MS + 3400);
     return () => {
       window.clearTimeout(t);
       window.clearTimeout(s);
@@ -164,7 +169,7 @@ export default function DoorScene({
       <figure
         ref={ref}
         data-ui
-        className={`door ${dragging ? "is-dragging" : ""} ${settled ? "is-settled" : ""}`}
+        className={`door ${dragging ? "is-dragging" : ""} ${settled ? "is-settled" : ""} ${arriving ? "is-arriving" : ""}`}
         style={{ "--door-angle": angle } as React.CSSProperties}
         aria-label={caption ? undefined : `A red front door opening onto a finished ${current.label.toLowerCase()}, a Red Door Revivals project in the ${region}`}
       >
