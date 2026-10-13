@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { site } from "@/lib/site";
 import { closingPromise } from "@/lib/copy";
+import type { Photo } from "@/lib/projects";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`mx-auto max-w-6xl px-5 md:px-8 ${className}`}>{children}</div>;
@@ -37,6 +38,22 @@ export function PageIntro({ title, children }: { title: string; children?: React
         {children && <div className="measure mt-6 text-lg text-ink-soft md:text-xl">{children}</div>}
       </Container>
     </section>
+  );
+}
+
+export function Img({ photo, className = "", sizes }: { photo: Photo; className?: string; sizes?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={photo.src}
+      width={photo.w}
+      height={photo.h}
+      alt={photo.alt}
+      loading="lazy"
+      decoding="async"
+      sizes={sizes}
+      className={`block h-auto w-full rounded-[2px] bg-paper-2 ${className}`}
+    />
   );
 }
 

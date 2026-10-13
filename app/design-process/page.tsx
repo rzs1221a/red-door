@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Container, CtaBand, PageIntro, PhotoSlot } from "@/components/ui";
+import { Container, CtaBand, Img, PageIntro } from "@/components/ui";
+import { residential } from "@/lib/projects";
 import { steps } from "@/lib/process";
 import { positioning, why } from "@/lib/copy";
 
@@ -51,12 +52,7 @@ export default function DesignProcess() {
                   )}
                   {i === 2 && (
                     <div className="mt-6">
-                      <PhotoSlot label="Design board or finish selections (Red Door project)" />
-                    </div>
-                  )}
-                  {i === 4 && (
-                    <div className="mt-6">
-                      <PhotoSlot label="Progress photo, mid-build (Red Door project)" />
+                      <Img photo={residential.gallery[3]} sizes="(min-width: 768px) 34vw, 100vw" />
                     </div>
                   )}
                 </div>

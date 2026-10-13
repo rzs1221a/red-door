@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Door from "@/components/Door";
-import { ButtonLink, Container, CtaBand, PhotoSlot } from "@/components/ui";
+import { ButtonLink, Container, CtaBand, Img } from "@/components/ui";
+import { featured, region } from "@/lib/projects";
 import { site } from "@/lib/site";
 import { steps } from "@/lib/process";
 import { difference, hero, idealCustomer, positioning, promise, services, why } from "@/lib/copy";
@@ -133,7 +134,7 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Projects teaser: placeholders until Red Door project photos arrive */}
+      {/* Projects teaser: Red Door Look Book photos (Atlanta area) */}
       <section className="border-b border-line">
         <Container className="py-16 md:py-24">
           <div className="flex flex-wrap items-end justify-between gap-6">
@@ -143,9 +144,17 @@ export default function Home() {
             </Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            <PhotoSlot label="Project photo: kitchen, after" />
-            <PhotoSlot label="Project photo: exterior, after" />
-            <PhotoSlot label="Project photo: bath, after" />
+            {featured.map((f) => (
+              <figure key={f.photo.src}>
+                <div className="aspect-[4/3] overflow-hidden rounded-[2px]">
+                  <Img photo={f.photo} className="h-full object-cover" sizes="(min-width: 768px) 31vw, 100vw" />
+                </div>
+                <figcaption className="mt-3 text-[0.95rem]">
+                  {f.caption}
+                  <span className="text-ink-soft">, {region}</span>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </Container>
       </section>
