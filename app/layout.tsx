@@ -18,11 +18,11 @@ export const metadata: Metadata = {
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "Red Door Revivals, Fernandina Beach" }],
   },
   twitter: { card: "summary_large_image" },
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: [{ url: "/favicon-48.png", sizes: "48x48" }, { url: "/icon.png", sizes: "512x512" }], apple: "/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#9e1b17",
+  themeColor: "#e31b23",
 };
 
 const jsonLd = {

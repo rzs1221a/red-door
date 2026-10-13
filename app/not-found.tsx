@@ -9,7 +9,7 @@ export default function NotFound() {
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <ButtonLink href="/">Go to the home page</ButtonLink>
-        <ButtonLink href="/contact/" variant="secondary">Request a walkthrough</ButtonLink>
+        <ButtonLink href="/contact/" variant="secondary">Request a consultation</ButtonLink>
       </div>
     </Container>
   );

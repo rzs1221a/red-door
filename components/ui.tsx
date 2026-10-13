@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { site } from "@/lib/site";
+import { closingPromise } from "@/lib/copy";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`mx-auto max-w-6xl px-5 md:px-8 ${className}`}>{children}</div>;
@@ -39,7 +40,7 @@ export function PageIntro({ title, children }: { title: string; children?: React
   );
 }
 
-// Stand-in for a project photo until Red Door's own photos arrive.
+// Labeled stand-in for a project photo until Red Door's own project photos arrive. Never fill with stock or another firm's work.
 export function PhotoSlot({ label, ratio = "aspect-[4/3]" }: { label: string; ratio?: string }) {
   return (
     <figure
@@ -57,8 +58,8 @@ export function PhotoSlot({ label, ratio = "aspect-[4/3]" }: { label: string; ra
 }
 
 export function CtaBand({
-  title = "Tell us about the property.",
-  body = "Send the address and what you have in mind. We'll set up a walkthrough and come back with a written scope and a clear price.",
+  title = closingPromise.lead,
+  body = closingPromise.verbs.join(" "),
 }: {
   title?: string;
   body?: string;
@@ -71,7 +72,7 @@ export function CtaBand({
           <p className="measure mt-4 text-lg text-white/85">{body}</p>
         </div>
         <div className="flex flex-wrap gap-3 md:justify-end">
-          <ButtonLink href="/contact/" variant="light">Request a walkthrough</ButtonLink>
+          <ButtonLink href="/contact/" variant="light">Request a consultation</ButtonLink>
           <a
             href={`tel:${site.phone.tel}`}
             className="inline-flex items-center rounded-[3px] border border-white/60 px-6 py-3.5 font-medium hover:bg-white/10"

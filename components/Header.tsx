@@ -26,7 +26,7 @@ export default function Header() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={`text-[0.95rem] underline-offset-[6px] hover:underline ${
-                  active ? "text-door underline decoration-2" : "text-ink"
+                  active ? "text-door-deep underline decoration-2" : "text-ink"
                 }`}
               >
                 {item.label}

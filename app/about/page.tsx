@@ -1,41 +1,42 @@
 import type { Metadata } from "next";
 import { Container, CtaBand, PageIntro } from "@/components/ui";
 import { site } from "@/lib/site";
+import { closingPromise, hero, positioning, why } from "@/lib/copy";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Red Door Revivals brings 30+ years of residential and commercial building and award-winning design to rental property owners in Fernandina Beach.",
+    "Red Door Revivals brings 30+ years of residential and commercial experience, professional design, and detailed project management to property owners in Fernandina Beach.",
   alternates: { canonical: "/about/" },
 };
+
+const experience = why.find((w) => w.title === "30+ Years of Experience")!;
 
 export default function About() {
   return (
     <>
-      <PageIntro title="We've seen almost every situation a renovation can throw at you">
-        <p>
-          Red Door Revivals has spent more than 30 years renovating homes and commercial buildings across the
-          Southeast. Now that experience is on Amelia Island, working for rental owners and investors.
-        </p>
+      <PageIntro title="Red Door Revivals, LLC">
+        <p>{hero.lead}</p>
       </PageIntro>
 
       <section className="border-b border-line">
         <Container className="grid gap-12 py-16 md:grid-cols-[1fr_1.4fr] md:py-24">
-          <h2 className="display text-[2.2rem] md:text-[3rem]">Residential and commercial, for three decades</h2>
+          <div>
+            <h2 className="display text-[2.2rem] md:text-[3rem]">{positioning.differenceLead}</h2>
+          </div>
           <div className="prose-site measure text-lg text-ink-soft">
-            <p>
-              The company started in residential construction and grew into commercial renovation and historic
-              restoration in the Atlanta area, where it has completed more than 50 projects.
-            </p>
-            <p>
-              That range matters on a rental. Old houses hide problems, budgets have limits, and every week a
-              property sits empty costs money. We know how to find issues early, price them honestly, and keep a
-              job moving.
-            </p>
-            <p>
-              Fernandina Beach is home for our Florida team, and the rental market here needs what we do best: a
-              predictable process, finished on schedule, by people who answer the phone.
-            </p>
+            <p className="font-medium text-ink">{positioning.difference}</p>
+            {positioning.detail.map((p) => <p key={p}>{p}</p>)}
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-b border-line">
+        <Container className="grid gap-12 py-16 md:grid-cols-[1fr_1.4fr] md:py-24">
+          <h2 className="display text-[2.2rem] md:text-[3rem]">{experience.title}</h2>
+          <div className="prose-site measure text-lg text-ink-soft">
+            <p>Residential and commercial building and design.</p>
+            {experience.body.map((p) => <p key={p}>{p}</p>)}
           </div>
         </Container>
       </section>
@@ -69,10 +70,27 @@ export default function About() {
       </section>
 
       <section className="border-b border-line">
+        <Container className="grid gap-12 py-16 md:grid-cols-[1fr_1.4fr] md:py-24">
+          <div>
+            <h2 className="display text-[2.2rem] md:text-[3rem]">{closingPromise.title}</h2>
+            <p className="mt-5 text-lg font-medium">{closingPromise.lead}</p>
+          </div>
+          <div className="text-lg">
+            <ul className="space-y-3 text-ink-soft">
+              {closingPromise.shouldnt.map((s) => (
+                <li key={s} className="border-l-2 border-door pl-5">{s}</li>
+              ))}
+            </ul>
+            <p className="mt-6 font-medium">{closingPromise.therefore}</p>
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-b border-line">
         <Container className="py-14">
           <p className="measure text-lg text-ink-soft">
-            See our commercial and historic work in Atlanta at{" "}
-            <a href={site.atlantaUrl} className="font-medium text-door underline underline-offset-4">
+            See our commercial work in Atlanta at{" "}
+            <a href={site.atlantaUrl} className="font-medium text-door-deep underline underline-offset-4">
               reddoorrevivals.com
             </a>
             .

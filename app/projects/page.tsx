@@ -9,19 +9,20 @@ export const metadata: Metadata = {
   alternates: { canonical: "/projects/" },
 };
 
-// Replace each entry with a real Red Door project as photos and details arrive.
+// Placeholders only. Replace each entry with a real Red Door project once its photos and
+// details arrive. No North Fletcher case study: no progress photos exist for it.
 const projects = [
   {
     title: "Project name",
-    place: "Fernandina Beach",
+    place: "Location",
     summary: "One or two sentences on the property, what the owner needed, and what changed.",
-    scope: ["Kitchen", "Baths", "Flooring"],
+    scope: ["Scope item", "Scope item"],
   },
   {
     title: "Project name",
-    place: "Amelia Island",
+    place: "Location",
     summary: "One or two sentences on the property, what the owner needed, and what changed.",
-    scope: ["Restoration", "Exterior", "Paint"],
+    scope: ["Scope item", "Scope item"],
   },
 ];
 
@@ -57,8 +58,8 @@ export default function Projects() {
       <section className="border-b border-line">
         <Container className="py-14">
           <p className="measure text-lg text-ink-soft">
-            Commercial renovations and historic restorations in the Atlanta area are on{" "}
-            <a href={site.atlantaUrl} className="font-medium text-door underline underline-offset-4">
+            Commercial work in the Atlanta area is on{" "}
+            <a href={site.atlantaUrl} className="font-medium text-door-deep underline underline-offset-4">
               reddoorrevivals.com
             </a>
             .

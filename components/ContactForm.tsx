@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { site } from "@/lib/site";
+import { steps } from "@/lib/process";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -35,8 +36,8 @@ export default function ContactForm() {
       <div role="status" className="rounded-[3px] border-l-4 border-door bg-white p-7">
         <h2 className="display text-[2rem]">Request sent</h2>
         <p className="mt-3 text-lg text-ink-soft">
-          Thanks. We&rsquo;ll reply within one business day to set up a walkthrough. If it&rsquo;s urgent, call{" "}
-          <a href={`tel:${site.phone.tel}`} className="font-medium text-door underline">{site.phone.display}</a>.
+          Thanks. We&rsquo;ll be in touch to set up a consultation. If it&rsquo;s urgent, call{" "}
+          <a href={`tel:${site.phone.tel}`} className="font-medium text-door-deep underline">{site.phone.display}</a>.
         </p>
       </div>
     );
@@ -79,8 +80,9 @@ export default function ContactForm() {
             <option value="" disabled>Choose one</option>
             <option>Vacation rental</option>
             <option>Long-term rental</option>
-            <option>Investment purchase</option>
+            <option>Investment property</option>
             <option>Second home</option>
+            <option>Home renovation</option>
             <option>Other</option>
           </select>
         </label>
@@ -95,6 +97,17 @@ export default function ContactForm() {
           </select>
         </label>
       </div>
+
+      <label className={label}>
+        {steps[0].listLead}
+        <select className={field} name="goal" defaultValue="">
+          <option value="" disabled>Choose one</option>
+          {steps[0].items!.map((g) => (
+            <option key={g}>{g.replace("?", "")}</option>
+          ))}
+          <option>Something else</option>
+        </select>
+      </label>
 
       <label className={label}>
         What do you have in mind?
