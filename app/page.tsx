@@ -80,10 +80,10 @@ export default function Home() {
           </RevealGroup>
           <div className="col-span-12 mt-10 grid grid-cols-2 gap-4 md:col-span-3 md:mt-0 md:grid-cols-1">
             <Reveal className="shutter">
-              <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[3/2] overflow-hidden" imgClassName="h-full object-cover" />
+              <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/2]" imgClassName="h-full object-cover" />
             </Reveal>
             <Reveal className="shutter" delay={150}>
-              <Picture photo={residential.gallery[8]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[3/2] overflow-hidden" imgClassName="h-full object-cover" />
+              <Picture photo={residential.gallery[8]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/2]" imgClassName="h-full object-cover" />
             </Reveal>
           </div>
         </div>
@@ -96,11 +96,14 @@ export default function Home() {
       <section aria-labelledby="services-heading" className="mt-section-sm">
         <h2 id="services-heading" className="sr-only">What we do</h2>
         {frames.map((f, i) => (
-          <div key={f.id} className="relative h-[100svh] overflow-hidden bg-surface">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.62) contrast(1.05)" }} />
-            <div className="wrap relative grid h-full grid-cols-4 items-center gap-[var(--spacing-gutter)] max-md:items-end max-md:pb-0">
-              <Reveal variant="fade" className={`col-span-4 flex min-h-[46svh] flex-col gap-4 bg-ink p-5 text-light-ink md:col-span-1 md:min-h-[52svh] md:items-center md:p-6 md:text-center ${["md:col-start-2", "md:col-start-3", "md:col-start-4"][i]}`} id={`frame-${f.id}`}>
+          <div key={f.id} className="relative bg-surface md:h-[100svh] md:overflow-hidden">
+            <div className="relative h-[62svh] overflow-hidden md:absolute md:inset-0 md:h-auto">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.62) contrast(1.05)" }} />
+            </div>
+            {/* On the phone the card stands across the bottom edge of the picture, as the door does in the hero. */}
+            <div className="wrap relative -mt-[18svh] pb-12 md:mt-0 md:grid md:h-full md:grid-cols-4 md:items-center md:gap-[var(--spacing-gutter)] md:pb-0">
+              <Reveal variant="fade" className={`flex flex-col gap-4 bg-ink p-5 text-light-ink md:col-span-1 md:min-h-[52svh] md:items-center md:p-6 md:text-center ${["md:col-start-2", "md:col-start-3", "md:col-start-4"][i]}`} id={`frame-${f.id}`}>
                 <div className="flex items-start justify-between gap-4 md:block">
                   <p className="lead max-w-none">{f.title}</p>
                   <Picture photo={f.small} sizes="96px" className="w-24 shrink-0 md:hidden" imgClassName="aspect-[3/2] object-cover" />
@@ -108,7 +111,7 @@ export default function Home() {
                 <p className="text-light-muted">{f.line}</p>
                 <p className="">{f.fact}</p>
                 <Picture photo={f.small} sizes="22vw" className="hidden w-full md:block" imgClassName="aspect-[3/2] object-cover" />
-                <Link href={`/services/#${f.id}`} className="btn mt-auto w-full">See the service</Link>
+                <Link href={`/services/#${f.id}`} className="btn mt-2 w-full md:mt-auto">See the service</Link>
               </Reveal>
             </div>
           </div>
@@ -158,10 +161,10 @@ export default function Home() {
             <Reveal className="shutter drift">
               <Picture photo={found.fairbanksHouse} sizes="(min-width: 768px) 48vw, 100vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/4]" imgClassName="h-full object-cover object-[60%_40%]" />
             </Reveal>
-            <Reveal delay={200} className="absolute -bottom-10 right-0 w-[38%] md:bottom-10 md:-left-10 md:right-auto md:w-1/3">
+            <Reveal delay={200} className="absolute -bottom-8 right-0 w-[38%] md:bottom-10 md:-left-10 md:right-auto md:w-1/3">
               <Picture photo={found.centreStreet} sizes="(min-width: 768px) 16vw, 38vw" className="aspect-square overflow-hidden" imgClassName="h-full object-cover object-[20%_60%]" />
             </Reveal>
-            <p className="small mt-14 text-muted md:absolute md:bottom-0 md:left-0 md:mt-0">
+            <p className="small mt-6 max-w-[56%] text-muted md:absolute md:bottom-0 md:left-0 md:mt-0 md:max-w-none">
               The Fairbanks House and Centre Street, {site.city}. Pictures via Wikimedia Commons, credited below.
             </p>
           </div>
@@ -170,7 +173,7 @@ export default function Home() {
       </section>
 
       {/* ---------- Contact: the email as display type, inverted ---------- */}
-      <section className="relative flex min-h-[100svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-[12vh] pt-10 text-light-ink" aria-label="Write to us">
+      <section className="relative flex min-h-[74svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-14 pt-10 text-light-ink md:min-h-[100svh] md:pb-[12vh]" aria-label="Write to us">
         <Reveal>
           <p className="lead max-w-[30ch]">Tell us about the property and what you want it to do.</p>
         </Reveal>
@@ -197,7 +200,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="h-[16svh]" aria-hidden="true" />
+      <div className="h-[6svh] md:h-[16svh]" aria-hidden="true" />
     </>
   );
 }

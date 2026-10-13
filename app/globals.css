@@ -216,8 +216,24 @@ b {
     text-decoration-color: currentColor;
   }
 }
-.link-on {
+.link-on,
+.link:active {
   text-decoration-color: currentColor;
+}
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+/* Picture credits: a secondary note, smaller on the phone. */
+.credits {
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+@media (min-width: 768px) {
+  .credits {
+    font-size: var(--text-body);
+  }
 }
 
 .square-btn {

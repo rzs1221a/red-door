@@ -54,7 +54,7 @@ export default function Nav() {
 
         <div className="flex items-center gap-4 lg:hidden">
           <Link href="/contact/" className="btn !px-3.5 !py-2 !small">Consultation</Link>
-          <button ref={buttonRef} type="button" className="link small" aria-expanded={open} aria-controls="menu" onClick={() => setOpen(true)}>
+          <button ref={buttonRef} type="button" className="link -mr-2 inline-flex min-h-[44px] items-center px-2 text-ink" aria-expanded={open} aria-controls="menu" onClick={() => setOpen(true)}>
             Menu
           </button>
         </div>
@@ -72,27 +72,29 @@ export default function Nav() {
           <div className="flex h-16 items-center justify-between">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/images/reddoor-logo-reverse-2x.png" alt="" width={313} height={104} className="h-9 w-auto" />
-            <button type="button" className="link small" onClick={() => dialogRef.current?.close()}>Close</button>
+            <button type="button" className="link -mr-2 inline-flex min-h-[44px] items-center px-2" onClick={() => dialogRef.current?.close()}>Close</button>
           </div>
-          <nav aria-label="Main" className="mt-10">
-            <ul className="space-y-3">
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="head link block py-1">{item.label}</Link>
-                </li>
-              ))}
+          <nav aria-label="Main" className="mt-8">
+            <ul className="space-y-1">
+              {nav.map((item) => {
+                const active = pathname === normalize(item.href);
+                return (
+                  <li key={item.href}>
+                    <Link href={item.href} aria-current={active ? "page" : undefined} className={`title link block py-1.5 ${active ? "link-on" : ""}`} data-rise style={{ "--i": nav.indexOf(item) } as React.CSSProperties}>
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
               <li>
-                <a href={site.portalUrl} className="head link block py-1">Client portal</a>
+                <a href={site.portalUrl} className="lead link mt-4 block py-2 text-muted">Client portal</a>
               </li>
             </ul>
           </nav>
-          <div className="mt-auto space-y-4 pt-10">
+          <div className="mt-auto grid gap-3 pt-10">
             <Link href="/contact/" className="btn w-full">Request a consultation</Link>
-            <p>
-              <a href={`tel:${site.phone.tel}`} className="link">{site.phone.display}</a>
-              <br />
-              <span className="text-muted">{site.serviceArea.join(", ")}</span>
-            </p>
+            <a href={`tel:${site.phone.tel}`} className="btn btn--ink w-full">Call {site.phone.display}</a>
+            <p className="small mt-2 text-muted">{site.serviceArea.join(", ")}, Florida</p>
           </div>
         </div>
       </dialog>

@@ -6,7 +6,7 @@ import { foundCredits } from "@/lib/found";
 export default function Footer({ credits = true }: { credits?: boolean }) {
   const year = new Date().getFullYear();
   return (
-    <footer className="wrap pb-6 pt-[14svh]">
+    <footer className="wrap pb-8 pt-[9svh] md:pt-[14svh]">
       <div className="grid gap-2 md:grid-cols-[1fr_auto_1fr] md:items-baseline">
         <p className="text-muted">Renovation and project management, {site.city}, Florida</p>
         <p className="flex flex-wrap gap-x-6 gap-y-1 md:justify-center">
@@ -20,7 +20,7 @@ export default function Footer({ credits = true }: { credits?: boolean }) {
         </p>
       </div>
       {credits && (
-        <p className="mt-6 max-w-none text-muted">
+        <p className="credits mt-8 max-w-none text-muted">
           Pictures of Fernandina Beach:{" "}
           {foundCredits.map((c, i) => (
             <span key={c.file}>
