@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head><meta name="robots" content="noindex" /></head>
+  <body>
+    <!-- Static copy of the inquiry form so Netlify Forms detects it at deploy time. Keep fields in sync with components/ContactForm.tsx. -->
+    <form name="inquiry" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="inquiry" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="phone" />
+      <input name="email" type="email" />
+      <input name="property" />
+      <select name="property-type"><option>x</option></select>
+      <select name="timeline"><option>x</option></select>
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>

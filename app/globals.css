@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import "@fontsource/libre-caslon-display/400.css";
+@import "@fontsource/public-sans/400.css";
+@import "@fontsource/public-sans/500.css";
+@import "@fontsource/public-sans/600.css";
+
+@theme {
+  --color-paper: #eef1ee;
+  --color-paper-2: #e2e7e3;
+  --color-ink: #1d2b2f;
+  --color-ink-soft: #46555a;
+  --color-door: #9e1b17;
+  --color-door-deep: #6e110e;
+  --color-marsh: #55685c;
+  --color-brass: #a88440;
+  --color-line: #c6cfca;
+
+  --font-display: "Libre Caslon Display", "Georgia", serif;
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.04;
+}
+
+.measure {
+  max-width: 62ch;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-door);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--color-door);
+  color: #fff;
+}
+
+/* The door: the one moving thing on the site. It swings open a little on load. */
+.door-leaf {
+  transform-origin: left center;
+  transform: perspective(1400px) rotateY(0deg);
+  animation: door-open 1.6s cubic-bezier(0.22, 0.8, 0.24, 1) 0.4s forwards;
+}
+
+@keyframes door-open {
+  to {
+    transform: perspective(1400px) rotateY(-32deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door-leaf {
+    animation: none;
+    transform: perspective(1400px) rotateY(-32deg);
+  }
+}
+
+.prose-site p + p {
+  margin-top: 1rem;
+}
