@@ -1,30 +1,64 @@
 @import "tailwindcss";
-@import "@fontsource/libre-caslon-display/400.css";
-@import "@fontsource/public-sans/400.css";
-@import "@fontsource/public-sans/500.css";
-@import "@fontsource/public-sans/600.css";
 
+/* ---------- Design tokens ---------- */
 @theme {
   --color-paper: #eef1ee;
   --color-paper-2: #e2e7e3;
+  --color-paper-deep: #d3dad5;
+  --color-cream: #f6f4ee;
   --color-ink: #1d2b2f;
+  --color-ink-deep: #121c1f;
   --color-ink-soft: #46555a;
   --color-door: #e31b23; /* logo red */
   --color-door-deep: #b3141b;
+  --color-lacquer: #7a120f;
   --color-marsh: #55685c;
   --color-brass: #a88440;
+  --color-brass-soft: #d9bb72;
   --color-line: #c6cfca;
 
-  --font-display: "Libre Caslon Display", "Georgia", serif;
-  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --container-site: 80rem;
+
+  --text-display-xl: clamp(3rem, 1.6rem + 4.8vw, 6rem);
+  --text-display-xl--line-height: 0.96;
+  --text-display-lg: clamp(2.4rem, 1.5rem + 3.2vw, 4.4rem);
+  --text-display-lg--line-height: 1.0;
+  --text-display-md: clamp(1.9rem, 1.4rem + 1.9vw, 3rem);
+  --text-display-md--line-height: 1.08;
+  --text-display-sm: clamp(1.5rem, 1.25rem + 0.9vw, 2rem);
+  --text-display-sm--line-height: 1.15;
+  --text-lede: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
+  --text-lede--line-height: 1.55;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --spacing-section: clamp(5rem, 3.5rem + 5vw, 9rem);
+  --spacing-section-sm: clamp(3.5rem, 2.5rem + 3vw, 6rem);
+
+  --shadow-card: 0 1px 0 rgba(29, 43, 47, 0.06), 0 24px 48px -32px rgba(29, 43, 47, 0.35);
+  --shadow-lift: 0 2px 4px rgba(29, 43, 47, 0.06), 0 32px 64px -28px rgba(29, 43, 47, 0.45);
 }
 
+@theme inline {
+  --font-display: var(--font-display-src), "Georgia", "Times New Roman", serif;
+  --font-sans: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------- Base ---------- */
 html {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -32,10 +66,20 @@ body {
   line-height: 1.6;
 }
 
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 .display {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   line-height: 1.04;
 }
 
@@ -54,26 +98,275 @@ body {
   color: #fff;
 }
 
-/* The door: the one moving thing on the site. It swings open a little on load. */
+.prose-site p + p {
+  margin-top: 1rem;
+}
+
+/* ---------- Utilities ---------- */
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+
+@utility eyebrow-rule {
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 1.75rem;
+    height: 2px;
+    background: var(--eyebrow-rule, var(--color-door));
+  }
+}
+
+@utility hairline-y {
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Paper grain: for dark bands and the hero only. */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: screen;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* Animated underline for text links. */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.45s var(--ease-out-expo);
+  padding-bottom: 2px;
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+@utility link-underline-on {
+  background-size: 100% 1px;
+}
+
+/* Arrow nudge on hover for buttons and links that carry an arrow icon. */
+@utility arrow-nudge {
+  & svg {
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+  &:hover svg,
+  &:focus-visible svg {
+    transform: translateX(4px);
+  }
+}
+
+/* Image zoom on hover for cards. */
+@utility zoom-media {
+  overflow: hidden;
+  & img {
+    transition: transform 1.2s var(--ease-out-expo);
+  }
+  &:hover img,
+  &:focus-within img {
+    transform: scale(1.04);
+  }
+}
+
+/* ---------- Scroll reveal ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.8s var(--ease-out-expo),
+      transform 1s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .reveal-pending.reveal-fade {
+    transform: none;
+  }
+  .reveal-pending.reveal-left {
+    transform: translateX(-24px);
+  }
+  .reveal-pending.reveal-scale {
+    transform: scale(0.96);
+  }
+  .reveal-pending.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-group > * {
+    --reveal-delay: calc(var(--stagger, 80ms) * var(--i, 0));
+  }
+}
+
+/* ---------- Hero motion ---------- */
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes hero-fade {
+  0%,
+  28% {
+    opacity: 1;
+  }
+  36%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.hero-still {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.hero-still img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: 50% 60%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-stills--animate .hero-still {
+    animation: hero-fade 21s linear infinite;
+  }
+  .hero-stills--animate .hero-still img {
+    animation: kenburns 21s linear infinite;
+  }
+  .hero-stills--animate .hero-still:nth-child(2),
+  .hero-stills--animate .hero-still:nth-child(2) img {
+    animation-delay: 7s;
+  }
+  .hero-stills--animate .hero-still:nth-child(3),
+  .hero-stills--animate .hero-still:nth-child(3) img {
+    animation-delay: 14s;
+  }
+  .hero-stills--animate .hero-still:nth-child(2),
+  .hero-stills--animate .hero-still:nth-child(3) {
+    animation-fill-mode: backwards;
+  }
+}
+
+.hero-still:first-child {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-stills--animate .hero-still:first-child {
+    opacity: 0;
+    animation-fill-mode: both;
+  }
+}
+
+/* ---------- The door ---------- */
 .door-leaf {
   transform-origin: left center;
   transform: perspective(1400px) rotateY(0deg);
-  animation: door-open 1.6s cubic-bezier(0.22, 0.8, 0.24, 1) 0.4s forwards;
+  animation: door-open 1.8s var(--ease-out-expo) 0.5s forwards;
+}
+
+.door-leaf--closed {
+  animation: none;
+  transform: perspective(1400px) rotateY(0deg);
 }
 
 @keyframes door-open {
   to {
-    transform: perspective(1400px) rotateY(-32deg);
+    transform: perspective(1400px) rotateY(-34deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .door-leaf {
     animation: none;
-    transform: perspective(1400px) rotateY(-32deg);
+    transform: perspective(1400px) rotateY(-34deg);
+  }
+  .door-leaf--closed {
+    transform: perspective(1400px) rotateY(0deg);
   }
 }
 
-.prose-site p + p {
-  margin-top: 1rem;
+/* ---------- Details / FAQ ---------- */
+details.faq > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details.faq > summary::-webkit-details-marker {
+  display: none;
+}
+details.faq .faq-chevron {
+  transition: transform 0.4s var(--ease-out-expo);
+}
+details.faq[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+/* ---------- Dialogs ---------- */
+dialog::backdrop {
+  background: rgba(18, 28, 31, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+body.scroll-locked {
+  overflow: hidden;
+}
+
+/* Before/after range handle */
+.ba-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: ew-resize;
+}
+.ba-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 0;
+}
+.ba-range::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 0;
+}
+.ba-range::-webkit-slider-runnable-track {
+  background: transparent;
+}
+.ba-range::-moz-range-track {
+  background: transparent;
 }
