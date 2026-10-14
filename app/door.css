@@ -3,7 +3,7 @@
    [data-ui] so the page rules around it stay flat. --door-angle (0–100) drives the swing. */
 
 [data-ui].door {
-  --door-angle: 54; /* 0 closed … 100 fully open; 54 ≈ the preview's resting -38deg */
+  --door-angle: 72; /* 0 closed … 100 fully open; 72 ≈ -50deg at rest */
   --door-deg: calc(var(--door-angle) * -0.7deg);
   --door-open: calc(var(--door-angle) / 100);
   width: 100%;
@@ -117,7 +117,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(90deg, #160c06ed, #160c0680); /* taste-skill-ignore */
-  opacity: calc(1 - 0.88 * var(--door-open));
+  opacity: calc(1 - 0.94 * var(--door-open));
   pointer-events: none;
 }
 [data-ui].door .door-leaf {

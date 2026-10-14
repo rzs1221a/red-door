@@ -14,6 +14,7 @@ export default function ActionBar() {
   const pathname = normalize(usePathname());
   const [on, setOn] = useState(false);
   const [keyboard, setKeyboard] = useState(false);
+  const [covered, setCovered] = useState(false);
   const hidden = pathname === "/contact" || pathname === "/client-portal";
 
   useEffect(() => {
@@ -24,15 +25,20 @@ export default function ActionBar() {
     const vv = window.visualViewport;
     const onResize = () => setKeyboard(!!vv && vv.height < window.innerHeight * 0.75);
     vv?.addEventListener("resize", onResize);
+    // Sections that carry their own way to get in touch (the email field) hide the bar while on screen.
+    const own = document.querySelectorAll("[data-hide-bar]");
+    const io = new IntersectionObserver((entries) => setCovered(entries.some((e) => e.isIntersecting)), { threshold: 0.05 });
+    own.forEach((el) => io.observe(el));
     return () => {
       window.removeEventListener("scroll", onScroll);
       vv?.removeEventListener("resize", onResize);
+      io.disconnect();
     };
   }, [hidden]);
 
   if (hidden) return null;
   return (
-    <div className={`action-bar ${on && !keyboard ? "is-on" : ""}`} aria-label="Get in touch">
+    <div className={`action-bar ${on && !keyboard && !covered ? "is-on" : ""}`} aria-label="Get in touch">
       <Link href="/contact/" className="btn">Request a consultation</Link>
       <a href={`tel:${site.phone.tel}`} className="btn btn--ink">Call</a>
     </div>

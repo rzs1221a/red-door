@@ -37,7 +37,7 @@ the caption under the sill. Without script: the door stands open on the first ro
 
 ## The argument (claims and proof, in page order)
 
-1. You own the property. We'll manage the project.        → the door, opening onto a finished room; one button
+1. You own the property. We'll manage the project.        → the doorway, nearly a screen tall on the dark ground, opening onto a finished room; one button
 2. You shouldn't have to become a construction expert.   → the staircase statement; the plan/manage/finish note; two photographs
 3. Three kinds of renovation, planned before they are built → three full-bleed rooms with a card each (rental, investment, whole-property; kitchens and bathrooms named inside)
 4. The work holds up, and some of it won award           → strips of real project photographs, the award named on the line
@@ -58,7 +58,7 @@ cornflower blue fights the red door. Type: Boska, as dealt, self-hosted.
 
 Nav: Red Door Revivals (logo) · What we do · Process · Projects · About · Contact → "Request a consultation"
 
-Hero
+Hero (the doorway is the first screen; the name runs along its bottom edge)
   name: Red Door Revivals
   supporting: You own the property. We'll manage the project.
   button: Request a consultation

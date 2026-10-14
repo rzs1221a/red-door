@@ -9,7 +9,7 @@ import { pictureAttrs } from "./Picture";
 // if the visitor takes hold of the leaf. The finished room behind it changes on its own. Without
 // script the door stands open on the first room (see the <noscript> style).
 
-const OPEN = 54; // the preview's resting angle (≈ -38deg)
+const OPEN = 72; // resting angle (≈ -50deg): wide enough to see the room behind the leaf
 const ARRIVAL_MS = 650; // the lever turns first (door.css), then the leaf is released
 const ROOM_MS = 6500;
 
@@ -210,7 +210,7 @@ export default function DoorScene({
               <div className="door-interior">
                 {rooms.map((r, i) => (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img key={r.photo.src} {...pictureAttrs(r.photo)} sizes="300px" alt="" className={i === room ? "is-on" : ""} loading={i === 0 ? "eager" : "lazy"} decoding="async" draggable={false} />
+                  <img key={r.photo.src} {...pictureAttrs(r.photo)} sizes="(min-width: 1024px) 420px, 320px" alt="" className={i === room ? "is-on" : ""} loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : undefined} decoding="async" draggable={false} />
                 ))}
               </div>
               <div className="door-reveal-shadow" />

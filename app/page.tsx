@@ -5,7 +5,6 @@ import FAQ from "@/components/FAQ";
 import JsonLd from "@/components/JsonLd";
 import MomentsRow from "@/components/MomentsRow";
 import OwnersList from "@/components/OwnersList";
-import Parallax from "@/components/Parallax";
 import Picture, { pictureAttrs } from "@/components/Picture";
 import Reveal, { RevealGroup } from "@/components/Reveal";
 import WorkStrips from "@/components/WorkStrips";
@@ -26,42 +25,31 @@ export const metadata: Metadata = {
 const homeFaqs = faqs.filter((f) => /first|designer|project plan|happening|bonded|outside the area/.test(f.q)).slice(0, 6);
 
 export default function Home() {
-  const heroPhoto = residential.gallery[0];
   return (
     <>
-      {/* ---------- Hero: the door stands across the edge of the photograph, the name beneath ---------- */}
+      {/* ---------- Hero: the doorway is the first screen; the finished room is seen through it ---------- */}
       <section className="hero relative overflow-x-clip bg-bg">
-        <div className="hero-stage wrap grid12 items-end">
-          <div className="hero-photo" aria-hidden="true">
-            <Parallax />
-            <div className="hero-photo-move">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                {...pictureAttrs(heroPhoto)}
-                sizes="100vw"
-                alt=""
-                fetchPriority="high"
-                decoding="async"
-                className="h-full w-full object-cover object-[50%_35%]"
-              />
+        <div className="hero-stage wrap grid12 items-center">
+          <div className="order-2 col-span-12 flex flex-col pt-14 lg:order-1 lg:col-span-4 lg:col-start-1 lg:pt-0">
+            <p className="lead max-w-[22ch]" data-rise style={{ "--i": 0 } as React.CSSProperties}>
+              {hero.headline}
+            </p>
+            {/* On phones the sentence comes last, so the name below it follows a paragraph, not a button. */}
+            <div className="order-2 mt-7 lg:order-3 lg:mt-8" data-rise style={{ "--i": 2 } as React.CSSProperties}>
+              <ButtonLink href="/contact/">Request a consultation</ButtonLink>
             </div>
+            <p className="order-3 mt-7 max-w-[34ch] text-muted lg:order-2 lg:mt-5" data-rise style={{ "--i": 1 } as React.CSSProperties}>
+              Thirty years of residential and commercial building, now in {site.city}, Florida.
+            </p>
           </div>
-          {/* The door is the lit object; its threshold rests on the page, its top stands in the photograph. */}
-          <div className="relative col-span-12 flex justify-center lg:col-span-5 lg:col-start-6">
+          {/* The door at the scale it was drawn for: nearly a screen tall, on the dark ground, the room lit behind it. */}
+          <div className="order-1 col-span-12 flex justify-center lg:order-2 lg:col-span-7 lg:col-start-6">
             <DoorScene rooms={doorRooms} region={region} className="hero-door" caption scroll />
           </div>
         </div>
 
-        <div className="hero-band wrap flex flex-col justify-between pb-7">
-          <div className="grid12 items-start gap-y-7">
-            <div data-rise style={{ "--i": 0 } as React.CSSProperties} className="col-span-12 lg:col-span-3 lg:col-start-10 lg:justify-self-end">
-              <ButtonLink href="/contact/">Request a consultation</ButtonLink>
-            </div>
-            <p className="col-span-12 max-w-[44ch] lg:col-span-5 lg:col-start-1 lg:row-start-1" data-rise style={{ "--i": 1 } as React.CSSProperties}>
-              {hero.headline} Thirty years of residential and commercial building, now in {site.city}, Florida.
-            </p>
-          </div>
-          <h1 className="wordmark display mt-14 -ml-[0.04em] md:mt-10" data-rise style={{ "--i": 2 } as React.CSSProperties}>
+        <div className="wrap pb-7 pt-12 lg:pt-2">
+          <h1 className="wordmark display -ml-[0.04em]" data-rise style={{ "--i": 3 } as React.CSSProperties}>
             <span className="block md:inline">Red Door </span>
             <span className="block md:inline">Revivals</span>
           </h1>
@@ -177,7 +165,7 @@ export default function Home() {
       </section>
 
       {/* ---------- Contact: the email as display type, inverted ---------- */}
-      <section className="relative flex min-h-[74svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-14 pt-10 text-light-ink md:min-h-[100svh] md:pb-[12vh]" aria-label="Write to us">
+      <section className="relative flex min-h-[74svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-14 pt-10 text-light-ink md:min-h-[100svh] md:pb-[12vh]" aria-label="Write to us" data-hide-bar>
         <Reveal>
           <p className="lead max-w-[30ch]">Tell us about the property and what you want it to do.</p>
         </Reveal>
