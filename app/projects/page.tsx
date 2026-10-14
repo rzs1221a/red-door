@@ -55,7 +55,7 @@ export default function Projects() {
         </p>
       </section>
 
-      <section className="wrap mt-section-sm" aria-label="Before and after">
+      <section className="wrap mt-10 md:mt-14" aria-label="Before and after">
         <Study s={{ name: f.name, headline: f.headline, body: f.body, recognition: f.recognition, before: f.before, after: f.after }} priority />
         <div className="mt-section-sm space-y-section-sm">
           {commercial.slice(0, 3).map((s, i) => (

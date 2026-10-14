@@ -27,16 +27,22 @@ const photos: Record<string, (typeof residential.gallery)[number] | undefined> =
 export default function Services() {
   return (
     <>
-      <section className="wrap pt-10 md:pt-16">
-        <h1 className="title max-w-[18ch]" data-rise style={{ "--i": 0 } as React.CSSProperties}>What we do</h1>
-        <p className="lead mt-8 text-muted" data-rise style={{ "--i": 1 } as React.CSSProperties}>{positioning.body[0]}</p>
-        <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 small">
-          {services.map((s) => (
-            <li key={s.id}>
-              <a href={`#${s.id}`} className="link">{s.title}</a>
-            </li>
-          ))}
-        </ul>
+      <section className="wrap title-screen pt-10 md:pt-16">
+        <div>
+          <h1 className="title max-w-[18ch]" data-rise style={{ "--i": 0 } as React.CSSProperties}>What we do</h1>
+          <p className="lead mt-8 text-muted" data-rise style={{ "--i": 1 } as React.CSSProperties}>{positioning.body[0]}</p>
+          <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 small">
+            {services.map((s) => (
+              <li key={s.id}>
+                <a href={`#${s.id}`} className="link">{s.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <Reveal className="shutter" data-rise style={{ "--i": 2 } as React.CSSProperties}>
+          <Picture photo={residential.gallery[5]} sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[4/3] overflow-hidden" imgClassName="h-full object-cover" priority />
+          <p className="small mt-3 text-muted">A living room in a Red Door project, {region}.</p>
+        </Reveal>
       </section>
 
       {services.map((s, i) => {

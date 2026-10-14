@@ -33,7 +33,7 @@ export default function DesignProcess() {
       </section>
 
       {/* Pinned story: the heading holds, the seven steps pass. */}
-      <section className="wrap mt-section-sm grid gap-10 md:grid-cols-[5fr_7fr]">
+      <section className="wrap mt-10 grid gap-10 md:mt-14 md:grid-cols-[5fr_7fr]">
         <div className="md:sticky md:top-[18vh] md:self-start">
           <p className="lead">Seven steps, in this order, on every project.</p>
           <p className="mt-4 max-w-[36ch] text-muted">Design decisions happen before construction, not while the contractor is standing in the kitchen.</p>

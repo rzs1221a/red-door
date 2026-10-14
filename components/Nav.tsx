@@ -37,7 +37,7 @@ export default function Nav() {
       <div className="wrap flex h-16 items-center justify-between gap-6 lg:h-[72px]">
         <Link href="/" aria-label="Red Door Revivals, home" className="inline-flex min-h-[44px] items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/reddoor-logo-reverse-2x.png" alt="Red Door Revivals" width={313} height={104} className="h-9 w-auto" loading="eager" fetchPriority="high" decoding="async" />
+          <img src="/images/reddoor-logo-2x.png" alt="Red Door Revivals" width={313} height={104} className="h-9 w-auto" loading="eager" fetchPriority="high" decoding="async" />
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
@@ -71,7 +71,7 @@ export default function Nav() {
         <div className="wrap flex h-full flex-col pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
           <div className="flex h-16 items-center justify-between">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/reddoor-logo-reverse-2x.png" alt="" width={313} height={104} className="h-9 w-auto" />
+            <img src="/images/reddoor-logo-2x.png" alt="" width={313} height={104} className="h-9 w-auto" />
             <button type="button" className="link -mr-2 inline-flex min-h-[44px] items-center px-2" onClick={() => dialogRef.current?.close()}>Close</button>
           </div>
           <nav aria-label="Main" className="mt-8">

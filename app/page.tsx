@@ -29,7 +29,15 @@ export default function Home() {
       {/* ---------- Hero: the completed work, revealed by the opening sequence ---------- */}
       <section className="hero relative overflow-x-clip bg-bg">
         <div className="hero-stage wrap grid12 items-center">
-          <div className="order-1 col-span-12 flex flex-col lg:col-span-5 lg:col-start-1">
+          {/* The finished work first in the document, so the name below follows a paragraph, not a label. */}
+          <div className="order-1 col-span-12 flex justify-center lg:order-2 lg:col-span-6 lg:col-start-7">
+            <figure className="hero-project">
+              <Picture photo={residential.gallery[3]} sizes="(min-width: 1024px) 50vw, 100vw" priority
+                className="overflow-hidden" imgClassName="h-full object-cover" />
+              <figcaption className="small">A kitchen in a Red Door project, {region}.</figcaption>
+            </figure>
+          </div>
+          <div className="order-2 col-span-12 flex flex-col pt-10 lg:order-1 lg:col-span-5 lg:col-start-1 lg:pt-0">
             <p className="hero-promise" data-rise style={{ "--i": 0 } as React.CSSProperties}>
               {hero.headline}
             </p>
@@ -40,14 +48,6 @@ export default function Home() {
             <p className="order-3 mt-7 max-w-[34ch] text-muted lg:order-2 lg:mt-5" data-rise style={{ "--i": 1 } as React.CSSProperties}>
               30+ years of residential and commercial building, now in {site.city}, Florida.
             </p>
-          </div>
-          {/* Real project photography carries the same dark-room direction. */}
-          <div className="order-2 col-span-12 flex justify-center lg:col-span-6 lg:col-start-7">
-            <figure className="hero-project">
-              <Picture photo={residential.gallery[3]} sizes="(min-width: 1024px) 50vw, 100vw" priority
-                className="overflow-hidden" imgClassName="h-full object-cover" />
-              <figcaption className="small"><span>Spaces, revived.</span><span>Red Door project · {region}</span></figcaption>
-            </figure>
           </div>
         </div>
 
@@ -60,30 +60,30 @@ export default function Home() {
       </section>
 
       {/* ---------- Statement: the staircase ---------- */}
-      <section className="wrap flex min-h-[100svh] flex-col justify-center py-section-sm">
+      <section className="wrap py-section">
         <div className="grid12 items-start">
-          <RevealGroup as="div" className="col-span-12 md:col-span-9" stagger={110}>
+          <RevealGroup as="div" className="col-span-12 md:col-span-8" stagger={110}>
             {statement.lines.map((line, i) => (
               <p
                 key={line}
-                className={`head max-w-none font-medium ${i % 2 ? "text-muted" : "text-ink"}`}
-                style={{ paddingLeft: `calc(${i * 6}vw)` }}
+                className={`statement-line max-w-none ${i % 2 ? "text-muted" : "text-ink"}`}
+                style={{ paddingLeft: `calc(${i * 5}vw)` }}
               >
                 {line}
               </p>
             ))}
           </RevealGroup>
-          <div className="col-span-12 mt-10 grid grid-cols-2 gap-4 md:col-span-3 md:mt-0 md:grid-cols-1">
+          <div className="col-span-12 mt-10 grid grid-cols-2 gap-4 md:col-span-4 md:col-start-9 md:mt-0 md:grid-cols-1">
             <Reveal className="shutter">
-              <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/2]" imgClassName="h-full object-cover" />
+              <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 30vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[4/3]" imgClassName="h-full object-cover" />
             </Reveal>
             <Reveal className="shutter" delay={150}>
-              <Picture photo={residential.gallery[8]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/2]" imgClassName="h-full object-cover" />
+              <Picture photo={residential.gallery[8]} sizes="(min-width: 768px) 30vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[4/3]" imgClassName="h-full object-cover" />
             </Reveal>
           </div>
         </div>
-        <Reveal className="mt-14 md:mt-20">
-          <p className="note max-w-[40ch]">{statement.note}</p>
+        <Reveal className="mt-12 md:mt-14">
+          <p className="max-w-[52ch]">{statement.note}</p>
         </Reveal>
       </section>
 
@@ -94,7 +94,7 @@ export default function Home() {
           <div key={f.id} className="relative bg-surface lg:h-[100svh] lg:overflow-hidden">
             <div className="relative h-[62svh] overflow-hidden lg:absolute lg:inset-0 lg:h-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="drift-img absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.62) contrast(1.05)" }} />
+              <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="drift-img absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.7) contrast(1.05)" }} />
             </div>
             {/* On the phone the card stands across the bottom edge of the picture, as the door does in the hero. */}
             <div className="wrap relative -mt-[18svh] pb-12 lg:mt-0 lg:grid lg:h-full lg:grid-cols-4 lg:items-center lg:gap-[var(--spacing-gutter)] lg:pb-0">
@@ -168,7 +168,7 @@ export default function Home() {
       </section>
 
       {/* ---------- Contact: the email as display type, inverted ---------- */}
-      <section className="relative flex min-h-[74svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-14 pt-10 text-light-ink md:min-h-[100svh] md:pb-[12vh]" aria-label="Write to us" data-hide-bar>
+      <section className="relative flex min-h-[74svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-14 pt-10 text-light-ink md:min-h-[72svh] md:pb-[8vh]" aria-label="Write to us" data-hide-bar>
         <Reveal>
           <p className="lead max-w-[30ch]">Tell us about the property and what you want it to do.</p>
         </Reveal>
@@ -195,7 +195,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="h-[6svh] md:h-[16svh]" aria-hidden="true" />
+      <div className="h-[6svh] md:h-[8svh]" aria-hidden="true" />
     </>
   );
 }
