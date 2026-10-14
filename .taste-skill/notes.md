@@ -30,14 +30,13 @@ Competitor test: another Amelia Island contractor has no red door. The sentence 
 
 ## The live thing
 
-The door itself, with nothing beside it. It swings open on arrival, leans with the pointer, opens
-wider as the first screen is scrolled away, and swings if the visitor takes hold of the leaf (pointer
-or thumb). The finished Red Door room behind it changes on its own (three real projects), named in
-the caption under the sill. Without script: the door stands open on the first room.
+The arrival: once per session the red door opens on a dark screen (lever first, then the leaf), with
+a skip and a reduced-motion bypass, and the finished work is behind it. On the page itself the
+before/after sliders and the process row are the hands-on things. Without script: no arrival screen.
 
 ## The argument (claims and proof, in page order)
 
-1. You own the property. We'll manage the project.        → the doorway, nearly a screen tall on the dark ground, opening onto a finished room; one button
+1. You own the property. We'll manage the project.        → the door opens once on arrival; then the finished kitchen, the promise, one button
 2. You shouldn't have to become a construction expert.   → the staircase statement; the plan/manage/finish note; two photographs
 3. Three kinds of renovation, planned before they are built → three full-bleed rooms with a card each (rental, investment, whole-property; kitchens and bathrooms named inside)
 4. The work holds up, and some of it won award           → strips of real project photographs, the award named on the line

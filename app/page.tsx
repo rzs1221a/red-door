@@ -29,7 +29,15 @@ export default function Home() {
       {/* ---------- Hero: the completed work, revealed by the opening sequence ---------- */}
       <section className="hero relative overflow-x-clip bg-bg">
         <div className="hero-stage wrap grid12 items-center">
-          <div className="order-1 col-span-12 flex flex-col lg:col-span-5 lg:col-start-1">
+          {/* The finished work first in the document, so the name below follows a paragraph, not a label. */}
+          <div className="order-1 col-span-12 flex justify-center lg:order-2 lg:col-span-6 lg:col-start-7">
+            <figure className="hero-project">
+              <Picture photo={residential.gallery[3]} sizes="(min-width: 1024px) 50vw, 100vw" priority
+                className="overflow-hidden" imgClassName="h-full object-cover" />
+              <figcaption className="small">A kitchen in a Red Door project, {region}.</figcaption>
+            </figure>
+          </div>
+          <div className="order-2 col-span-12 flex flex-col pt-10 lg:order-1 lg:col-span-5 lg:col-start-1 lg:pt-0">
             <p className="hero-promise" data-rise style={{ "--i": 0 } as React.CSSProperties}>
               {hero.headline}
             </p>
@@ -40,14 +48,6 @@ export default function Home() {
             <p className="order-3 mt-7 max-w-[34ch] text-muted lg:order-2 lg:mt-5" data-rise style={{ "--i": 1 } as React.CSSProperties}>
               30+ years of residential and commercial building, now in {site.city}, Florida.
             </p>
-          </div>
-          {/* Real project photography carries the same dark-room direction. */}
-          <div className="order-2 col-span-12 flex justify-center lg:col-span-6 lg:col-start-7">
-            <figure className="hero-project">
-              <Picture photo={residential.gallery[3]} sizes="(min-width: 1024px) 50vw, 100vw" priority
-                className="overflow-hidden" imgClassName="h-full object-cover" />
-              <figcaption className="small"><span>Spaces, revived.</span><span>Red Door project · {region}</span></figcaption>
-            </figure>
           </div>
         </div>
 

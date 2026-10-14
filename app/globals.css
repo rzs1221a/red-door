@@ -765,21 +765,18 @@ body.scroll-locked {
 /* The finished work is the landing page; the door is reserved for the arrival. */
 .hero { min-height:100svh; display:flex; flex-direction:column; }
 .hero-stage { position:relative; flex:1; padding-top:112px; padding-bottom:40px; }
-.hero-promise { font-size:clamp(2.5rem,4.25vw,4.5rem); line-height:1.06; letter-spacing:-.025em; max-width:15ch; }
+.hero-promise { font-size:var(--text-head); line-height:var(--text-head--line-height); letter-spacing:-.02em; max-width:24ch; text-wrap:balance; }
 .hero-project { margin:0; width:100%; }
 .hero-project .ph { height:clamp(340px,54svh,610px); }
 .hero-project img { object-position:58% center; }
-.hero-project figcaption { display:flex; justify-content:space-between; gap:16px; margin-top:14px; color:var(--color-muted); }
+.hero-project figcaption { margin-top:14px; color:var(--color-muted); }
 @media (max-width:1023px) {
-  .hero-stage { padding-top:110px; padding-bottom:12px; row-gap:40px; }
-  .hero-promise { max-width:20ch; }
+  .hero-stage { padding-top:96px; padding-bottom:12px; }
   .hero-project .ph { height:420px; }
 }
 @media (max-width:639px) {
-  .hero-stage { padding-top:100px; row-gap:32px; }
-  .hero-promise { font-size:2.65rem; max-width:15ch; }
+  .hero-stage { padding-top:88px; }
   .hero-project .ph { height:340px; }
-  .hero-project figcaption { font-size:15px; }
 }
 
 /* Hidden without JavaScript, after the first entry, and when motion is reduced. */
@@ -788,15 +785,17 @@ body.scroll-locked {
 .door-intro-pending .door-intro { position:fixed; inset:0; z-index:1000; display:grid; grid-template-rows:auto 1fr auto; min-height:100svh; background:#141f22; color:#e9eae6; padding:24px clamp(20px,4vw,64px); opacity:1; transition:opacity .65s ease,visibility .65s; }
 .door-intro-pending .door-intro.is-exiting { opacity:0; visibility:hidden; pointer-events:none; }
 .door-intro-header { display:flex; align-items:center; justify-content:space-between; gap:20px; }
-.door-intro-brand { font-size:22px; letter-spacing:-.02em; }
-.door-intro-skip { min-height:44px; min-width:72px; padding:10px 0 10px 16px; color:#c1c7c0; background:none; cursor:pointer; font-size:16px; }
+.door-intro-brand { font-size:var(--text-lead); letter-spacing:-.02em; }
+.door-intro-skip { min-height:44px; min-width:72px; padding:10px 0 10px 16px; color:#c1c7c0; background:none; cursor:pointer; font-size:var(--text-body); }
 .door-intro-skip:hover { color:#fff; }
 .door-intro-art { display:flex; align-items:center; justify-content:center; min-height:0; }
 .door-intro-art > div { width:100%; max-width:410px; }
 .door-intro-art .door { margin:auto; }
 .door-intro-footer { text-align:center; padding-bottom:env(safe-area-inset-bottom); }
-.door-intro-footer p { margin:0 auto; font-size:clamp(24px,3vw,34px); }
-.door-intro-footer span { display:block; margin-top:8px; font-size:15px; color:#aab4ae; }
+.door-intro-footer p { margin:0 auto; font-size:var(--text-head); line-height:var(--text-head--line-height); }
+.door-intro-footer span { display:block; margin-top:10px; font-size:var(--text-small); color:#aab4ae; }
+/* The page's own entrances hold until the door has opened and the arrival screen has gone. */
+.door-intro-pending [data-rise] { animation-play-state:paused; }
 @media (max-height:700px) { .door-intro-art .door { transform:scale(.8); }.door-intro-art { height:390px; }.door-intro-pending .door-intro { padding-top:12px; padding-bottom:16px; } }
-@media (max-height:540px) { .door-intro-art .door { transform:scale(.52); }.door-intro-art { height:250px; }.door-intro-footer p { font-size:20px; }.door-intro-footer span { display:none; } }
+@media (max-height:540px) { .door-intro-art .door { transform:scale(.52); }.door-intro-art { height:250px; }.door-intro-footer p { font-size:var(--text-lead); }.door-intro-footer span { display:none; } }
 @media (prefers-reduced-motion:reduce) { .door-intro-pending { overflow:visible; }.door-intro-pending .door-intro { display:none; } }
