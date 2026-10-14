@@ -3,6 +3,7 @@ import "./globals.css";
 import { boska } from "./fonts";
 import ActionBar from "@/components/ActionBar";
 import Nav from "@/components/Nav";
+import DoorIntro from "@/components/DoorIntro";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { site } from "@/lib/site";
@@ -38,7 +39,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={boska.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body>
         {/* Motion recipes only hide things when script runs: see globals.css (.js [data-rise]). */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js');
+try {
+  var seen = false;
+  try { seen = sessionStorage.getItem('red-door-arrival-v1') === 'seen'; } catch (_) {}
+  if (!seen && !matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash) {
+    document.documentElement.classList.add('door-intro-pending');
+    setTimeout(function () {
+      document.documentElement.classList.remove('door-intro-pending');
+      var shell = document.getElementById('site-shell');
+      if (shell) shell.inert = false;
+    }, 6500);
+  }
+} catch (_) {}` }} />
+        <DoorIntro />
+        <div id="site-shell">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-light-ink">
           Skip to content
         </a>
@@ -49,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <ActionBar />
         <JsonLd data={graph(organization(), website())} />
+        </div>
       </body>
     </html>
   );

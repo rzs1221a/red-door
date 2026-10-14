@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import DoorScene from "@/components/DoorScene";
 import FAQ from "@/components/FAQ";
 import JsonLd from "@/components/JsonLd";
 import MomentsRow from "@/components/MomentsRow";
@@ -12,7 +11,7 @@ import { ButtonLink, TextLink } from "@/components/ui";
 import { hero } from "@/lib/copy";
 import { faqs } from "@/lib/faq";
 import { found } from "@/lib/found";
-import { doorRooms, frames, moments, owners, statement, strips } from "@/lib/home";
+import { frames, moments, owners, statement, strips } from "@/lib/home";
 import { region, residential } from "@/lib/projects";
 import { faqPage, graph } from "@/lib/schema";
 import { site } from "@/lib/site";
@@ -27,11 +26,11 @@ const homeFaqs = faqs.filter((f) => /first|designer|project plan|happening|bonde
 export default function Home() {
   return (
     <>
-      {/* ---------- Hero: the doorway is the first screen; the finished room is seen through it ---------- */}
+      {/* ---------- Hero: the completed work, revealed by the opening sequence ---------- */}
       <section className="hero relative overflow-x-clip bg-bg">
         <div className="hero-stage wrap grid12 items-center">
-          <div className="order-2 col-span-12 flex flex-col pt-14 lg:order-1 lg:col-span-4 lg:col-start-1 lg:pt-0">
-            <p className="lead max-w-[22ch]" data-rise style={{ "--i": 0 } as React.CSSProperties}>
+          <div className="order-1 col-span-12 flex flex-col lg:col-span-5 lg:col-start-1">
+            <p className="hero-promise" data-rise style={{ "--i": 0 } as React.CSSProperties}>
               {hero.headline}
             </p>
             {/* On phones the sentence comes last, so the name below it follows a paragraph, not a button. */}
@@ -39,12 +38,16 @@ export default function Home() {
               <ButtonLink href="/contact/">Request a consultation</ButtonLink>
             </div>
             <p className="order-3 mt-7 max-w-[34ch] text-muted lg:order-2 lg:mt-5" data-rise style={{ "--i": 1 } as React.CSSProperties}>
-              Thirty years of residential and commercial building, now in {site.city}, Florida.
+              30+ years of residential and commercial building, now in {site.city}, Florida.
             </p>
           </div>
-          {/* The door at the scale it was drawn for: nearly a screen tall, on the dark ground, the room lit behind it. */}
-          <div className="order-1 col-span-12 flex justify-center lg:order-2 lg:col-span-7 lg:col-start-6">
-            <DoorScene rooms={doorRooms} region={region} className="hero-door" caption scroll />
+          {/* Real project photography carries the same dark-room direction. */}
+          <div className="order-2 col-span-12 flex justify-center lg:col-span-6 lg:col-start-7">
+            <figure className="hero-project">
+              <Picture photo={residential.gallery[3]} sizes="(min-width: 1024px) 50vw, 100vw" priority
+                className="overflow-hidden" imgClassName="h-full object-cover" />
+              <figcaption className="small"><span>Spaces, revived.</span><span>Red Door project · {region}</span></figcaption>
+            </figure>
           </div>
         </div>
 

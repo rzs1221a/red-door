@@ -1,23 +1,11 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { Photo } from "@/lib/projects";
 import { pictureAttrs } from "./Picture";
-
-// The red door from the supplied preview, made live without any control beside it: it swings
-// open on arrival, leans with the pointer, opens wider as the page is scrolled into, and swings
-// if the visitor takes hold of the leaf. The finished room behind it changes on its own. Without
-// script the door stands open on the first room (see the <noscript> style).
-
-const OPEN = 72; // resting angle (≈ -50deg): wide enough to see the room behind the leaf
-const ARRIVAL_MS = 650; // the lever turns first (door.css), then the leaf is released
-const ROOM_MS = 6500;
-
-const clamp = (v: number) => Math.min(100, Math.max(0, v));
 
 function Leaf() {
   return (
     <div className="door-leaf">
+      <div className="door-back" />
       <div className="door-face">
         <div className="door-panels">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -51,181 +39,43 @@ function Leaf() {
   );
 }
 
+/** Shared door artwork. Angles are actual degrees; animation is owned by DoorIntro. */
 export default function DoorScene({
-  rooms,
-  interactive = true,
-  initialAngle = OPEN,
-  className = "",
-  region = "Atlanta area",
-  caption = false,
-  scroll = false,
+  rooms, angle = 38, className = "", region = "Atlanta area", caption = false,
 }: {
   rooms: { label: string; photo: Photo }[];
-  interactive?: boolean;
-  /** Resting angle 0–100 when not interactive. */
-  initialAngle?: number;
+  angle?: number;
   className?: string;
   region?: string;
-  /** Name the room behind the door in a caption under it. */
   caption?: boolean;
-  /** Open the door wider as the first screen is scrolled away (the hero). */
-  scroll?: boolean;
 }) {
-  const [angle, setAngle] = useState(interactive ? 0 : initialAngle);
-  const [room, setRoom] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const [settled, setSettled] = useState(false);
-  const [arriving, setArriving] = useState(false);
-  const ref = useRef<HTMLElement>(null);
-  const drag = useRef<{ x: number; a: number } | null>(null);
-  // The angle is composed: a rest that follows the scroll, the visitor's own swing, and a lean
-  // that follows the pointer. Kept in refs so the listeners never go stale.
-  const parts = useRef({ rest: OPEN, swing: 0, lean: 0 });
-  const reduced = useRef(false);
-
-  const compose = () => {
-    const p = parts.current;
-    setAngle(clamp(p.rest + p.swing + p.lean));
-  };
-
-  // Swing open once the page has settled (CSS transitions the leaf from 0 to OPEN).
-  useEffect(() => {
-    if (!interactive) return;
-    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduced.current) setArriving(true);
-    const t = window.setTimeout(() => setAngle(OPEN), reduced.current ? 0 : ARRIVAL_MS);
-    const s = window.setTimeout(() => {
-      setSettled(true);
-      setArriving(false);
-    }, reduced.current ? 0 : ARRIVAL_MS + 3400);
-    return () => {
-      window.clearTimeout(t);
-      window.clearTimeout(s);
-    };
-  }, [interactive]);
-
-  // After arrival: lean with a fine pointer, open with the scroll.
-  useEffect(() => {
-    if (!interactive || !settled || reduced.current) return;
-    let raf = 0;
-    const fine = window.matchMedia("(pointer: fine)").matches;
-    const onMove = (e: PointerEvent) => {
-      if (drag.current || !ref.current) return;
-      const r = ref.current.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > window.innerHeight) return;
-      const dx = (e.clientX - (r.left + r.width / 2)) / window.innerWidth; // -0.5 … 0.5
-      parts.current.lean = Math.max(-14, Math.min(14, dx * 36));
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(compose);
-    };
-    const onScroll = () => {
-      if (drag.current) return;
-      const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.7)));
-      parts.current.rest = OPEN + (100 - OPEN) * p;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(compose);
-    };
-    if (fine) window.addEventListener("pointermove", onMove, { passive: true });
-    if (scroll) {
-      window.addEventListener("scroll", onScroll, { passive: true });
-      onScroll();
-    }
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, [interactive, settled, scroll]);
-
-  // The room behind the door changes on its own while the door is in view.
-  useEffect(() => {
-    if (!interactive || rooms.length < 2 || !ref.current) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let timer = 0;
-    const start = () => {
-      stop();
-      timer = window.setInterval(() => setRoom((r) => (r + 1) % rooms.length), ROOM_MS);
-    };
-    const stop = () => window.clearInterval(timer);
-    const io = new IntersectionObserver(([e]) => (e.isIntersecting && !document.hidden ? start() : stop()), { threshold: 0.4 });
-    io.observe(ref.current);
-    const vis = () => (document.hidden ? stop() : start());
-    document.addEventListener("visibilitychange", vis);
-    return () => {
-      stop();
-      io.disconnect();
-      document.removeEventListener("visibilitychange", vis);
-    };
-  }, [interactive, rooms.length]);
-
-  const current = rooms[room];
-  const line = `Behind the door, a ${current.label.toLowerCase()} we built in the ${region}.`;
-
+  const room = rooms[0];
+  if (!room) return null;
   return (
     <div className={className}>
-      <noscript>
-        <style>{`[data-ui].door{--door-angle:${OPEN}}`}</style>
-      </noscript>
-      <figure
-        ref={ref}
-        data-ui
-        className={`door ${dragging ? "is-dragging" : ""} ${settled ? "is-settled" : ""} ${arriving ? "is-arriving" : ""}`}
-        style={{ "--door-angle": angle } as React.CSSProperties}
-        aria-label={caption ? undefined : `A red front door opening onto a finished ${current.label.toLowerCase()}, a Red Door Revivals project in the ${region}`}
-      >
-        <div className="door-scene">
-          <div className="door-halo" aria-hidden="true" />
-          <div className="door-floor" aria-hidden="true" />
-          <div className="door-portal" aria-hidden="true">
+      <figure data-ui className="door" style={{ "--door-angle": Math.min(52, Math.max(0, angle)) } as CSSProperties}
+        aria-label={`A red door opening onto a ${room.label.toLowerCase()}, a Red Door Revivals project in the ${region}`}>
+        <div className="door-scene" aria-hidden="true">
+          <div className="door-halo" />
+          <div className="door-floor" />
+          <div className="door-portal">
             <div className="door-cornice" />
-            <div className="door-transom">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div
-              className="door-opening"
-              onPointerDown={(e) => {
-                if (!interactive) return;
-                drag.current = { x: e.clientX, a: angle };
-                (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
-                setDragging(true);
-              }}
-              onPointerMove={(e) => {
-                if (!drag.current) return;
-                const w = ref.current?.getBoundingClientRect().width ?? 300;
-                const a = clamp(drag.current.a + ((e.clientX - drag.current.x) / w) * 180);
-                parts.current.swing = a - parts.current.rest - parts.current.lean;
-                setAngle(a);
-              }}
-              onPointerUp={() => {
-                drag.current = null;
-                setDragging(false);
-              }}
-              onPointerCancel={() => {
-                drag.current = null;
-                setDragging(false);
-              }}
-            >
+            <div className="door-transom"><span /><span /><span /></div>
+            <div className="door-opening">
               <div className="door-interior">
-                {rooms.map((r, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={r.photo.src} {...pictureAttrs(r.photo)} sizes="(min-width: 1024px) 420px, 320px" alt="" className={i === room ? "is-on" : ""} loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : undefined} decoding="async" draggable={false} />
-                ))}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img {...pictureAttrs(room.photo)} sizes="320px" alt="" className="is-on" decoding="async" draggable={false} />
               </div>
               <div className="door-reveal-shadow" />
               <Leaf />
+              <span className="door-hinge door-hinge-top" />
+              <span className="door-hinge door-hinge-middle" />
+              <span className="door-hinge door-hinge-bottom" />
             </div>
-            <span className="door-hinge door-hinge-top" />
-            <span className="door-hinge door-hinge-bottom" />
+            <div className="door-threshold" />
           </div>
-          <div className="door-threshold" aria-hidden="true" />
         </div>
-        {caption && (
-          <figcaption className="door-caption small">
-            <span key={room} className="door-caption-line">{line}</span>
-          </figcaption>
-        )}
+        {caption && <figcaption className="door-caption small">{room.label} — {region}<span className="door-caption-note">A Red Door Revivals renovation</span></figcaption>}
       </figure>
     </div>
   );
