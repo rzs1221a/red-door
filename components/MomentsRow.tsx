@@ -68,7 +68,7 @@ export default function MomentsRow({
         {moments.map((m, i) => (
           <li key={m.title} className="w-[72vw] sm:w-[280px]">
             <p className="font-medium">{m.title}</p>
-            <p className="small mt-2 text-muted">{m.text}</p>
+            <p className="note mt-2 text-muted">{m.text}</p>
             <div aria-hidden="true" style={{ height: `clamp(32px, ${m.space / 2}px + 2vw, ${m.space}px)` }} />
             <Picture photo={m.photo} sizes="280px" className="aspect-[4/5] overflow-hidden" imgClassName="h-full object-cover" priority={i === 0} />
           </li>

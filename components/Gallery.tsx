@@ -58,12 +58,12 @@ export default function Gallery({
 
   return (
     <>
-      <ul className={`grid gap-2 ${cols} ${className}`}>
+      <ul className={`rail sm:grid sm:gap-2 ${cols} ${className}`}>
         {photos.map((ph, i) => (
           <li key={ph.src} className={ph.w / ph.h > 1.6 ? "sm:col-span-2" : ""}>
             <button
               type="button"
-              className="ph group block w-full text-left focus-visible:outline-offset-4"
+              className="ph group relative block w-full text-left focus-visible:outline-offset-4"
               onClick={(e) => {
                 lastButton.current = e.currentTarget;
                 setIndex(i);

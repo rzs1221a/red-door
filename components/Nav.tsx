@@ -35,7 +35,7 @@ export default function Nav() {
   return (
     <header className={`${home ? "absolute inset-x-0 top-0" : "relative"} z-40`}>
       <div className="wrap flex h-16 items-center justify-between gap-6 lg:h-[72px]">
-        <Link href="/" aria-label="Red Door Revivals, home" className="inline-flex items-center">
+        <Link href="/" aria-label="Red Door Revivals, home" className="inline-flex min-h-[44px] items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/reddoor-logo-reverse-2x.png" alt="Red Door Revivals" width={313} height={104} className="h-9 w-auto" loading="eager" fetchPriority="high" decoding="async" />
         </Link>
@@ -53,7 +53,7 @@ export default function Nav() {
         </nav>
 
         <div className="flex items-center gap-4 lg:hidden">
-          <Link href="/contact/" className="btn !px-3.5 !py-2 !small">Consultation</Link>
+          <Link href="/contact/" className="btn min-h-[44px] !px-3.5 !py-2 !small">Consultation</Link>
           <button ref={buttonRef} type="button" className="link -mr-2 inline-flex min-h-[44px] items-center px-2 text-ink" aria-expanded={open} aria-controls="menu" onClick={() => setOpen(true)}>
             Menu
           </button>
@@ -68,7 +68,7 @@ export default function Nav() {
         onClick={(e) => e.target === dialogRef.current && dialogRef.current?.close()}
         className="sheet m-0 h-dvh max-h-none w-full max-w-none bg-bg p-0 text-ink"
       >
-        <div className="wrap flex h-full flex-col pb-8 pt-4">
+        <div className="wrap flex h-full flex-col pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
           <div className="flex h-16 items-center justify-between">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/images/reddoor-logo-reverse-2x.png" alt="" width={313} height={104} className="h-9 w-auto" />

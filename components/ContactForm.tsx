@@ -71,7 +71,25 @@ export default function ContactForm() {
   const err = (k: keyof Errors) => (errors[k] ? {"aria-invalid": true as const,"aria-describedby": `${k}-error` } : {});
 
   return (
-    <form name="inquiry" onSubmit={onSubmit} noValidate className="space-y-6">
+    <form
+      name="inquiry"
+      onSubmit={onSubmit}
+      onBlur={(e) => {
+        // Check the field just left, in plain words under it.
+        const t = e.target as unknown as { name?: string };
+        if (!t.name || !["name", "email", "phone", "property-type", "message"].includes(t.name)) return;
+        const errs = validate(new FormData(e.currentTarget));
+        const k = t.name as keyof Errors;
+        setErrors((prev) => {
+          const next = { ...prev };
+          if (errs[k]) next[k] = errs[k];
+          else delete next[k];
+          return next;
+        });
+      }}
+      noValidate
+      className="space-y-6"
+    >
       <input type="hidden" name="form-name" value="inquiry" />
       <p className="hidden">
         <label>
@@ -166,10 +184,10 @@ export default function ContactForm() {
       )}
 
       <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-        <button type="submit" disabled={status ==="sending"} className="btn disabled:opacity-60">
+        <button type="submit" disabled={status ==="sending"} className="btn w-full min-h-12 disabled:opacity-60 sm:w-auto">
           {status ==="sending" ? "Sending…" : "Send request"}
         </button>
-        <a href={`tel:${site.phone.tel}`} className="link">or call {site.phone.display}</a>
+        <a href={`tel:${site.phone.tel}`} className="link inline-block py-2.5 md:py-0">or call {site.phone.display}</a>
       </div>
       <p className="small text-muted">
         We use what you send only to reply about your project. <Link href="/privacy/" className="link text-ink">Privacy</Link>

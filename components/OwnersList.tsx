@@ -75,7 +75,7 @@ export default function OwnersList({ heading, owners }: { heading: string; owner
                 </button>
                 <div className="faq-panel" style={{ gridTemplateRows: i === active ? "1fr" : "0fr" }}>
                   <div>
-                    <p className="small max-w-[34ch] pt-2 text-muted">{o.text}</p>
+                    <p className="note max-w-[34ch] pt-2 text-muted">{o.text}</p>
                   </div>
                 </div>
               </li>

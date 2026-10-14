@@ -67,6 +67,7 @@ export default function Projects() {
       <section className="wrap mt-section" aria-label="All projects">
         <Reveal>
           <WorkStrips strips={strips} title="All projects" />
+          <p className="note mt-8 text-muted">All projects shown are Red Door Revivals work in the {region}. Florida projects will join as they complete.</p>
         </Reveal>
       </section>
 

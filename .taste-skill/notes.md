@@ -62,7 +62,7 @@ Hero
   name: Red Door Revivals
   supporting: You own the property. We'll manage the project.
   button: Request a consultation
-  door caption (under the sill): Behind the door, a [kitchen / living room / library] Red Door built in the Atlanta area.
+  door caption (under the sill): Behind the door, a [kitchen / living room / library] we built in the Atlanta area.
 
 Intro (statement, five lines)
   You shouldn't / have to become / a construction expert / to renovate / your property.

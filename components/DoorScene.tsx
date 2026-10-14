@@ -159,7 +159,7 @@ export default function DoorScene({
   }, [interactive, rooms.length]);
 
   const current = rooms[room];
-  const line = `Behind the door, a ${current.label.toLowerCase()} Red Door built in the ${region}.`;
+  const line = `Behind the door, a ${current.label.toLowerCase()} we built in the ${region}.`;
 
   return (
     <div className={className}>

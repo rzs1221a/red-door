@@ -25,6 +25,6 @@ export function ButtonLink({
 }
 
 export function TextLink({ href, children, className = "" }: { href: string; children: ReactNode; className?: string }) {
-  const cls = `link ${className}`;
+  const cls = `link inline-block py-2.5 md:py-0 ${className}`;
   return href.startsWith("/") ? <Link href={href} className={cls}>{children}</Link> : <a href={href} className={cls}>{children}</a>;
 }

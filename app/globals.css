@@ -19,7 +19,7 @@
   --spacing-section: clamp(7.5rem, 6rem + 6vw, 13.75rem);
   --spacing-section-sm: clamp(4.5rem, 3rem + 4vw, 7rem);
 
-  --text-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --text-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
   --text-small--line-height: 1.45;
   --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
   --text-body--line-height: 1.55;
@@ -235,6 +235,14 @@ a,
 button {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+}
+/* Inline links in running text: padding on an inline box widens the tap area, not the line. */
+p .link:not(.inline-block):not(.inline-flex) {
+  padding-block: 0.55em;
+}
+p.small .link:not(.inline-block):not(.inline-flex),
+p.credits .link:not(.inline-block):not(.inline-flex) {
+  padding-block: 0.95em;
 }
 /* Picture credits: a secondary note, smaller on the phone. */
 .credits {
@@ -468,6 +476,76 @@ body.scroll-locked {
   }
 }
 
+/* ---------- The phone ---------- */
+/* Secondary notes: text size on the phone (nothing a thumb reads is under 15px), small from 768px. */
+.note {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+@media (min-width: 768px) {
+  .note {
+    font-size: var(--text-small);
+    line-height: var(--text-small--line-height);
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --spacing-section: 4.5rem;
+    --spacing-section-sm: 3.5rem;
+  }
+  /* Grouped pictures ride a rail with the next one peeking. */
+  .rail {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    contain: inline-size; /* its cards never widen the page */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--spacing-margin));
+    padding-inline: var(--spacing-margin);
+    scroll-padding-inline: var(--spacing-margin);
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rail > li {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+  /* Room for the action bar at the end of the page. */
+  body:has(.action-bar) {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+}
+/* The action bar: one primary action and a call, in thumb reach, phones only. */
+.action-bar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 8px var(--spacing-margin) calc(8px + env(safe-area-inset-bottom));
+  background: var(--color-bg);
+  transform: translateY(110%);
+  transition: transform 320ms var(--ease-out);
+}
+.action-bar.is-on {
+  transform: none;
+}
+.action-bar .btn {
+  min-height: 48px;
+  padding-block: 0.7em;
+}
+@media (min-width: 768px), (max-height: 480px) {
+  .action-bar {
+    display: none;
+  }
+  body:has(.action-bar) {
+    padding-bottom: 0;
+  }
+}
+
 /* ---------- Motion ---------- */
 @media (prefers-reduced-motion: no-preference) {
   /* Hero load: a few things rise once. */
@@ -529,10 +607,35 @@ body.scroll-locked {
     transform: none;
   }
 }
+/* Phones scroll fast: entrances are short, and nothing moves with the scroll or the pointer. */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .js [data-rise] {
+    animation-duration: 420ms;
+    animation-delay: calc(var(--i, 0) * 60ms + 80ms);
+    transform: translateY(12px);
+  }
+  .reveal-pending {
+    transform: translateY(14px);
+    transition-duration: 320ms, 400ms;
+  }
+  .reveal-pending.reveal-right {
+    transform: translateX(18px);
+  }
+  .reveal-group > * {
+    --reveal-delay: calc(var(--stagger, 80ms) * 0.6 * var(--i, 0));
+  }
+  .shutter.reveal-pending > .ph {
+    transition-duration: 450ms;
+  }
+  .shutter.reveal-pending img {
+    transform: scale(1.06);
+    transition-duration: 600ms;
+  }
+}
 
 /* Signature move: the giant name settles a few percent as the first screen leaves. */
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
     .wordmark {
       transform-origin: left bottom;
       animation: settle linear both;
@@ -659,7 +762,7 @@ body.scroll-locked {
   }
 }
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
     .hero-photo img {
       animation: hero-sink linear both;
       animation-timeline: scroll(root);

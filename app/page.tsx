@@ -92,7 +92,7 @@ export default function Home() {
           </div>
         </div>
         <Reveal className="mt-14 md:mt-20">
-          <p className="max-w-[40ch] small">{statement.note}</p>
+          <p className="note max-w-[40ch]">{statement.note}</p>
         </Reveal>
       </section>
 
@@ -100,22 +100,22 @@ export default function Home() {
       <section aria-labelledby="services-heading" className="mt-section-sm">
         <h2 id="services-heading" className="sr-only">What we do</h2>
         {frames.map((f, i) => (
-          <div key={f.id} className="relative bg-surface md:h-[100svh] md:overflow-hidden">
-            <div className="relative h-[62svh] overflow-hidden md:absolute md:inset-0 md:h-auto">
+          <div key={f.id} className="relative bg-surface lg:h-[100svh] lg:overflow-hidden">
+            <div className="relative h-[62svh] overflow-hidden lg:absolute lg:inset-0 lg:h-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="drift-img absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.62) contrast(1.05)" }} />
             </div>
             {/* On the phone the card stands across the bottom edge of the picture, as the door does in the hero. */}
-            <div className="wrap relative -mt-[18svh] pb-12 md:mt-0 md:grid md:h-full md:grid-cols-4 md:items-center md:gap-[var(--spacing-gutter)] md:pb-0">
-              <Reveal variant="fade" className={`flex flex-col gap-4 bg-ink p-5 text-light-ink md:col-span-1 md:min-h-[52svh] md:items-center md:p-6 md:text-center ${["md:col-start-2", "md:col-start-3", "md:col-start-4"][i]}`} id={`frame-${f.id}`}>
-                <div className="flex items-start justify-between gap-4 md:block">
+            <div className="wrap relative -mt-[18svh] pb-12 lg:mt-0 lg:grid lg:h-full lg:grid-cols-4 lg:items-center lg:gap-[var(--spacing-gutter)] lg:pb-0">
+              <Reveal variant="fade" className={`flex flex-col gap-4 bg-ink p-5 text-light-ink lg:col-span-1 lg:min-h-[52svh] lg:items-center lg:p-6 lg:text-center ${["lg:col-start-2", "lg:col-start-3", "lg:col-start-4"][i]}`} id={`frame-${f.id}`}>
+                <div className="flex items-start justify-between gap-4 lg:block">
                   <p className="lead max-w-none">{f.title}</p>
-                  <Picture photo={f.small} sizes="96px" className="w-24 shrink-0 md:hidden" imgClassName="aspect-[3/2] object-cover" />
+                  <Picture photo={f.small} sizes="96px" className="w-24 shrink-0 lg:hidden" imgClassName="aspect-[3/2] object-cover" />
                 </div>
                 <p className="text-light-muted">{f.line}</p>
                 <p className="">{f.fact}</p>
-                <Picture photo={f.small} sizes="22vw" className="hidden w-full md:block" imgClassName="aspect-[3/2] object-cover" />
-                <Link href={`/services/#${f.id}`} className="btn mt-2 w-full md:mt-auto">See the service</Link>
+                <Picture photo={f.small} sizes="22vw" className="hidden w-full lg:block" imgClassName="aspect-[3/2] object-cover" />
+                <Link href={`/services/#${f.id}`} className="btn mt-2 w-full lg:mt-auto">See the service</Link>
               </Reveal>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function Home() {
       {/* ---------- Work: one strip per project ---------- */}
       <section className="wrap mt-section" aria-label="Projects">
         <WorkStrips strips={strips} />
-        <p className="small mt-8 text-muted">All projects shown are Red Door Revivals work in the {region}. Florida projects will join as they complete.</p>
+        <p className="note mt-8 text-muted">All projects shown are Red Door Revivals work in the {region}. Florida projects will join as they complete.</p>
       </section>
 
       {/* ---------- Process: drag row of moments ---------- */}
@@ -145,10 +145,10 @@ export default function Home() {
             <h2 id="faq-heading" className="head">Before you call</h2>
             <ul className="mt-8 space-y-1">
               <li>
-                <a href={`tel:${site.phone.tel}`} className="link">{site.phone.display}</a>
+                <a href={`tel:${site.phone.tel}`} className="link inline-block py-2.5">{site.phone.display}</a>
               </li>
               <li>
-                <a href={`mailto:${site.email}`} className="link">{site.email}</a>
+                <a href={`mailto:${site.email}`} className="link inline-block py-2.5">{site.email}</a>
               </li>
               <li>{site.serviceArea.join(", ")}, Florida</li>
               <li>Bonded and insured</li>
@@ -193,13 +193,13 @@ export default function Home() {
           </Reveal>
           <div className="mt-10 flex flex-col gap-3 small md:flex-row md:items-end md:justify-between">
             <p>
-              <a href={`tel:${site.phone.tel}`} className="link">{site.phone.display}</a>
+              <a href={`tel:${site.phone.tel}`} className="link inline-block py-3 md:py-0">{site.phone.display}</a>
               <br />
               {site.city}, Florida
             </p>
             <p className="flex gap-6">
-              <a href={site.social.instagram} className="link">Instagram</a>
-              <a href={site.social.facebook} className="link">Facebook</a>
+              <a href={site.social.instagram} className="link inline-block py-3 md:py-0">Instagram</a>
+              <a href={site.social.facebook} className="link inline-block py-3 md:py-0">Facebook</a>
             </p>
           </div>
         </div>

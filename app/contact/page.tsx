@@ -7,7 +7,7 @@ import { faqs } from "@/lib/faq";
 import { pageMeta } from "@/lib/seo";
 import { breadcrumbs, contactPage, graph } from "@/lib/schema";
 import Picture from "@/components/Picture";
-import Reveal from "@/components/Reveal";
+import Reveal, { RevealGroup } from "@/components/Reveal";
 import { found } from "@/lib/found";
 import { region, residential } from "@/lib/projects";
 
@@ -34,10 +34,10 @@ export default function Contact() {
           </p>
           <ul className="mt-10 space-y-1" data-rise style={{ "--i": 2 } as React.CSSProperties}>
             <li>
-              <a href={`tel:${site.phone.tel}`} className="link">{site.phone.display}</a>
+              <a href={`tel:${site.phone.tel}`} className="link inline-block py-2.5">{site.phone.display}</a>
             </li>
             <li>
-              <a href={`mailto:${site.email}`} className="link">{site.email}</a>
+              <a href={`mailto:${site.email}`} className="link inline-block py-2.5">{site.email}</a>
             </li>
             <li>{site.serviceArea.join(", ")}, Florida</li>
           </ul>
@@ -47,7 +47,7 @@ export default function Contact() {
           </Reveal>
           <p className="small mt-3 text-muted">The Fairbanks House, {site.city}, and Historic Marietta, a Red Door project in the {region}.</p>
           <p className="mt-12" data-rise style={{ "--i": 3 } as React.CSSProperties}>What happens next</p>
-          <ol className="mt-3 max-w-[44ch] space-y-4 text-muted">
+          <RevealGroup as="ol" className="mt-3 max-w-[44ch] space-y-4 text-muted" stagger={90}>
             {steps.slice(0, 3).map((s, i) => (
               <li key={s.title} className="grid grid-cols-[72px_1fr] items-start gap-4">
                 <Picture photo={stepPhotos[i]} sizes="72px" className="aspect-square overflow-hidden" imgClassName="h-full object-cover" />
@@ -56,7 +56,7 @@ export default function Contact() {
                 </span>
               </li>
             ))}
-          </ol>
+          </RevealGroup>
           <p className="small mt-3 text-muted">Red Door projects, {region}.</p>
         </div>
         <Reveal variant="fade" className="col-span-12 mt-12 md:col-span-6 md:col-start-7 md:mt-0">
