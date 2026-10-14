@@ -12,6 +12,7 @@ const SESSION_KEY = "red-door-arrival-v1";
 const OPEN = 52; // the door artwork's fully open angle
 const HOLD = "door-intro-holding"; // on <html> while the page beneath is held still (scroll lock, paused entrances)
 const MOVE = 1200; // the room's move out of the doorway, ms
+const WAIT = 6000; // the longest the dark screen waits for its pictures and fonts, ms
 const EASE = "cubic-bezier(.7, 0, .15, 1)"; // a slow start and a long, soft landing
 
 /** y for a given x on a CSS cubic-bezier, so the easing can be baked into keyframes. */
@@ -86,6 +87,9 @@ export default function DoorIntro() {
       return;
     }
     let cancelled = false;
+    // The page's own fallback (app/layout.tsx) is for a script that never runs; from here the
+    // arrival keeps its own time, so a late start is never cut short.
+    window.clearTimeout((window as Window & { __doorIntroFallback?: number }).__doorIntroFallback);
     const shell = document.getElementById("site-shell");
     previousFocus.current = document.activeElement as HTMLElement;
     if (shell) shell.inert = true;
@@ -208,25 +212,49 @@ export default function DoorIntro() {
     motion.addEventListener("change", onMotion);
     document.addEventListener("keydown", onKey);
 
-    // Wait for the real first-view assets: the fonts, the room behind the door and the hero
-    // picture it lands on. A picture counts as ready when it has loaded (decode() is only a
-    // best-effort extra, since Safari can reject it early), with a deadline for slow or failed
-    // requests. The room is kept dark until then and fades in when it arrives, so a slow
-    // connection never shows an empty doorway that the picture pops into.
+    // Nothing starts until everything the visitor will see has arrived: the fonts, the room
+    // behind the door, the hero picture it lands on and the logo above it. A picture is ready
+    // when it has loaded. Safari can leave img.decode() unsettled for ever, so the room's
+    // visibility never waits on it: decoding is warmed on a detached copy, for half a second at
+    // most, and the room is drawn with synchronous decoding so it can never paint late.
     const loaded = (img: HTMLImageElement | null) =>
-      new Promise<void>((resolve) => {
-        if (!img) return resolve();
-        const done = () => img.decode().catch(() => undefined).then(() => resolve());
-        if (img.complete && img.naturalWidth > 0) return void done();
-        img.addEventListener("load", done, { once: true });
-        img.addEventListener("error", () => resolve(), { once: true });
+      new Promise<boolean>((resolve) => {
+        if (!img) return resolve(true);
+        if (img.complete) return resolve(img.naturalWidth > 0);
+        img.addEventListener("load", () => resolve(true), { once: true });
+        img.addEventListener("error", () => resolve(false), { once: true });
       });
-    const roomImg = document.querySelector<HTMLImageElement>(".door-intro .door-interior img");
-    const roomReady = loaded(roomImg).then(() => { if (roomImg) roomImg.dataset.ready = "1"; });
-    const assets = Promise.allSettled([document.fonts.ready, roomReady, loaded(document.querySelector<HTMLImageElement>(".hero-project img"))]);
-    const deadline = new Promise<void>(resolve => later(resolve, 4000));
-    Promise.race([assets, deadline]).then(() => {
-      if (cancelled || !document.documentElement.classList.contains("door-intro-pending")) return;
+    const warm = (img: HTMLImageElement | null) =>
+      new Promise<void>((resolve) => {
+        const src = img?.currentSrc || img?.src;
+        if (!src) return resolve();
+        const copy = new Image();
+        copy.src = src;
+        copy.decode().then(() => resolve(), () => resolve());
+        window.setTimeout(resolve, 500);
+      });
+    const roomImg = root.current?.querySelector<HTMLImageElement>(".door-interior img") ?? null;
+    const heroImg = document.querySelector<HTMLImageElement>(".hero-project img");
+    const logo = document.querySelector<HTMLImageElement>("#site-shell header img");
+    if (roomImg) roomImg.decoding = "sync";
+    let roomReady = !roomImg;
+    const roomArrived = loaded(roomImg).then((ok) => {
+      if (!ok) return dismiss(); // no room to walk into: straight to the page
+      roomReady = true;
+      if (roomImg) roomImg.dataset.ready = "1";
+      return warm(roomImg);
+    });
+    const assets = Promise.all([
+      roomArrived,
+      loaded(heroImg).then((ok) => (ok ? warm(heroImg) : undefined)),
+      loaded(logo),
+      document.fonts.ready,
+    ]).then(() => true, () => true);
+    const deadline = new Promise<boolean>((resolve) => later(() => resolve(false), WAIT));
+    let started = false;
+    const start = () => {
+      if (started || cancelled || !document.documentElement.classList.contains("door-intro-pending")) return;
+      started = true;
       setPhase("lit"); // t=0: a light comes on behind the door
       later(() => setPhase("opening"), 600); // the lever turns
       later(() => setAngle(OPEN), 1300); // the latch releases, the leaf swings (2.2s)
@@ -239,8 +267,11 @@ export default function DoorIntro() {
         setPhase("exiting");
       }, 3700 + MOVE);
       later(dismiss, 4000 + MOVE);
-    });
-    later(dismiss, 7400); // also covers a failed image, font, or interrupted transition
+      later(dismiss, 7000); // also covers an interrupted transition
+    };
+    // On a connection too slow for the room to arrive in time, the door never opens onto an
+    // empty doorway: the visitor goes straight to the page.
+    Promise.race([assets, deadline]).then(() => (roomReady ? start() : dismiss()));
 
     return () => {
       cancelled = true;

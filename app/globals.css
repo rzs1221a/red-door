@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @import "./door.css";
 
+/* iOS Safari and the door's depth. In the artwork's 3D scene (.door-opening) the doorway's own
+   plane, the room's photograph, the shading over the room and the closed leaf's face all sat at
+   depth zero. Chrome draws equal depths in document order; Safari draws the doorway's own plane
+   on top, which painted the room's backing over the leaf (a white door) and over the photograph
+   (an empty doorway). Each now has a hair of depth of its own, back to front: the room as one flat
+   layer (its backing, photograph and shading in document order inside it), the shading over it,
+   then the face. The hinges already stand at 5px. The door artwork (app/door.css) is unchanged. */
+[data-ui].door .door-interior { transform: translateZ(0.05px); }
+[data-ui].door .door-reveal-shadow { transform: translateZ(0.1px); }
+[data-ui].door .door-face { transform: translateZ(0.3px); backface-visibility: visible; }
+
 /* ---------- Tokens: the dark room, in the subject's own colours ---------- */
 @theme {
   --color-bg: #eff0ec; /* paper with a hint of the door preview's green, the dark theme's ink lifted */

@@ -45,7 +45,7 @@ try {
   try { seen = sessionStorage.getItem('red-door-arrival-v1') === 'seen'; } catch (_) {}
   if (!seen && !matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash) {
     document.documentElement.classList.add('door-intro-pending', 'door-intro-holding');
-    setTimeout(function () {
+    window.__doorIntroFallback = setTimeout(function () {
       document.documentElement.classList.remove('door-intro-pending', 'door-intro-holding');
       var shell = document.getElementById('site-shell');
       if (shell) shell.inert = false;
