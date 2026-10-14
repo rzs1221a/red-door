@@ -3,16 +3,16 @@
 
 /* ---------- Tokens: the dark room, in the subject's own colours ---------- */
 @theme {
-  --color-bg: #141f22; /* green-black, from the door preview */
-  --color-surface: #1d2b2f; /* one tone step up: panels, fields */
-  --color-ink: #e9eae6; /* off-white, a hint of the ground's green */
-  --color-muted: #aab4ae; /* secondary text, 7:1 on the ground */
+  --color-bg: #eff0ec; /* paper with a hint of the door preview's green, the dark theme's ink lifted */
+  --color-surface: #e2e4df; /* one tone step down: panels, fields */
+  --color-ink: #141f22; /* green-black, from the door preview, now the ink */
+  --color-muted: #475250; /* secondary text, 7:1 on the paper */
   --color-accent: #c8202a; /* the red door */
   --color-accent-strong: #a8161e;
   --color-accent-ink: #ffffff;
-  --color-light: #e9eae6; /* the one inverted field */
-  --color-light-ink: #141f22;
-  --color-light-muted: #4f5c5a;
+  --color-light: #141f22; /* the one inverted field: the dark room, kept for the email */
+  --color-light-ink: #e9eae6;
+  --color-light-muted: #aab4ae;
 
   --spacing-margin: clamp(1rem, 1.7vw, 1.5rem);
   --spacing-gutter: clamp(0.75rem, 1.4vw, 1.5rem);
@@ -151,7 +151,7 @@ b {
 
 /* ---------- Pictures: one treatment for the whole page ---------- */
 .ph img {
-  filter: brightness(0.86) contrast(1.05);
+  filter: brightness(1) contrast(1.02);
 }
 .ph {
   background: var(--color-surface);
@@ -202,7 +202,7 @@ b {
   }
   .btn--light:hover,
   .btn--ink:hover {
-    background: #ffffff;
+    background: #223236;
   }
   .btn--dark:hover {
     background: var(--color-surface);
@@ -275,7 +275,7 @@ p.credits .link:not(.inline-block):not(.inline-flex) {
 }
 @media (hover: hover) and (pointer: fine) {
   .square-btn:not(:disabled):hover {
-    background: #ffffff;
+    background: #223236;
   }
   .square-btn[aria-label^="Later"]:not(:disabled):hover svg {
     transform: translateX(3px);
@@ -305,7 +305,7 @@ p.credits .link:not(.inline-block):not(.inline-flex) {
   transition: background-color 180ms ease, outline-color 180ms ease;
 }
 .field:focus-visible {
-  background: #223236;
+  background: #e8eae5;
 }
 .field::placeholder {
   color: var(--color-muted);
@@ -320,7 +320,7 @@ p.credits .link:not(.inline-block):not(.inline-flex) {
 }
 select.field {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%23e9eae6' stroke-width='2'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%23141f22' stroke-width='2'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1em center;
   padding-right: 2.6em;
@@ -420,7 +420,10 @@ details.faq[open] .faq-panel {
 
 /* Dialogs float: the one place a dark backdrop belongs. */
 dialog::backdrop { /* taste-skill-ignore: a dialog floats */
-  background: rgba(10, 16, 18, 0.85);
+  background: rgba(10, 16, 18, 0.9);
+}
+dialog.viewer {
+  color: var(--color-light-ink);
 }
 body.scroll-locked {
   overflow: hidden;

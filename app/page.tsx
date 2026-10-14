@@ -94,7 +94,7 @@ export default function Home() {
           <div key={f.id} className="relative bg-surface lg:h-[100svh] lg:overflow-hidden">
             <div className="relative h-[62svh] overflow-hidden lg:absolute lg:inset-0 lg:h-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="drift-img absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.62) contrast(1.05)" }} />
+              <img {...pictureAttrs(f.photo)} sizes="100vw" alt={f.photo.alt} loading="lazy" decoding="async" className="drift-img absolute inset-0 h-full w-full object-cover" style={{ filter: "brightness(0.7) contrast(1.05)" }} />
             </div>
             {/* On the phone the card stands across the bottom edge of the picture, as the door does in the hero. */}
             <div className="wrap relative -mt-[18svh] pb-12 lg:mt-0 lg:grid lg:h-full lg:grid-cols-4 lg:items-center lg:gap-[var(--spacing-gutter)] lg:pb-0">
