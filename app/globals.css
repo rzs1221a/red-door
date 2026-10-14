@@ -840,6 +840,9 @@ body.scroll-locked {
 /* The page's own entrances hold until the door has opened and the arrival screen has gone. */
 .door-intro-holding [data-rise] { animation-play-state:paused; will-change:transform, opacity; }
 
+/* The room behind the door is dark until its picture has loaded; it then fades in on the
+   artwork's own transition, so a slow connection never shows the picture popping into the doorway. */
+.door-intro .door-portal .door-interior img:not([data-ready]) { opacity:0; }
 /* Dark: nothing is lit yet. The halo, the glass and the spill on the floor come on together. */
 .door-intro.is-waiting .door-halo,
 .door-intro.is-waiting .door-floor::after,
@@ -851,14 +854,28 @@ body.scroll-locked {
 .door-intro .door-transom span { box-shadow:inset 2px 2px 4px #0005, inset 0 0 18px #f3cf8a66; } /* taste-skill-ignore */
 
 /* The hand-off. No camera: the ground brightens from the dark room to the paper, the room steps
-   out of the doorway (components/DoorIntro.tsx measures and moves it), the door fades last. */
-.door-intro-stepout { position:fixed; z-index:1001; overflow:hidden; pointer-events:none; transform-origin:0 0; will-change:transform, clip-path; }
-.door-intro-stepout img { position:absolute; display:block; max-width:none; transform-origin:0 0; will-change:transform; }
+   out of the doorway (components/DoorIntro.tsx measures and moves it), the door fades last.
+   The room is three nested layers that only translate, plus the picture at one uniform scale:
+   the window's near corner, its far corner, and the picture, with the room as the door lit it
+   under the room as the page shows it. Each is drawn once and composed every frame. */
+.door-intro-stepout { position:fixed; left:0; top:0; z-index:1001; overflow:hidden; pointer-events:none; transform-origin:0 0; will-change:transform; contain:strict; }
+.door-intro-stepout-end { position:absolute; left:0; top:0; overflow:hidden; transform-origin:0 0; will-change:transform; contain:strict; }
+.door-intro-stepout-pic { position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform; }
+.door-intro-stepout-pic img { position:absolute; inset:0; display:block; width:100%; height:100%; max-width:none; }
+.door-intro-stepout-pic img:first-child { filter:brightness(.92) saturate(.8); } /* the room as the door shows it */
+.door-intro-stepout-pic img + img { opacity:0; will-change:opacity; }
+/* The doorway's shading over the room, as app/door.css draws it, so the stood-in room matches to the pixel. */
+.door-intro-stepout-veil { position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform, opacity; box-shadow:inset 12px 0 22px #24160890, inset 0 7px 8px #24160870; background:linear-gradient(0deg, #4e331a55, transparent 35%), linear-gradient(90deg, #160c060a, #160c0605); } /* taste-skill-ignore */
 @media (prefers-reduced-motion:no-preference) {
+  /* The layers that will fade exist before they move, so nothing is set up mid-frame. */
+  .door-intro.is-opening::after,
+  .door-intro.is-through::after { will-change:opacity; }
+  .door-intro.is-opening .door-intro-art,
+  .door-intro.is-through .door-intro-art { will-change:opacity; }
   .door-intro.is-through::after,
-  .door-intro.is-exiting::after { opacity:1; transition:opacity .9s var(--ease-in-out); }
+  .door-intro.is-exiting::after { opacity:1; transition:opacity 1.2s var(--ease-in-out); }
   .door-intro.is-through .door-intro-art,
-  .door-intro.is-exiting .door-intro-art { opacity:0; transition:opacity .5s ease .45s; }
+  .door-intro.is-exiting .door-intro-art { opacity:0; transition:opacity .6s ease .5s; }
   .door-intro.is-through .door-intro-header,
   .door-intro.is-through .door-intro-footer,
   .door-intro.is-exiting .door-intro-header,

@@ -11,6 +11,8 @@ import { site } from "@/lib/site";
 const SESSION_KEY = "red-door-arrival-v1";
 const OPEN = 52; // the door artwork's fully open angle
 const HOLD = "door-intro-holding"; // on <html> while the page beneath is held still (scroll lock, paused entrances)
+const MOVE = 1200; // the room's move out of the doorway, ms
+const EASE = "cubic-bezier(.7, 0, .15, 1)"; // a slow start and a long, soft landing
 
 /** y for a given x on a CSS cubic-bezier, so the easing can be baked into keyframes. */
 function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
@@ -30,7 +32,7 @@ function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
     return sampleY(Math.min(1, Math.max(0, t)));
   };
 }
-const ease = cubicBezier(0.76, 0, 0.24, 1);
+const ease = cubicBezier(0.7, 0, 0.15, 1);
 
 /** Where object-fit: cover; object-position: 58% center puts a w0×h0 picture in a w×h box. */
 function cover(w: number, h: number, w0: number, h0: number) {
@@ -94,16 +96,20 @@ export default function DoorIntro() {
       timers.current.push(id);
     };
     // The hand-off: the room seen through the door steps out of the doorway and settles into its
-    // place as the hero photograph, measured, while the dark ground brightens to the paper. Only
-    // transforms and clip-path move (the compositor does the work, the page never lays out), and the
-    // easing is baked into the keyframes so the picture keeps its proportions the whole way. Pages
-    // without the hero picture simply have the lights come up around the door.
+    // place as the hero photograph, measured, while the dark ground brightens to the paper. Three
+    // nested layers move, each by translation only (the window's near corner, its far corner, and
+    // the picture inside it at one uniform scale), so every frame is composed on the compositor
+    // from bitmaps drawn once: nothing is laid out, painted, clipped or filtered on the way. The
+    // easing is baked into dense keyframes so the layers stay in step and the picture keeps its
+    // proportions. Pages without the hero picture simply have the lights come up around the door.
     let move: (() => void) | null = null;
     const prepare = async () => {
-      const interior = document.querySelector<HTMLElement>(".door-intro .door-interior");
+      const intro = root.current;
+      const interior = intro?.querySelector<HTMLElement>(".door-interior");
       const heroBox = document.querySelector<HTMLElement>(".hero-project .ph");
       const heroImg = heroBox?.querySelector("img");
-      if (!interior || !heroBox || !heroImg) return;
+      const roomImg = interior?.querySelector("img");
+      if (!intro || !interior || !heroBox || !heroImg) return;
       const from = interior.getBoundingClientRect();
       const to = heroBox.getBoundingClientRect();
       if (from.width === 0 || to.width === 0) return;
@@ -114,46 +120,78 @@ export default function DoorIntro() {
       // The picture as the hero shows it.
       const c2 = cover(to.width, to.height, w0, h0);
       const S2 = { w: c2.w, h: c2.h, x: to.left + c2.x, y: to.top + c2.y };
+      // How much of the doorway the open leaf still hides, from its projected edge, plus a little
+      // of its cast on the room.
+      let leafRight = from.left;
+      intro.querySelectorAll<HTMLElement>(".door-leaf, .door-back").forEach((part) => { leafRight = Math.max(leafRight, part.getBoundingClientRect().right); });
+      const covered = Math.min(0.9, Math.max(0, (leafRight - from.left) / from.width + 0.025));
+      const vw = window.innerWidth, vh = window.innerHeight;
 
-      const box = document.createElement("div");
-      box.className = "door-intro-stepout";
-      Object.assign(box.style, { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px` });
-      const img = document.createElement("img");
-      img.src = heroImg.currentSrc || room.src; // the candidate the page has already decoded
-      img.alt = "";
-      Object.assign(img.style, { left: `${c2.x}px`, top: `${c2.y}px`, width: `${c2.w}px`, height: `${c2.h}px` });
-      box.appendChild(img);
-      await Promise.race([img.decode().catch(() => undefined), new Promise((r) => setTimeout(r, 250))]);
+      const make = (className: string, parent: HTMLElement | null, size: [number, number]) => {
+        const el = document.createElement("div");
+        el.className = className;
+        Object.assign(el.style, { width: `${size[0]}px`, height: `${size[1]}px` });
+        parent?.appendChild(el);
+        return el;
+      };
+      // The window is the overlap of two viewport-sized clips: one holds its near corner, the
+      // other its far corner. Inside, the picture at the hero's size, as the door lit it and as the
+      // page shows it, the second fading in over the first.
+      const box = make("door-intro-stepout", null, [vw, vh]);
+      const end = make("door-intro-stepout-end", box, [vw, vh]);
+      const pic = make("door-intro-stepout-pic", end, [c2.w, c2.h]);
+      // The candidate the page has already loaded; if the hero picture is still on its way, the
+      // room's own copy, which is on screen already.
+      const src = (heroImg.complete && heroImg.naturalWidth > 0 && heroImg.currentSrc) || roomImg?.currentSrc || room.src;
+      const [, lit] = [0, 1].map(() => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "";
+        pic.appendChild(img);
+        return img;
+      });
+      // The doorway's own shading over the room (the artwork's own shading at the jamb and the top, the warm fall-off at
+      // the floor, the leaf's faint cast), laid out at the doorway's size so it matches to the
+      // pixel when the room is stood in place; it lifts as the room comes out.
+      const veil = make("door-intro-stepout-veil", box, [from.width, from.height]);
+      await Promise.race([lit.decode().catch(() => undefined), new Promise((r) => setTimeout(r, 250))]);
       if (cancelled) return;
 
-      const sx = from.width / to.width, sy = from.height / to.height;
-      const steps = 30;
-      const outer: Keyframe[] = [], inner: Keyframe[] = [];
-      const filterAt = (e: number) => `brightness(${0.92 + 0.08 * e}) saturate(${0.8 + 0.2 * e})`;
+      const steps = 96;
+      const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+      const px = (n: number) => `${Math.round(n * 100) / 100}px`;
+      const kBox: Keyframe[] = [], kEnd: Keyframe[] = [], kPic: Keyframe[] = [], kVeil: Keyframe[] = [];
       for (let i = 0; i <= steps; i++) {
         const p = i / steps, e = ease(p);
-        const tx = (from.left - to.left) * (1 - e), ty = (from.top - to.top) * (1 - e);
-        const kx = sx + (1 - sx) * e, ky = sy + (1 - sy) * e;
-        const clip = 58 * (1 - Math.min(1, p / 0.3));
-        outer.push({ offset: p, transform: `translate(${tx}px, ${ty}px) scale(${kx}, ${ky})`, clipPath: `inset(0 0 0 ${clip}%)` });
-        // Where the picture must be on screen at this moment, then the inner transform that puts it there under the outer one.
-        const S = { x: S1.x + (S2.x - S1.x) * e, y: S1.y + (S2.y - S1.y) * e, w: S1.w + (S2.w - S1.w) * e, h: S1.h + (S2.h - S1.h) * e };
-        const ax = (S.x - to.left - tx) / kx - c2.x, ay = (S.y - to.top - ty) / ky - c2.y;
-        const bx = S.w / (kx * c2.w), by = S.h / (ky * c2.h);
-        inner.push({ offset: p, transform: `translate(${ax}px, ${ay}px) scale(${bx}, ${by})`, filter: filterAt(e) });
+        // The window: the doorway becoming the hero's frame, less the strip the leaf still hides,
+        // which it gives up over the first part of the move.
+        const l = lerp(from.left, to.left, e), t = lerp(from.top, to.top, e);
+        const r = l + lerp(from.width, to.width, e), b = t + lerp(from.height, to.height, e);
+        const near = l + (r - l) * covered * (1 - Math.min(1, e / 0.35));
+        // Where the picture is on screen at this moment: both crops show the same photograph, so
+        // it moves at one uniform scale.
+        const S = { x: lerp(S1.x, S2.x, e), y: lerp(S1.y, S2.y, e), w: lerp(S1.w, S2.w, e) };
+        kBox.push({ offset: p, transform: `translate(${px(near)}, ${px(t)})` });
+        kEnd.push({ offset: p, transform: `translate(${px(r - vw - near)}, ${px(b - vh - t)})` });
+        kPic.push({ offset: p, transform: `translate(${px(S.x - (r - vw))}, ${px(S.y - (b - vh))}) scale(${Math.round((S.w / c2.w) * 1e5) / 1e5})` });
+        kVeil.push({ offset: p, transform: `translate(${px(l - near)}, 0px) scale(${Math.round(((r - l) / from.width) * 1e5) / 1e5}, ${Math.round(((b - t) / from.height) * 1e5) / 1e5})` });
       }
-      // Stand it in the doorway now, identical to the room behind the leaf, so it is rasterised
-      // before the move; the move then only starts the animations from this exact state.
-      box.style.transform = outer[0].transform as string;
-      box.style.clipPath = outer[0].clipPath as string;
-      img.style.transform = inner[0].transform as string;
-      img.style.filter = inner[0].filter as string;
+      // Stand it in the doorway now, identical to the room behind the leaf, so its layers are
+      // drawn before the move; the move then only starts the animations from this exact state.
+      box.style.transform = kBox[0].transform as string;
+      end.style.transform = kEnd[0].transform as string;
+      pic.style.transform = kPic[0].transform as string;
+      veil.style.transform = kVeil[0].transform as string;
       document.body.appendChild(box);
       stepOut.current = box;
       move = () => {
-        const opts: KeyframeAnimationOptions = { duration: 900, easing: "linear", fill: "forwards" };
-        box.animate(outer, opts);
-        img.animate(inner, opts);
+        const opts: KeyframeAnimationOptions = { duration: MOVE, easing: "linear", fill: "forwards" };
+        box.animate(kBox, opts);
+        end.animate(kEnd, opts);
+        pic.animate(kPic, opts);
+        veil.animate(kVeil, opts);
+        veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: MOVE * 0.4, easing: "ease-out", fill: "forwards" });
+        lit.animate([{ opacity: 0 }, { opacity: 1 }], { duration: MOVE, easing: EASE, fill: "forwards" });
       };
     };
     const through = () => {
@@ -170,11 +208,23 @@ export default function DoorIntro() {
     motion.addEventListener("change", onMotion);
     document.addEventListener("keydown", onKey);
 
-    // Wait for the real first-view assets (fonts, the room behind the door, the hero picture it
-    // lands on), with a deadline for slow or failed requests.
-    const decode = (sel: string) => document.querySelector<HTMLImageElement>(sel)?.decode().catch(() => undefined) ?? Promise.resolve();
-    const assets = Promise.allSettled([document.fonts.ready, decode(".door-intro .door-interior img"), decode(".hero-project img")]);
-    const deadline = new Promise<void>(resolve => later(resolve, 1500));
+    // Wait for the real first-view assets: the fonts, the room behind the door and the hero
+    // picture it lands on. A picture counts as ready when it has loaded (decode() is only a
+    // best-effort extra, since Safari can reject it early), with a deadline for slow or failed
+    // requests. The room is kept dark until then and fades in when it arrives, so a slow
+    // connection never shows an empty doorway that the picture pops into.
+    const loaded = (img: HTMLImageElement | null) =>
+      new Promise<void>((resolve) => {
+        if (!img) return resolve();
+        const done = () => img.decode().catch(() => undefined).then(() => resolve());
+        if (img.complete && img.naturalWidth > 0) return void done();
+        img.addEventListener("load", done, { once: true });
+        img.addEventListener("error", () => resolve(), { once: true });
+      });
+    const roomImg = document.querySelector<HTMLImageElement>(".door-intro .door-interior img");
+    const roomReady = loaded(roomImg).then(() => { if (roomImg) roomImg.dataset.ready = "1"; });
+    const assets = Promise.allSettled([document.fonts.ready, roomReady, loaded(document.querySelector<HTMLImageElement>(".hero-project img"))]);
+    const deadline = new Promise<void>(resolve => later(resolve, 4000));
     Promise.race([assets, deadline]).then(() => {
       if (cancelled || !document.documentElement.classList.contains("door-intro-pending")) return;
       setPhase("lit"); // t=0: a light comes on behind the door
@@ -187,10 +237,10 @@ export default function DoorIntro() {
         // are not in the same frame as the unmount.
         document.documentElement.classList.remove(HOLD);
         setPhase("exiting");
-      }, 4600);
-      later(dismiss, 4900);
+      }, 3700 + MOVE);
+      later(dismiss, 4000 + MOVE);
     });
-    later(dismiss, 7000); // also covers a failed image, font, or interrupted transition
+    later(dismiss, 7400); // also covers a failed image, font, or interrupted transition
 
     return () => {
       cancelled = true;
