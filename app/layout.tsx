@@ -49,7 +49,7 @@ try {
       document.documentElement.classList.remove('door-intro-pending');
       var shell = document.getElementById('site-shell');
       if (shell) shell.inert = false;
-    }, 6500);
+    }, 8000);
   }
 } catch (_) {}` }} />
         <DoorIntro />

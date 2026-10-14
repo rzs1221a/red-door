@@ -30,9 +30,11 @@ Competitor test: another Amelia Island contractor has no red door. The sentence 
 
 ## The live thing
 
-The arrival: once per session the red door opens on a dark screen (lever first, then the leaf), with
-a skip and a reduced-motion bypass, and the finished work is behind it. On the page itself the
-before/after sliders and the process row are the hands-on things. Without script: no arrival screen.
+The arrival: once per session, on a dark screen, a light comes on behind the red door, the lever
+turns, the leaf opens, and after a held breath the view moves through the opening onto the page,
+where the same kitchen is the hero picture. Skip and Escape end it; reduced motion never shows it.
+On the page itself the before/after sliders and the process row are the hands-on things. Without
+script: no arrival screen.
 
 ## The argument (claims and proof, in page order)
 

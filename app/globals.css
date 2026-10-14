@@ -816,23 +816,54 @@ body.scroll-locked {
   .hero-project .ph { height:340px; }
 }
 
-/* Hidden without JavaScript, after the first entry, and when motion is reduced. */
+/* ---------- The arrival ----------
+   Hidden without JavaScript, after the first entry, and when motion is reduced. The door artwork
+   itself (app/door.css) is untouched: these rules only light it, scale it and move the camera. */
 .door-intro { display:none; }
 .door-intro-pending { overflow:hidden; }
-.door-intro-pending .door-intro { position:fixed; inset:0; z-index:1000; display:grid; grid-template-rows:auto 1fr auto; min-height:100svh; background:#141f22; color:#e9eae6; padding:24px clamp(20px,4vw,64px); opacity:1; transition:opacity .65s ease,visibility .65s; }
+.door-intro-pending .door-intro { position:fixed; inset:0; z-index:1000; display:grid; grid-template-rows:auto 1fr auto; min-height:100svh; background:#141f22; color:#e9eae6; padding:24px clamp(20px,4vw,64px); opacity:1; outline:none; transition:opacity .5s var(--ease-out),visibility .5s; }
 .door-intro-pending .door-intro.is-exiting { opacity:0; visibility:hidden; pointer-events:none; }
-.door-intro-header { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.door-intro-header { display:flex; align-items:center; justify-content:space-between; gap:20px; transition:opacity .3s ease; }
 .door-intro-brand { font-size:var(--text-lead); letter-spacing:-.02em; }
 .door-intro-skip { min-height:44px; min-width:72px; padding:10px 0 10px 16px; color:#c1c7c0; background:none; cursor:pointer; font-size:var(--text-body); }
 .door-intro-skip:hover { color:#fff; }
-.door-intro-art { display:flex; align-items:center; justify-content:center; min-height:0; }
+.door-intro-art { display:flex; align-items:center; justify-content:center; min-height:0; transform-origin:64% 54%; }
 .door-intro-art > div { width:100%; max-width:410px; }
-.door-intro-art .door { margin:auto; }
-.door-intro-footer { text-align:center; padding-bottom:env(safe-area-inset-bottom); }
-.door-intro-footer p { margin:0 auto; font-size:var(--text-head); line-height:var(--text-head--line-height); }
+.door-intro-art .door { margin:auto; transform-origin:bottom center; }
+.door-intro-footer { text-align:center; padding-bottom:env(safe-area-inset-bottom); transition:opacity .3s ease; }
+.door-intro-footer p { margin:0 auto; max-width:22ch; font-size:var(--text-head); line-height:var(--text-head--line-height); text-wrap:balance; }
 .door-intro-footer span { display:block; margin-top:10px; font-size:var(--text-small); color:#aab4ae; }
 /* The page's own entrances hold until the door has opened and the arrival screen has gone. */
 .door-intro-pending [data-rise] { animation-play-state:paused; }
+
+/* Dark: nothing is lit yet. The halo, the glass and the spill on the floor come on together. */
+.door-intro.is-waiting .door-halo,
+.door-intro.is-waiting .door-floor::after,
+.door-intro.is-waiting .door-transom span { opacity:0; }
+.door-intro .door-halo,
+.door-intro .door-transom span { transition:opacity .7s var(--ease-soft); }
+.door-intro .door-halo { opacity:1; }
+/* A warmer light for the arrival only: the page never shows this door. */
+.door-intro .door-transom span { box-shadow:inset 2px 2px 4px #0005, inset 0 0 18px #f3cf8a66; } /* taste-skill-ignore */
+
+/* The camera: a slow push-in while the door opens, then the move through the opening. */
+@media (prefers-reduced-motion:no-preference) {
+  .door-intro.is-opening .door-intro-art,
+  .door-intro.is-through .door-intro-art,
+  .door-intro.is-exiting .door-intro-art { will-change:transform; }
+  .door-intro-art { transition:transform 3.4s linear; }
+  .door-intro.is-opening .door-intro-art { transform:scale(1.04); }
+  .door-intro.is-through .door-intro-art,
+  .door-intro.is-exiting .door-intro-art { transform:scale(3.4); transition:transform .9s var(--ease-in-out); }
+  .door-intro.is-through .door-intro-header,
+  .door-intro.is-through .door-intro-footer,
+  .door-intro.is-exiting .door-intro-header,
+  .door-intro.is-exiting .door-intro-footer { opacity:0; }
+  /* The door at a size that holds the screen. */
+  @media (min-width:1024px) and (min-height:820px) {
+    .door-intro-art .door { transform:scale(1.2); }
+  }
+}
 @media (max-height:700px) { .door-intro-art .door { transform:scale(.8); }.door-intro-art { height:390px; }.door-intro-pending .door-intro { padding-top:12px; padding-bottom:16px; } }
 @media (max-height:540px) { .door-intro-art .door { transform:scale(.52); }.door-intro-art { height:250px; }.door-intro-footer p { font-size:var(--text-lead); }.door-intro-footer span { display:none; } }
 @media (prefers-reduced-motion:reduce) { .door-intro-pending { overflow:visible; }.door-intro-pending .door-intro { display:none; } }
