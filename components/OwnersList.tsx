@@ -60,7 +60,7 @@ export default function OwnersList({ heading, owners }: { heading: string; owner
                 ref={(el) => {
                   rows.current[i] = el;
                 }}
-                className="min-h-[56px] py-3.5"
+                className="min-h-[56px] py-3.5 md:py-4"
                 onMouseEnter={() => setActive(i)}
               >
                 <button
@@ -70,8 +70,8 @@ export default function OwnersList({ heading, owners }: { heading: string; owner
                   aria-expanded={i === active}
                   className={`flex w-full flex-col items-start gap-0.5 text-left transition-colors duration-200 md:flex-row md:items-baseline md:justify-between md:gap-6 ${i === active ? "text-ink" : "text-muted"}`}
                 >
-                  <span className="lead">{o.name}</span>
-                  <span className="small shrink-0 text-muted md:text-right">{o.service}</span>
+                  <span className="index-name">{o.name}</span>
+                  <span className="small text-muted md:max-w-[45%] md:text-right">{o.service}</span>
                 </button>
                 <div className="faq-panel" style={{ gridTemplateRows: i === active ? "1fr" : "0fr" }}>
                   <div>

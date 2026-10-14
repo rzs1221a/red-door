@@ -16,8 +16,8 @@
 
   --spacing-margin: clamp(1rem, 1.7vw, 1.5rem);
   --spacing-gutter: clamp(0.75rem, 1.4vw, 1.5rem);
-  --spacing-section: clamp(7.5rem, 6rem + 6vw, 13.75rem);
-  --spacing-section-sm: clamp(4.5rem, 3rem + 4vw, 7rem);
+  --spacing-section: clamp(5rem, 3.5rem + 4vw, 8rem);
+  --spacing-section-sm: clamp(3.5rem, 2.5rem + 2.5vw, 5rem);
 
   --text-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
   --text-small--line-height: 1.45;
@@ -474,6 +474,40 @@ body.scroll-locked {
     height: 120px;
     scroll-snap-align: start;
   }
+}
+
+/* The staircase statement: one line per paragraph, large enough to hold the screen. */
+.statement-line {
+  font-size: clamp(1.75rem, 1rem + 3.4vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+}
+/* Index rows (who we work with): heading size from 768px so the column is full. */
+.index-name {
+  font-size: var(--text-lead);
+  line-height: 1.15;
+}
+@media (min-width: 768px) {
+  .index-name {
+    font-size: clamp(1.5rem, 0.5rem + 1.9vw, 2rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+}
+/* Title screens: the title and its first picture share the screen from 768px. */
+.title-screen {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--spacing-gutter);
+  row-gap: 2.5rem;
+  align-items: end;
+}
+.title-screen > :first-child { grid-column: span 12; }
+.title-screen > :last-child { grid-column: span 12; }
+@media (min-width: 768px) {
+  .title-screen > :first-child { grid-column: 1 / span 6; }
+  .title-screen > :last-child { grid-column: 7 / span 6; }
 }
 
 /* ---------- The phone ---------- */

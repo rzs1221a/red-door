@@ -60,30 +60,30 @@ export default function Home() {
       </section>
 
       {/* ---------- Statement: the staircase ---------- */}
-      <section className="wrap flex min-h-[100svh] flex-col justify-center py-section-sm">
+      <section className="wrap py-section">
         <div className="grid12 items-start">
-          <RevealGroup as="div" className="col-span-12 md:col-span-9" stagger={110}>
+          <RevealGroup as="div" className="col-span-12 md:col-span-8" stagger={110}>
             {statement.lines.map((line, i) => (
               <p
                 key={line}
-                className={`head max-w-none font-medium ${i % 2 ? "text-muted" : "text-ink"}`}
-                style={{ paddingLeft: `calc(${i * 6}vw)` }}
+                className={`statement-line max-w-none ${i % 2 ? "text-muted" : "text-ink"}`}
+                style={{ paddingLeft: `calc(${i * 5}vw)` }}
               >
                 {line}
               </p>
             ))}
           </RevealGroup>
-          <div className="col-span-12 mt-10 grid grid-cols-2 gap-4 md:col-span-3 md:mt-0 md:grid-cols-1">
+          <div className="col-span-12 mt-10 grid grid-cols-2 gap-4 md:col-span-4 md:col-start-9 md:mt-0 md:grid-cols-1">
             <Reveal className="shutter">
-              <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/2]" imgClassName="h-full object-cover" />
+              <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 30vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[4/3]" imgClassName="h-full object-cover" />
             </Reveal>
             <Reveal className="shutter" delay={150}>
-              <Picture photo={residential.gallery[8]} sizes="(min-width: 768px) 20vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/2]" imgClassName="h-full object-cover" />
+              <Picture photo={residential.gallery[8]} sizes="(min-width: 768px) 30vw, 50vw" className="aspect-[4/5] overflow-hidden md:aspect-[4/3]" imgClassName="h-full object-cover" />
             </Reveal>
           </div>
         </div>
-        <Reveal className="mt-14 md:mt-20">
-          <p className="note max-w-[40ch]">{statement.note}</p>
+        <Reveal className="mt-12 md:mt-14">
+          <p className="max-w-[52ch]">{statement.note}</p>
         </Reveal>
       </section>
 
@@ -168,7 +168,7 @@ export default function Home() {
       </section>
 
       {/* ---------- Contact: the email as display type, inverted ---------- */}
-      <section className="relative flex min-h-[74svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-14 pt-10 text-light-ink md:min-h-[100svh] md:pb-[12vh]" aria-label="Write to us" data-hide-bar>
+      <section className="relative flex min-h-[74svh] flex-col justify-between bg-light px-[var(--spacing-margin)] pb-14 pt-10 text-light-ink md:min-h-[72svh] md:pb-[8vh]" aria-label="Write to us" data-hide-bar>
         <Reveal>
           <p className="lead max-w-[30ch]">Tell us about the property and what you want it to do.</p>
         </Reveal>
@@ -195,7 +195,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="h-[6svh] md:h-[16svh]" aria-hidden="true" />
+      <div className="h-[6svh] md:h-[8svh]" aria-hidden="true" />
     </>
   );
 }
