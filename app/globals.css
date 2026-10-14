@@ -573,7 +573,11 @@ body.scroll-locked {
   .reveal-pending.reveal-scale {
     transform: scale(0.96);
   }
-  .reveal-pending.is-visible {
+  .reveal-pending.reveal-right {
+    transform: translateX(32px);
+  }
+  /* Arrived: wins over every variant above and below, whatever the order. */
+  .js .reveal-pending.is-visible {
     opacity: 1;
     transform: none;
   }
@@ -756,9 +760,6 @@ body.scroll-locked {
       opacity: 1;
       transform: none;
     }
-  }
-  .reveal-pending.reveal-right {
-    transform: translateX(32px);
   }
 }
 @supports (animation-timeline: scroll()) {

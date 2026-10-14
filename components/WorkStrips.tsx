@@ -36,7 +36,7 @@ export default function WorkStrips({ strips, title ="Projects" }: { strips: Stri
           </p>
         </div>
       </div>
-      <div ref={list} className="strips space-y-11 overflow-hidden">
+      <div ref={list} className="strips space-y-11 overflow-clip">
         {shown.map((s) => (
           <article key={s.name} className="strip-row">
             <div className="strip ph">
