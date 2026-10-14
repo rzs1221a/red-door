@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { preload } from "react-dom";
+import { pictureAttrs } from "./Picture";
 import DoorScene from "./DoorScene";
 import { hero } from "@/lib/copy";
 import { residential } from "@/lib/projects";
@@ -18,6 +20,9 @@ const rooms = [{ label: "Kitchen", photo: residential.gallery[3] }];
  * It never gates navigation or form submission; Skip and Escape end it at once.
  */
 export default function DoorIntro() {
+  // The room behind the door is the first large paint of the visit: ask for its exact candidate early.
+  const room = pictureAttrs(rooms[0].photo);
+  preload(room.src, { as: "image", imageSrcSet: room.srcSet, imageSizes: "320px", fetchPriority: "high" });
   const [visible, setVisible] = useState(true);
   const [phase, setPhase] = useState("waiting");
   const [angle, setAngle] = useState(0);
