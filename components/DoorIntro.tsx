@@ -103,6 +103,7 @@ export default function DoorIntro() {
       const interior = document.querySelector<HTMLElement>(".door-intro .door-interior");
       const heroBox = document.querySelector<HTMLElement>(".hero-project .ph");
       const heroImg = heroBox?.querySelector("img");
+      const roomImg = interior?.querySelector("img");
       if (!interior || !heroBox || !heroImg) return;
       const from = interior.getBoundingClientRect();
       const to = heroBox.getBoundingClientRect();
@@ -119,7 +120,10 @@ export default function DoorIntro() {
       box.className = "door-intro-stepout";
       Object.assign(box.style, { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px` });
       const img = document.createElement("img");
-      img.src = heroImg.currentSrc || room.src; // the candidate the page has already decoded
+      // The candidate the page has already loaded; if the hero picture is still on its way, the
+      // room's own copy, which is on screen already.
+      const heroLoaded = heroImg.complete && heroImg.naturalWidth > 0;
+      img.src = (heroLoaded && heroImg.currentSrc) || roomImg?.currentSrc || room.src;
       img.alt = "";
       Object.assign(img.style, { left: `${c2.x}px`, top: `${c2.y}px`, width: `${c2.w}px`, height: `${c2.h}px` });
       box.appendChild(img);
@@ -170,11 +174,23 @@ export default function DoorIntro() {
     motion.addEventListener("change", onMotion);
     document.addEventListener("keydown", onKey);
 
-    // Wait for the real first-view assets (fonts, the room behind the door, the hero picture it
-    // lands on), with a deadline for slow or failed requests.
-    const decode = (sel: string) => document.querySelector<HTMLImageElement>(sel)?.decode().catch(() => undefined) ?? Promise.resolve();
-    const assets = Promise.allSettled([document.fonts.ready, decode(".door-intro .door-interior img"), decode(".hero-project img")]);
-    const deadline = new Promise<void>(resolve => later(resolve, 1500));
+    // Wait for the real first-view assets: the fonts, the room behind the door and the hero
+    // picture it lands on. A picture counts as ready when it has loaded (decode() is only a
+    // best-effort extra, since Safari can reject it early), with a deadline for slow or failed
+    // requests. The room is kept dark until then and fades in when it arrives, so a slow
+    // connection never shows an empty doorway that the picture pops into.
+    const loaded = (img: HTMLImageElement | null) =>
+      new Promise<void>((resolve) => {
+        if (!img) return resolve();
+        const done = () => img.decode().catch(() => undefined).then(() => resolve());
+        if (img.complete && img.naturalWidth > 0) return void done();
+        img.addEventListener("load", done, { once: true });
+        img.addEventListener("error", () => resolve(), { once: true });
+      });
+    const roomImg = document.querySelector<HTMLImageElement>(".door-intro .door-interior img");
+    const roomReady = loaded(roomImg).then(() => { if (roomImg) roomImg.dataset.ready = "1"; });
+    const assets = Promise.allSettled([document.fonts.ready, roomReady, loaded(document.querySelector<HTMLImageElement>(".hero-project img"))]);
+    const deadline = new Promise<void>(resolve => later(resolve, 4000));
     Promise.race([assets, deadline]).then(() => {
       if (cancelled || !document.documentElement.classList.contains("door-intro-pending")) return;
       setPhase("lit"); // t=0: a light comes on behind the door

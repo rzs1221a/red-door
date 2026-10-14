@@ -49,6 +49,7 @@ export default function Nav() {
               </Link>
             );
           })}
+          <a href={site.portalUrl} className="link small text-muted">Client portal</a>
           <Link href="/contact/" className="btn ml-2 !py-2.5 !small">Request a consultation</Link>
         </nav>
 
@@ -87,7 +88,10 @@ export default function Nav() {
                 );
               })}
               <li>
-                <a href={site.portalUrl} className="lead link mt-4 block py-2 text-muted">Client portal</a>
+                <a href={site.portalUrl} className="title link block py-1.5" data-rise style={{ "--i": nav.length } as React.CSSProperties}>
+                  Client portal
+                </a>
+                <p className="small -mt-1 text-muted">For current clients: schedule, photos, selections and messages.</p>
               </li>
             </ul>
           </nav>

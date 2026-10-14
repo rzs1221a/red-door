@@ -840,6 +840,9 @@ body.scroll-locked {
 /* The page's own entrances hold until the door has opened and the arrival screen has gone. */
 .door-intro-holding [data-rise] { animation-play-state:paused; will-change:transform, opacity; }
 
+/* The room behind the door is dark until its picture has loaded; it then fades in on the
+   artwork's own transition, so a slow connection never shows the picture popping into the doorway. */
+.door-intro .door-portal .door-interior img:not([data-ready]) { opacity:0; }
 /* Dark: nothing is lit yet. The halo, the glass and the spill on the floor come on together. */
 .door-intro.is-waiting .door-halo,
 .door-intro.is-waiting .door-floor::after,
