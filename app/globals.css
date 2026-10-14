@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "./door.css";
 
+/* iOS Safari and the door's depth. In the artwork's 3D scene the closed leaf's face, the room
+   behind it and the shading over the room all sit at the same depth; Chrome draws them in document
+   order, WebKit draws the room on top, and the door arrives white with the room showing through
+   its face (its panels, plate and sheen sit a hair in front, so they still show). A hair of depth
+   of their own settles the order everywhere. The door artwork itself (app/door.css) is unchanged. */
+[data-ui].door .door-face { transform: translateZ(0.3px); backface-visibility: visible; }
+[data-ui].door .door-reveal-shadow { transform: translateZ(0.1px); }
+
 /* ---------- Tokens: the dark room, in the subject's own colours ---------- */
 @theme {
   --color-bg: #eff0ec; /* paper with a hint of the door preview's green, the dark theme's ink lifted */
