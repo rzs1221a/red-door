@@ -827,7 +827,7 @@ body.scroll-locked {
 .door-intro-brand { font-size:var(--text-lead); letter-spacing:-.02em; }
 .door-intro-skip { min-height:44px; min-width:72px; padding:10px 0 10px 16px; color:#c1c7c0; background:none; cursor:pointer; font-size:var(--text-body); }
 .door-intro-skip:hover { color:#fff; }
-.door-intro-art { display:flex; align-items:center; justify-content:center; min-height:0; transform-origin:64% 54%; }
+.door-intro-art { display:flex; align-items:center; justify-content:center; min-height:0; }
 .door-intro-art > div { width:100%; max-width:410px; }
 .door-intro-art .door { margin:auto; transform-origin:bottom center; }
 .door-intro-footer { text-align:center; padding-bottom:env(safe-area-inset-bottom); transition:opacity .3s ease; }
@@ -846,15 +846,16 @@ body.scroll-locked {
 /* A warmer light for the arrival only: the page never shows this door. */
 .door-intro .door-transom span { box-shadow:inset 2px 2px 4px #0005, inset 0 0 18px #f3cf8a66; } /* taste-skill-ignore */
 
-/* The camera: a slow push-in while the door opens, then the move through the opening. */
+/* The hand-off. No camera: the ground brightens from the dark room to the paper, the room steps
+   out of the doorway (components/DoorIntro.tsx measures and moves it), the door fades last. */
+.door-intro-stepout { position:fixed; z-index:1001; object-fit:cover; object-position:58% center; pointer-events:none; }
 @media (prefers-reduced-motion:no-preference) {
-  .door-intro.is-opening .door-intro-art,
-  .door-intro.is-through .door-intro-art,
-  .door-intro.is-exiting .door-intro-art { will-change:transform; }
   .door-intro-art { transition:transform 3.4s linear; }
   .door-intro.is-opening .door-intro-art { transform:scale(1.04); }
+  .door-intro.is-through,
+  .door-intro.is-exiting { background:var(--color-bg); transition:background-color .9s var(--ease-in-out), opacity .3s ease, visibility .3s; }
   .door-intro.is-through .door-intro-art,
-  .door-intro.is-exiting .door-intro-art { transform:scale(3.4); transition:transform .9s var(--ease-in-out); }
+  .door-intro.is-exiting .door-intro-art { transform:scale(1.04); opacity:0; transition:opacity .5s ease .45s; }
   .door-intro.is-through .door-intro-header,
   .door-intro.is-through .door-intro-footer,
   .door-intro.is-exiting .door-intro-header,

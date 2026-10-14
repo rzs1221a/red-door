@@ -27,6 +27,7 @@ export default function DoorIntro() {
   const [phase, setPhase] = useState("waiting");
   const [angle, setAngle] = useState(0);
   const timers = useRef<number[]>([]);
+  const stepOut = useRef<HTMLImageElement | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const skip = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -34,6 +35,8 @@ export default function DoorIntro() {
   const dismiss = useCallback(() => {
     timers.current.forEach(window.clearTimeout);
     timers.current = [];
+    stepOut.current?.remove();
+    stepOut.current = null;
     document.documentElement.classList.remove("door-intro-pending");
     const shell = document.getElementById("site-shell");
     if (shell) shell.inert = false;
@@ -62,6 +65,33 @@ export default function DoorIntro() {
       const id = window.setTimeout(fn, ms);
       timers.current.push(id);
     };
+    // The hand-off: the room seen through the door steps out of the doorway and settles into its
+    // place as the hero photograph, measured, while the dark ground brightens to the paper. Pages
+    // without the hero picture simply have the lights come up around the door.
+    const through = () => {
+      setPhase("through");
+      const from = document.querySelector(".door-intro .door-interior")?.getBoundingClientRect();
+      const to = document.querySelector(".hero-project .ph")?.getBoundingClientRect();
+      if (!from || !to || from.width === 0 || to.width === 0) return;
+      const img = document.createElement("img");
+      img.src = room.src;
+      img.srcset = room.srcSet ?? "";
+      img.sizes = "(min-width: 1024px) 50vw, 100vw";
+      img.alt = "";
+      img.decoding = "sync";
+      img.className = "door-intro-stepout";
+      Object.assign(img.style, { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px` });
+      document.body.appendChild(img);
+      stepOut.current = img;
+      img.animate(
+        [
+          { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, clipPath: "inset(0 0 0 58%)", filter: "brightness(.92) saturate(.8)", offset: 0 },
+          { clipPath: "inset(0 0 0 0%)", offset: 0.3 },
+          { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px`, clipPath: "inset(0 0 0 0%)", filter: "brightness(1) saturate(1)", offset: 1 },
+        ],
+        { duration: 900, easing: "cubic-bezier(.76, 0, .24, 1)", fill: "forwards" },
+      );
+    };
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const onMotion = () => { if (motion.matches) dismiss(); };
     const onKey = (event: KeyboardEvent) => {
@@ -82,9 +112,9 @@ export default function DoorIntro() {
       setPhase("lit"); // t=0: a light comes on behind the door
       later(() => setPhase("opening"), 600); // the lever turns
       later(() => setAngle(OPEN), 1300); // the latch releases, the leaf swings (2.2s)
-      later(() => setPhase("through"), 3700); // after a held breath, move through the opening
-      later(() => setPhase("exiting"), 4100);
-      later(dismiss, 4600);
+      later(through, 3700); // after a held breath, the room steps out of the doorway
+      later(() => setPhase("exiting"), 4600);
+      later(dismiss, 4900);
     });
     later(dismiss, 7000); // also covers a failed image, font, or interrupted transition
 
