@@ -44,9 +44,9 @@ try {
   var seen = false;
   try { seen = sessionStorage.getItem('red-door-arrival-v1') === 'seen'; } catch (_) {}
   if (!seen && !matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash) {
-    document.documentElement.classList.add('door-intro-pending');
+    document.documentElement.classList.add('door-intro-pending', 'door-intro-holding');
     setTimeout(function () {
-      document.documentElement.classList.remove('door-intro-pending');
+      document.documentElement.classList.remove('door-intro-pending', 'door-intro-holding');
       var shell = document.getElementById('site-shell');
       if (shell) shell.inert = false;
     }, 8000);
