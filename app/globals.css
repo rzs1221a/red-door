@@ -812,6 +812,9 @@ body.scroll-locked {
   .hero-door [data-ui].door {
     margin-bottom: 4.5rem;
   }
+  .hero-door .door-caption {
+    margin-top: 1.6rem;
+  }
 }
 @media (min-width: 1280px) {
   .hero-door {
