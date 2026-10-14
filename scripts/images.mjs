@@ -21,23 +21,24 @@ async function fresh(src, out) {
   }
 }
 
-async function responsiveWidths() {
-  await mkdir(responsive, { recursive: true });
-  const files = (await readdir(projects)).filter((f) => f.endsWith(".webp"));
+async function responsiveWidths(dir = projects) {
+  const outDir = path.join(dir, "_r");
+  await mkdir(outDir, { recursive: true });
+  const files = (await readdir(dir)).filter((f) => /\.(webp|jpe?g|png)$/i.test(f));
   let made = 0;
   for (const file of files) {
-    const src = path.join(projects, file);
-    const name = file.replace(/\.webp$/, "");
+    const src = path.join(dir, file);
+    const name = file.replace(/\.(webp|jpe?g|png)$/i, "");
     const { width } = await sharp(src).metadata();
     for (const w of WIDTHS) {
       if (w >= width) continue;
-      const out = path.join(responsive, `${name}-${w}.webp`);
+      const out = path.join(outDir, `${name}-${w}.webp`);
       if (await fresh(src, out)) continue;
       await sharp(src).resize({ width: w }).webp({ quality: 78, effort: 4 }).toFile(out);
       made++;
     }
   }
-  console.log(`responsive: ${files.length} photos, ${made} files written`);
+  console.log(`responsive ${path.basename(dir)}: ${files.length} photos, ${made} files written`);
 }
 
 // Page → photo for the share image. Home keeps public/og.png (the door).
@@ -79,5 +80,6 @@ async function logos() {
 }
 
 await responsiveWidths();
+await responsiveWidths(path.join(root, "public/images/found"));
 await ogImages();
 await logos();

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Photo } from "@/lib/projects";
 import Picture, { pictureAttrs } from "./Picture";
-import { ChevronLeft, ChevronRight, Close } from "./icons";
+import { ArrowLeft as ChevronLeft, ArrowRight as ChevronRight, Close } from "./icons";
 
 // Grid of photos with explicit aspect ratios (no CLS) that opens a <dialog> lightbox.
 export default function Gallery({
@@ -13,7 +13,7 @@ export default function Gallery({
   className = "",
 }: {
   photos: Photo[];
-  /** Appended to each caption, e.g. "Atlanta area". */
+  /** Appended to each caption, e.g."Atlanta area". */
   caption?: string;
   columns?: 2 | 3;
   className?: string;
@@ -40,8 +40,8 @@ export default function Gallery({
   useEffect(() => {
     if (index === null) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") step(1);
-      if (e.key === "ArrowLeft") step(-1);
+      if (e.key ==="ArrowRight") step(1);
+      if (e.key ==="ArrowLeft") step(-1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -58,12 +58,12 @@ export default function Gallery({
 
   return (
     <>
-      <ul className={`grid gap-3 ${cols} ${className}`}>
+      <ul className={`rail sm:grid sm:gap-2 ${cols} ${className}`}>
         {photos.map((ph, i) => (
           <li key={ph.src} className={ph.w / ph.h > 1.6 ? "sm:col-span-2" : ""}>
             <button
               type="button"
-              className="zoom-media group block w-full rounded-[3px] bg-paper-2 text-left focus-visible:outline-offset-4"
+              className="ph group relative block w-full text-left focus-visible:outline-offset-4"
               onClick={(e) => {
                 lastButton.current = e.currentTarget;
                 setIndex(i);
@@ -73,7 +73,7 @@ export default function Gallery({
               <Picture
                 photo={ph}
                 sizes={columns === 2 ? "(min-width: 640px) 48vw, 100vw" : "(min-width: 1024px) 31vw, (min-width: 640px) 48vw, 100vw"}
-                className={`overflow-hidden rounded-[3px] ${ph.w / ph.h > 1.6 ? "aspect-[2/1] sm:aspect-[2.1/1]" : "aspect-[4/3]"}`}
+                className={`overflow-hidden ${ph.w / ph.h > 1.6 ? "aspect-[2/1] sm:aspect-[2.1/1]" : "aspect-[4/3]"}`}
                 imgClassName="h-full w-full object-cover"
               />
               <span className="sr-only">{caption ? `${ph.alt}, ${caption}` : ph.alt}</span>
@@ -89,15 +89,15 @@ export default function Gallery({
           if (e.target === dialogRef.current) close();
         }}
         aria-label="Photo viewer"
-        className="m-auto h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-white"
+        className="viewer m-auto h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-ink"
       >
         {current && (
           <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between px-4 py-3 text-[0.85rem] text-white/70">
+            <div className="flex items-center justify-between px-4 py-3 small text-muted">
               <span>
                 {index! + 1} / {photos.length}
               </span>
-              <button type="button" onClick={close} className="inline-flex items-center gap-2 rounded-[3px] px-2 py-1 hover:text-white" aria-label="Close">
+              <button type="button" onClick={close} className="link inline-flex items-center gap-2" aria-label="Close">
                 Close <Close size={18} />
               </button>
             </div>
@@ -107,12 +107,12 @@ export default function Gallery({
                 {...pictureAttrs(current)}
                 sizes="100vw"
                 alt={current.alt}
-                className="max-h-full max-w-full object-contain shadow-lift"
+                className="max-h-full max-w-full object-contain"
               />
               <button
                 type="button"
                 onClick={() => step(-1)}
-                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 backdrop-blur hover:bg-white/20"
+                className="square-btn absolute left-2 top-1/2 -translate-y-1/2"
                 aria-label="Previous photo"
               >
                 <ChevronLeft size={22} />
@@ -120,15 +120,15 @@ export default function Gallery({
               <button
                 type="button"
                 onClick={() => step(1)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 backdrop-blur hover:bg-white/20"
+                className="square-btn absolute right-2 top-1/2 -translate-y-1/2"
                 aria-label="Next photo"
               >
                 <ChevronRight size={22} />
               </button>
             </div>
-            <p className="px-4 py-4 text-center text-[0.9rem] text-white/75">
+            <p className="mx-auto px-4 py-4 text-center small text-muted">
               {current.alt}
-              {caption && <span className="text-white/50">, {caption}</span>}
+              {caption && <span>, {caption}</span>}
             </p>
           </div>
         )}

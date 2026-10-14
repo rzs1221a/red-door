@@ -6,3 +6,8 @@ out/
 next-env.d.ts
 .DS_Store
 .env*
+
+# taste-skill working files (direction sheet is kept)
+.taste-skill/*
+!.taste-skill/direction.json
+!.taste-skill/notes.md

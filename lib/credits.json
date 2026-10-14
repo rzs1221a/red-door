@@ -1,0 +1,72 @@
+[
+ {
+  "file": "/images/found/centre-street.jpg",
+  "media": "image",
+  "ref": "commons:56741402",
+  "title": "Centre St looking East, Fernandina Beach",
+  "creator": "Michael Rivera",
+  "creatorUrl": null,
+  "date": "Taken on 18 February 2017, 14:40:00",
+  "license": "CC BY-SA 4.0",
+  "licenseCode": "by-sa",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "creditRequired": true,
+  "page": "https://commons.wikimedia.org/wiki/File:Centre_St_looking_East,_Fernandina_Beach.jpg",
+  "via": "Wikimedia Commons",
+  "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Centre_St_looking_East%2C_Fernandina_Beach.jpg/1920px-Centre_St_looking_East%2C_Fernandina_Beach.jpg",
+  "width": 1920,
+  "height": 1280,
+  "bytes": 602306,
+  "credit": "\"Centre St looking East, Fernandina Beach\" by Michael Rivera, CC BY-SA 4.0, via Wikimedia Commons",
+  "notes": [
+   "Share-alike: an altered version (recoloured, combined with other pictures) must be shared under the same licence."
+  ],
+  "saved": "2026-10-13T21:47:49.341Z"
+ },
+ {
+  "file": "/images/found/fairbanks-house.jpg",
+  "media": "image",
+  "ref": "openverse:f0e98f35-d75b-4a6e-a5ec-f298ad4d407f",
+  "title": "Fernandina Beach FL Fairbanks House01",
+  "creator": "Ebyabe",
+  "creatorUrl": "https://commons.wikimedia.org/wiki/User:Ebyabe",
+  "date": null,
+  "license": "CC BY-SA 3.0",
+  "licenseCode": "by-sa",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+  "creditRequired": true,
+  "page": "https://commons.wikimedia.org/w/index.php?curid=12116879",
+  "via": "Wikimedia Commons",
+  "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Fernandina_Beach_FL_Fairbanks_House01.jpg/1920px-Fernandina_Beach_FL_Fairbanks_House01.jpg",
+  "width": 1920,
+  "height": 1440,
+  "bytes": 1111757,
+  "credit": "\"Fernandina Beach FL Fairbanks House01\" by Ebyabe, CC BY-SA 3.0, via Wikimedia Commons",
+  "notes": [
+   "Share-alike: an altered version (recoloured, combined with other pictures) must be shared under the same licence."
+  ],
+  "saved": "2026-10-13T21:47:51.786Z"
+ },
+ {
+  "file": "/images/found/amelia-lighthouse.jpg",
+  "media": "image",
+  "ref": "openverse:aaa0c3a7-616b-4d37-8152-439f8fb3dbfc",
+  "title": "Amelia Island Lighthouse (16381969781)",
+  "creator": "NatalieMaynor",
+  "creatorUrl": "https://www.flickr.com/people/93178668@N00",
+  "date": null,
+  "license": "CC BY 2.0",
+  "licenseCode": "by",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "creditRequired": true,
+  "page": "https://commons.wikimedia.org/w/index.php?curid=95788432",
+  "via": "Wikimedia Commons",
+  "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Amelia_Island_Lighthouse_%2816381969781%29.jpg/1920px-Amelia_Island_Lighthouse_%2816381969781%29.jpg",
+  "width": 1920,
+  "height": 1279,
+  "bytes": 610238,
+  "credit": "\"Amelia Island Lighthouse (16381969781)\" by NatalieMaynor, CC BY 2.0, via Wikimedia Commons",
+  "notes": [],
+  "saved": "2026-10-13T21:47:55.018Z"
+ }
+]

@@ -1,97 +1,37 @@
 import Link from "next/link";
-import Logo from "./Logo";
 import { nav, site } from "@/lib/site";
-import { ArrowRight, Facebook, Instagram, Mail, Phone, Pin } from "./icons";
+import { foundCredits } from "@/lib/found";
 
-export default function Footer() {
+// A single quiet line after a stretch of empty ground, then the picture credits.
+export default function Footer({ credits = true }: { credits?: boolean }) {
   const year = new Date().getFullYear();
   return (
-    <footer className="grain bg-ink-deep pb-24 text-white/80 md:pb-0">
-      <div className="mx-auto max-w-site px-5 md:px-8 lg:px-10">
-        {/* Big line */}
-        <div className="flex flex-wrap items-end justify-between gap-8 border-b border-white/10 py-14 md:py-20">
-          <div>
-            <p className="eyebrow eyebrow-rule text-white/60" style={{ "--eyebrow-rule": "rgba(255,255,255,0.6)" } as React.CSSProperties}>Start a conversation</p>
-            <p className="display mt-4 max-w-3xl text-display-lg text-white">{site.promise}</p>
-          </div>
-          <Link
-            href="/contact/"
-            className="arrow-nudge inline-flex items-center gap-3 rounded-[3px] bg-white px-6 py-4 font-medium text-ink transition-colors hover:bg-cream"
-          >
-            Request a consultation <ArrowRight size={17} />
-          </Link>
-        </div>
-
-        <div className="grid gap-12 py-14 md:grid-cols-[1.5fr_1fr_1fr_1fr] md:py-16">
-          <div>
-            <Logo inverse />
-            <p className="mt-5 max-w-sm text-[0.95rem] text-white/65">{site.description}</p>
-            <ul className="mt-6 space-y-2.5 text-[0.95rem]">
-              <li>
-                <a href={`tel:${site.phone.tel}`} className="inline-flex items-center gap-2.5 hover:text-white">
-                  <Phone size={16} className="text-white/50" /> {site.phone.display}
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${site.email}`} className="inline-flex items-center gap-2.5 hover:text-white">
-                  <Mail size={16} className="text-white/50" /> {site.email}
-                </a>
-              </li>
-              <li className="inline-flex items-center gap-2.5">
-                <Pin size={16} className="text-white/50" /> {site.city}, Florida
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="eyebrow text-white/50">Explore</h2>
-            <ul className="mt-4 space-y-2.5 text-[0.95rem]">
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="link-underline hover:text-white">{item.label}</Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/privacy/" className="link-underline hover:text-white">Privacy</Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="eyebrow text-white/50">Clients</h2>
-            <ul className="mt-4 space-y-2.5 text-[0.95rem]">
-              <li><a href={site.portalUrl} className="link-underline hover:text-white">Client portal login</a></li>
-              <li><Link href="/client-portal/" className="link-underline hover:text-white">How the portal works</Link></li>
-            </ul>
-            <h2 className="eyebrow mt-8 text-white/50">Atlanta</h2>
-            <p className="mt-4 text-[0.95rem]">
-              <a href={site.atlantaUrl} className="link-underline hover:text-white">reddoorrevivals.com</a>
-            </p>
-          </div>
-
-          <div>
-            <h2 className="eyebrow text-white/50">Where we work</h2>
-            <ul className="mt-4 space-y-2.5 text-[0.95rem]">
-              {site.serviceArea.map((a) => (
-                <li key={a}>{a}</li>
-              ))}
-            </ul>
-            <div className="mt-8 flex gap-3">
-              <a href={site.social.instagram} aria-label="Instagram" className="rounded-full border border-white/20 p-2.5 transition-colors hover:border-white hover:text-white">
-                <Instagram size={18} />
-              </a>
-              <a href={site.social.facebook} aria-label="Facebook" className="rounded-full border border-white/20 p-2.5 transition-colors hover:border-white hover:text-white">
-                <Facebook size={18} />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap justify-between gap-3 border-t border-white/10 py-6 text-[0.82rem] text-white/45">
-          <p>© {year} Red Door Revivals, LLC. Serving {site.serviceArea.join(", ")}.</p>
-          <p>{site.tagline}</p>
-        </div>
+    <footer className="wrap pb-8 pt-[9svh] md:pt-[14svh]">
+      <div className="grid gap-2 md:grid-cols-[1fr_auto_1fr] md:items-baseline">
+        <p className="text-muted">Renovation and project management, {site.city}, Florida</p>
+        <p className="flex flex-wrap gap-x-6 gap-y-0 md:justify-center md:gap-y-1">
+          {nav.map((n) => (
+            <Link key={n.href} href={n.href} className="link inline-block min-w-[44px] py-2.5 md:min-w-0 md:py-0">{n.label}</Link>
+          ))}
+          <a href={site.portalUrl} className="link inline-block py-2.5 md:py-0">Client portal</a>
+        </p>
+        <p className="text-muted md:text-right">
+          © {year} Red Door Revivals, LLC · <Link href="/privacy/" className="link inline-block py-2.5 text-ink md:py-0">Privacy</Link>
+        </p>
       </div>
+      {credits && (
+        <p className="credits mt-8 max-w-none text-muted">
+          Pictures of Fernandina Beach:{" "}
+          {foundCredits.map((c, i) => (
+            <span key={c.file}>
+              <a href={c.page} className="link text-ink">“{c.title}”</a> by {c.creator},{" "}
+              <a href={c.licenseUrl} className="link text-ink">{c.license}</a>, via Wikimedia Commons
+              {i < foundCredits.length - 1 ? ";" : "."}
+            </span>
+          ))}{" "}
+          Project photographs are Red Door Revivals’ own work in the Atlanta area.
+        </p>
+      )}
     </footer>
   );
 }

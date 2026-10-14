@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { display, sans } from "./fonts";
-import Header from "@/components/Header";
+import { boska } from "./fonts";
+import ActionBar from "@/components/ActionBar";
+import Nav from "@/components/Nav";
+import DoorIntro from "@/components/DoorIntro";
 import Footer from "@/components/Footer";
-import MobileCtaBar from "@/components/MobileCtaBar";
 import JsonLd from "@/components/JsonLd";
 import { site } from "@/lib/site";
 import { graph, organization, website } from "@/lib/schema";
@@ -31,29 +32,39 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: "#e31b23",
-  width: "device-width",
-  initialScale: 1,
-};
+export const viewport: Viewport = { themeColor: "#141f22", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en" className={boska.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body>
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[3px] focus:bg-white focus:px-4 focus:py-2 focus:shadow-lift"
-        >
+        {/* Motion recipes only hide things when script runs: see globals.css (.js [data-rise]). */}
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js');
+try {
+  var seen = false;
+  try { seen = sessionStorage.getItem('red-door-arrival-v1') === 'seen'; } catch (_) {}
+  if (!seen && !matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash) {
+    document.documentElement.classList.add('door-intro-pending');
+    setTimeout(function () {
+      document.documentElement.classList.remove('door-intro-pending');
+      var shell = document.getElementById('site-shell');
+      if (shell) shell.inert = false;
+    }, 6500);
+  }
+} catch (_) {}` }} />
+        <DoorIntro />
+        <div id="site-shell">
+        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-light-ink">
           Skip to content
         </a>
-        <Header />
+        <Nav />
         <main id="main" tabIndex={-1} className="outline-none">
           {children}
         </main>
         <Footer />
-        <MobileCtaBar />
+        <ActionBar />
         <JsonLd data={graph(organization(), website())} />
+        </div>
       </body>
     </html>
   );

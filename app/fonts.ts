@@ -1,22 +1,13 @@
 import localFont from "next/font/local";
 
-// Self-hosted via @fontsource files; next/font preloads them and sets size-adjusted fallbacks.
-export const display = localFont({
-  src: "../node_modules/@fontsource/libre-caslon-display/files/libre-caslon-display-latin-400-normal.woff2",
-  weight: "400",
-  style: "normal",
-  display: "swap",
-  variable: "--font-display-src",
-  adjustFontFallback: "Times New Roman",
-});
-
-export const sans = localFont({
+// Boska (Indian Type Foundry, via Fontshare), self-hosted from public/fonts.
+// One family does every job on the site. Two files on first paint (400 and 500); italics are not used.
+export const boska = localFont({
   src: [
-    { path: "../node_modules/@fontsource/public-sans/files/public-sans-latin-400-normal.woff2", weight: "400" },
-    { path: "../node_modules/@fontsource/public-sans/files/public-sans-latin-500-normal.woff2", weight: "500" },
-    { path: "../node_modules/@fontsource/public-sans/files/public-sans-latin-600-normal.woff2", weight: "600" },
+    { path: "../public/fonts/boska-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/boska-500-normal.woff2", weight: "500", style: "normal" },
   ],
   display: "swap",
-  variable: "--font-sans-src",
-  adjustFontFallback: "Arial",
+  variable: "--font-boska-src",
+  adjustFontFallback: "Times New Roman",
 });

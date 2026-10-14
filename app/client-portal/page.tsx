@@ -1,7 +1,7 @@
 import JsonLd from "@/components/JsonLd";
-import { RevealGroup } from "@/components/Reveal";
-import { ButtonLink, Container, PageIntro, SectionHead } from "@/components/ui";
-import { Doc, Speak, Status } from "@/components/icons";
+import Picture from "@/components/Picture";
+import Reveal, { RevealGroup } from "@/components/Reveal";
+import { ButtonLink, TextLink } from "@/components/ui";
 import { site } from "@/lib/site";
 import { interiors, region } from "@/lib/projects";
 import { pageMeta } from "@/lib/seo";
@@ -17,54 +17,49 @@ export const metadata = pageMeta({
 
 // Portal contents per the scope: documents, messages, and project status (CoConstruct).
 const inside = [
-  { title: "Project status", body: "Where the project stands during the build.", icon: Status },
-  { title: "Messages", body: "Project messages, kept with the project.", icon: Speak },
-  { title: "Documents", body: "Project documents in one place.", icon: Doc },
+  ["Project status","Where the project stands during the build."],
+  ["Messages","Project messages, kept with the project."],
+  ["Documents","Project documents in one place."],
 ];
 
 export default function ClientPortal() {
   return (
     <>
-      <PageIntro
-        eyebrow="Client portal"
-        title="Your project, from anywhere"
-        photo={interiors.photos[2]}
-        photoCaption={`Creative office, Red Door project, ${region}`}
-        actions={
-          <>
-            <ButtonLink href={site.portalUrl} size="lg" icon>Log in to the client portal</ButtonLink>
-            <ButtonLink href="/contact/" variant="secondary" size="lg">Start a project</ButtonLink>
-          </>
-        }
-      >
-        <p>
-          Owners receive regular updates throughout the project. Clients and trade partners find documents, messages, and
-          project status in our client portal during a build.
-        </p>
-      </PageIntro>
-
-      <section className="border-b border-line">
-        <Container className="py-section-sm md:py-section">
-          <SectionHead eyebrow="Inside" title="What you'll find" />
-          <RevealGroup className="mt-12 grid gap-5 sm:grid-cols-3">
-            {inside.map((item) => (
-              <div key={item.title} className="rounded-[3px] bg-cream p-7 shadow-card">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-door/10 text-door-deep">
-                  <item.icon size={22} />
-                </span>
-                <p className="mt-5 text-[1.15rem] font-semibold">{item.title}</p>
-                <p className="mt-2 text-ink-soft">{item.body}</p>
-              </div>
-            ))}
-          </RevealGroup>
-          <p className="measure mt-14 text-ink-soft">
-            Can&rsquo;t log in? Call{" "}
-            <a href={`tel:${site.phone.tel}`} className="font-medium text-door-deep underline underline-offset-4">
-              {site.phone.display}
-            </a>{" "}
-            and we&rsquo;ll reset your access.
+      <section className="wrap pt-10 md:pt-16">
+        <h1 className="title max-w-[18ch]" data-rise style={{ "--i": 0 } as React.CSSProperties}>Your project, from anywhere</h1>
+      </section>
+      <section className="wrap grid12 mt-10 items-center md:mt-14">
+        <div className="col-span-12 md:col-span-5">
+          <p className="lead text-muted" data-rise style={{ "--i": 1 } as React.CSSProperties}>
+            Owners receive regular updates throughout the project. Clients and trade partners find documents, messages, and project status in our client portal during a build.
           </p>
-        </Container>
+          <div className="mt-8 flex flex-wrap items-center gap-6" data-rise style={{ "--i": 2 } as React.CSSProperties}>
+            <ButtonLink href={site.portalUrl}>Log in to the client portal</ButtonLink>
+            <TextLink href="/contact/">Start a project</TextLink>
+          </div>
+        </div>
+        <Reveal className="shutter col-span-12 mt-10 md:col-span-6 md:col-start-7 md:mt-0">
+          <Picture photo={interiors.photos[2]} sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[4/3] overflow-hidden" imgClassName="h-full object-cover" />
+          <p className="small mt-3 text-muted">Creative office, a Red Door project in the {region}.</p>
+        </Reveal>
+      </section>
+
+      <section className="wrap mt-section grid12">
+        <Reveal as="div" className="col-span-12 md:col-span-4">
+          <h2 className="head">What you’ll find</h2>
+        </Reveal>
+        <RevealGroup as="div" className="col-span-12 mt-8 grid gap-8 sm:grid-cols-3 md:col-span-8 md:col-start-5 md:mt-0">
+          {inside.map(([t, b], i) => (
+            <div key={t}>
+              <Picture photo={[interiors.photos[4], interiors.photos[0], interiors.photos[3]][i]} sizes="(min-width: 640px) 22vw, 100vw" className="aspect-[4/3] overflow-hidden" imgClassName="h-full object-cover" />
+              <p className="lead mt-4">{t}</p>
+              <p className="text-muted">{b}</p>
+            </div>
+          ))}
+        </RevealGroup>
+        <Reveal as="p" className="col-span-12 mt-12 max-w-[44ch] text-muted md:col-span-8 md:col-start-5">
+          Can’t log in? Call <a href={`tel:${site.phone.tel}`} className="link text-ink">{site.phone.display}</a> and we’ll reset your access.
+        </Reveal>
       </section>
       <JsonLd data={graph(breadcrumbs([{ name: "Client portal", path: "/client-portal/" }]))} />
     </>
