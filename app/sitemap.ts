@@ -12,6 +12,7 @@ const pages: { path: string; updated: string; priority: number }[] = [
   { path: "about/", updated: "2026-10-13", priority: 0.7 },
   { path: "contact/", updated: "2026-10-13", priority: 0.9 },
   { path: "client-portal/", updated: "2026-10-13", priority: 0.4 },
+  { path: "tour/", updated: "2026-10-14", priority: 0.5 },
   { path: "privacy/", updated: "2026-10-13", priority: 0.2 },
 ];
 

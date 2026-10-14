@@ -828,6 +828,31 @@ body.scroll-locked {
   .hero-project .ph { height:340px; }
 }
 
+/* ---------- The tour ----------
+   Seven stops down the page; a guide beside them that keeps its place. On a phone the guide is
+   one line at the top of the screen with the way to the next stop. */
+.tour { display: grid; gap: var(--spacing-section-sm) var(--spacing-gutter); }
+.tour-stops { display: grid; gap: var(--spacing-section); }
+/* The guide holds its place for the whole run of stops: the list on wide screens, the line on a phone. */
+.tour-guide { position: sticky; top: 0; z-index: 20; align-self: start; }
+.tour-n { display: inline-block; min-width: 1.6em; color: var(--color-accent); font-variant-numeric: tabular-nums; }
+.tour-rail { display: none; gap: 0.35rem; }
+.tour-rail a { display: grid; grid-template-columns: 2rem 1fr; align-items: baseline; padding: 0.35rem 0; min-height: 44px; }
+.tour-rail-n { font-size: var(--text-small); color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.tour-rail .is-current a { color: var(--color-ink); }
+.tour-rail .is-current .tour-rail-n { color: var(--color-accent); }
+.tour-rail li:not(.is-current) a { color: var(--color-muted); }
+.tour-strip { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 0 calc(-1 * var(--spacing-margin)); padding: 10px var(--spacing-margin); padding-top: max(10px, env(safe-area-inset-top)); background: var(--color-bg); font-size: var(--text-small); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s; }
+.tour-strip.is-on { opacity: 1; visibility: visible; }
+.tour-strip > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tour-strip a { flex: none; min-height: 44px; display: inline-flex; align-items: center; }
+@media (min-width: 768px) {
+  .tour { grid-template-columns: 3fr 9fr; }
+  .tour-guide { top: 18vh; }
+  .tour-rail { display: grid; }
+  .tour-strip { display: none; }
+}
+
 /* ---------- The arrival ----------
    Hidden without JavaScript, after the first entry, and when motion is reduced. The door artwork
    itself (app/door.css) is untouched: these rules only light it, scale it and move the camera. */

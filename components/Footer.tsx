@@ -14,6 +14,7 @@ export default function Footer({ credits = true }: { credits?: boolean }) {
             <Link key={n.href} href={n.href} className="link inline-block min-w-[44px] py-2.5 md:min-w-0 md:py-0">{n.label}</Link>
           ))}
           <a href={site.portalUrl} className="link inline-block py-2.5 md:py-0">Client portal</a>
+          <Link href="/tour/" className="link inline-block py-2.5 md:py-0">Tour</Link>
         </p>
         <p className="text-muted md:text-right">
           © {year} Red Door Revivals, LLC · <Link href="/privacy/" className="link inline-block py-2.5 text-ink md:py-0">Privacy</Link>
