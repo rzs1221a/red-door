@@ -50,7 +50,7 @@ export default function About() {
           {[
             { n: "30+", t: "years of residential and commercial building and design" },
             { n: String(steps.length), t: "steps in the Red Door Process, consultation to completion" },
-            { n: "2", t: "principals, working together since 2000" },
+            { n: String(site.leadership.length), t: "principals, working together since 2000" },
             { n: "2", t: "renovation-of-the-year awards" },
           ].map((s) => (
             <div key={s.t}>
@@ -77,7 +77,7 @@ export default function About() {
 
       <section className="wrap mt-section grid12">
         <div className="col-span-12 md:col-span-5">
-          <h2 className="head">Two principals</h2>
+          <h2 className="head">Three principals</h2>
           <ul className="mt-8 space-y-4">
             {site.leadership.map((p) => (
               <li key={p.name}>

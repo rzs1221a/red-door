@@ -2,7 +2,7 @@
 // lib/copy.ts, lib/process.ts, and lib/site.ts so nothing here is a new claim.
 import { idealCustomer, services, why } from "./copy";
 import { steps } from "./process";
-import { site } from "./site";
+import { licenseLine, site } from "./site";
 
 export type Faq = { q: string; a: string };
 
@@ -36,6 +36,10 @@ export const faqs: Faq[] = [
     q: "Are you bonded and insured?",
     a: bonded.body[0],
   },
+  // Appears only once the Florida license number is in lib/site.ts.
+  ...(licenseLine()
+    ? [{ q: "Are you licensed in Florida?", a: `Yes. Red Door Revivals is a ${licenseLine()}. ${bonded.body[0]}` }]
+    : []),
   {
     q: "Do you work with owners who live outside the area?",
     a: `Yes. ${idealCustomer.forLead} ${idealCustomer.for.join(", ").toLowerCase()}. Owners receive regular updates throughout the project, and clients find documents, messages, and project status in our client portal during a build.`,
@@ -56,3 +60,15 @@ export const faqs: Faq[] = [
 
 /** Short subset for pages that only need a few. */
 export const faqsShort = faqs.slice(0, 5);
+
+/** The contact page: the practical questions first (bonded, licensed, where, who), then the process. */
+const contactOrder = [
+  "Are you bonded and insured?",
+  "Are you licensed in Florida?",
+  "Where do you work?",
+  "Do you work with owners who live outside the area?",
+  "What happens first?",
+  "How do you decide what work gets done?",
+  "What is in the detailed project plan?",
+];
+export const faqsContact = contactOrder.map((q) => faqs.find((f) => f.q === q)).filter((f): f is Faq => Boolean(f));

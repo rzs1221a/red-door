@@ -1,27 +1,27 @@
 [
  {
-  "file": "/images/found/centre-street.jpg",
+  "file": "/images/found/amelia-sunrise.jpg",
   "media": "image",
-  "ref": "commons:56741402",
-  "title": "Centre St looking East, Fernandina Beach",
-  "creator": "Michael Rivera",
-  "creatorUrl": null,
-  "date": "Taken on 18 February 2017, 14:40:00",
-  "license": "CC BY-SA 4.0",
-  "licenseCode": "by-sa",
-  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "ref": "commons:File:Amelia_Island_Sunrise_(471574160).jpg",
+  "title": "Amelia Island Sunrise",
+  "creator": "Patty O'Hearn Kickham",
+  "creatorUrl": "https://www.flickr.com/photos/77994098@N00",
+  "date": "Taken on 14 April 2007, 06:01",
+  "license": "CC BY 2.0",
+  "licenseCode": "by",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
   "creditRequired": true,
-  "page": "https://commons.wikimedia.org/wiki/File:Centre_St_looking_East,_Fernandina_Beach.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Amelia_Island_Sunrise_(471574160).jpg",
   "via": "Wikimedia Commons",
-  "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Centre_St_looking_East%2C_Fernandina_Beach.jpg/1920px-Centre_St_looking_East%2C_Fernandina_Beach.jpg",
-  "width": 1920,
-  "height": 1280,
-  "bytes": 602306,
-  "credit": "\"Centre St looking East, Fernandina Beach\" by Michael Rivera, CC BY-SA 4.0, via Wikimedia Commons",
+  "image": "https://upload.wikimedia.org/wikipedia/commons/5/51/Amelia_Island_Sunrise_%28471574160%29.jpg",
+  "width": 2816,
+  "height": 1880,
+  "bytes": null,
+  "credit": "\"Amelia Island Sunrise\" by Patty O'Hearn Kickham, CC BY 2.0, via Wikimedia Commons",
   "notes": [
-   "Share-alike: an altered version (recoloured, combined with other pictures) must be shared under the same licence."
+   "Resized to 1920 wide for the site; attribution only, no share-alike."
   ],
-  "saved": "2026-10-13T21:47:49.341Z"
+  "saved": "2026-11-02T02:10:00.000Z"
  },
  {
   "file": "/images/found/fairbanks-house.jpg",

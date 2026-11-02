@@ -1,9 +1,8 @@
 import JsonLd from "@/components/JsonLd";
 import FAQ from "@/components/FAQ";
-import Picture from "@/components/Picture";
 import Reveal from "@/components/Reveal";
+import StepIcon from "@/components/StepIcons";
 import { ButtonLink } from "@/components/ui";
-import { region, residential } from "@/lib/projects";
 import { steps } from "@/lib/process";
 import { positioning, why } from "@/lib/copy";
 import { faqs } from "@/lib/faq";
@@ -18,9 +17,8 @@ export const metadata = pageMeta({
   imageAlt: "Kitchen with painted cabinets and dark ceiling beams",
 });
 
-const designCombined = why.find((w) => w.title ==="Design + Construction")!;
+const designCombined = why.find((w) => w.title === "Design + Construction")!;
 const processFaqs = faqs.filter((f) => /first|decide|designer|project plan|happening|end of the project/.test(f.q));
-const stepPhotos = [residential.gallery[0], residential.feature.before, residential.gallery[3], residential.gallery[4], residential.gallery[2], residential.gallery[5], residential.feature.after];
 
 export default function DesignProcess() {
   return (
@@ -32,28 +30,33 @@ export default function DesignProcess() {
         </p>
       </section>
 
-      {/* Pinned story: the heading holds, the seven steps pass. */}
+      {/* Pinned story: the heading holds, the seven steps pass, each marked by its symbol in the margin. */}
       <section className="wrap mt-10 grid gap-10 md:mt-14 md:grid-cols-[5fr_7fr]">
         <div className="md:sticky md:top-[18vh] md:self-start">
           <p className="lead">Seven steps, in this order, on every project.</p>
           <p className="mt-4 max-w-[36ch] text-muted">Design decisions happen before construction, not while the contractor is standing in the kitchen.</p>
         </div>
-        <ol className="space-y-section-sm">
+        <ol className="space-y-12 md:space-y-16">
           {steps.map((s, i) => (
             <li key={s.title}>
-              <Reveal>
-                <h2 className="head">{s.title}</h2>
-                {s.intro.map((p) => (
-                  <p key={p} className="lead mt-4 text-muted">{p}</p>
-                ))}
-                {s.listLead && <p className="mt-5">{s.listLead}</p>}
-                {s.items && <p className="mt-2 max-w-[52ch] text-muted">{s.items.join(s.items[0].length > 30 ? " " : ", ")}{s.items[0].length > 30 ? "" : "."}</p>}
-                {s.close?.map((c) => (
-                  <p key={c} className="mt-5">{c}</p>
-                ))}
-              </Reveal>
-              <Reveal className="shutter mt-8" delay={100}>
-                <Picture photo={stepPhotos[i]} sizes="(min-width: 768px) 55vw, 100vw" className={`overflow-hidden ${i % 2 ? "aspect-[3/2] md:w-2/3" : "aspect-[16/10]"}`} imgClassName="h-full object-cover" />
+              <Reveal className="grid grid-cols-[56px_1fr] gap-5 sm:grid-cols-[72px_1fr] sm:gap-6">
+                <div>
+                  <span className="flex size-14 items-center justify-center bg-surface text-ink" aria-hidden="true">
+                    <StepIcon index={i} size={28} />
+                  </span>
+                  <span className="small mt-2 block text-muted tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                </div>
+                <div>
+                  <h2 className="head">{s.title}</h2>
+                  {s.intro.map((p) => (
+                    <p key={p} className="lead mt-4 text-muted">{p}</p>
+                  ))}
+                  {s.listLead && <p className="mt-5">{s.listLead}</p>}
+                  {s.items && <p className="mt-2 max-w-[52ch] text-muted">{s.items.join(s.items[0].length > 30 ? " " : ", ")}{s.items[0].length > 30 ? "" : "."}</p>}
+                  {s.close?.map((c) => (
+                    <p key={c} className="mt-5">{c}</p>
+                  ))}
+                </div>
               </Reveal>
             </li>
           ))}
@@ -81,7 +84,6 @@ export default function DesignProcess() {
           </div>
         </div>
       </section>
-      <p className="wrap small mt-10 text-muted">Photographs are Red Door projects in the {region}.</p>
       <JsonLd data={graph(breadcrumbs([{ name: "Our process", path: "/design-process/" }]))} />
     </>
   );

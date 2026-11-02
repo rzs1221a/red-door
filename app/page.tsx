@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   openGraph: { url: "/", title: "Rental Property Renovation in Fernandina Beach | Red Door Revivals", description: site.description },
 };
 
+// The address as display type, broken after the @ on phones.
+const [emailUser, emailDomain] = site.email.split("@");
+
 const homeFaqs = faqs.filter((f) => /first|designer|project plan|happening|bonded|outside the area/.test(f.q)).slice(0, 6);
 
 export default function Home() {
@@ -157,10 +160,10 @@ export default function Home() {
               <Picture photo={found.fairbanksHouse} sizes="(min-width: 768px) 48vw, 100vw" className="aspect-[4/5] overflow-hidden md:aspect-[3/4]" imgClassName="h-full object-cover object-[60%_40%]" />
             </Reveal>
             <Reveal delay={200} className="absolute -bottom-8 right-0 w-[38%] md:bottom-10 md:-left-10 md:right-auto md:w-1/3">
-              <Picture photo={found.centreStreet} sizes="(min-width: 768px) 16vw, 38vw" className="aspect-square overflow-hidden" imgClassName="h-full object-cover object-[20%_60%]" />
+              <Picture photo={found.sunrise} sizes="(min-width: 768px) 16vw, 38vw" className="aspect-square overflow-hidden" imgClassName="h-full object-cover object-[50%_55%]" />
             </Reveal>
             <p className="small mt-6 max-w-[56%] text-muted md:absolute md:bottom-0 md:left-0 md:mt-0 md:max-w-none">
-              The Fairbanks House and Centre Street, {site.city}. Pictures via Wikimedia Commons, credited below.
+              The Fairbanks House, {site.city}, and sunrise on Amelia Island. Pictures via Wikimedia Commons, credited below.
             </p>
           </div>
         </div>
@@ -178,8 +181,8 @@ export default function Home() {
               href={`mailto:${site.email}`}
               className="email-display block w-full whitespace-nowrap leading-[0.9] tracking-[-0.04em] transition-colors duration-300 hover:text-accent"
             >
-              <span className="block md:inline">will@</span>
-              <span className="block md:inline">reddoorrevivals.com</span>
+              <span className="block md:inline">{emailUser}@</span>
+              <span className="block md:inline">{emailDomain}</span>
             </a>
           </Reveal>
           <div className="mt-10 flex flex-col gap-3 small md:flex-row md:items-end md:justify-between">

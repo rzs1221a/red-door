@@ -4,11 +4,11 @@ import type { Photo } from "./projects";
 import credits from "./credits.json";
 
 export const found = {
-  centreStreet: {
-    src: "/images/found/centre-street.jpg",
+  sunrise: {
+    src: "/images/found/amelia-sunrise.jpg",
     w: 1920,
-    h: 1280,
-    alt: "Centre Street in Fernandina Beach looking east, with its brick storefronts, palms and live oaks",
+    h: 1282,
+    alt: "Sunrise over the Atlantic at Amelia Island, the sun just above the water, seen through sea oats on the dune",
   } satisfies Photo,
   fairbanksHouse: {
     src: "/images/found/fairbanks-house.jpg",
