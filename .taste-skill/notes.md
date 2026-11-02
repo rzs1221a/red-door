@@ -6,8 +6,8 @@
 2. The promise, in the client's words: "You own the property. We'll manage the project."
 3. Fernandina Beach, Amelia Island, Yulee, Nassau County: a Victorian seaside town (Centre Street
    storefronts, the Fairbanks House, the lighthouse over the marsh, live oaks, palms).
-4. 30+ years, residential and commercial. Two principals (Will Colley, Ken Parsons) working
-   together since 2000.
+4. 30+ years, residential and commercial. Three principals (Will Colley, Ken Parsons, Steve Ruddy)
+   working together since 2000.
 5. The Red Door Process: seven named steps, and the Must Do / Should Do / Could Do triage.
 6. The detailed project plan as a document: scope, materials, finishes, labor, sequence,
    responsibilities, schedule, pricing, allowances, exclusions, contingencies.
@@ -84,7 +84,7 @@ List: Who we work with (seven), each with a one-line description composed from e
 
 FAQ: Before you call · facts: phone, email, where we work, bonded and insured · six questions
 
-Contact: will@reddoorrevivals.com · "Tell us about the property and what you want it to do." · phone, city · Instagram, Facebook
+Contact: admin@reddoorrevivals.com · "Tell us about the property and what you want it to do." · phone, city · Instagram, Facebook
 
 Footer line: Renovation and project management, Fernandina Beach · links · © year · Privacy
 

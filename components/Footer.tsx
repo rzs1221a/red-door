@@ -21,7 +21,7 @@ export default function Footer({ credits = true }: { credits?: boolean }) {
       </div>
       {credits && (
         <p className="credits mt-8 max-w-none text-muted">
-          Pictures of Fernandina Beach:{" "}
+          Pictures of Fernandina Beach and Amelia Island:{" "}
           {foundCredits.map((c, i) => (
             <span key={c.file}>
               <a href={c.page} className="link text-ink">“{c.title}”</a> by {c.creator},{" "}

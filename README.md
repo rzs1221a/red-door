@@ -22,9 +22,10 @@ Netlify builds with `npm run build` and publishes `out/` (see `netlify.toml`).
 
 | What | File |
 | --- | --- |
-| Phone, email, domain, service area, leadership, awards | `lib/site.ts` |
+| Phone, email, domain, service area, leadership, awards, Florida license number | `lib/site.ts` |
 | Site copy (from the Sept 11 positioning doc) | `lib/copy.ts` |
 | Process steps (home, process page, contact) | `lib/process.ts` |
+| Process step symbols (process page, contact) | `components/StepIcons.tsx` |
 | Project photos and captions (from the Look Book) | `lib/projects.ts`, `public/images/projects/` |
 | Responsive photo sizes (generated, committed) | `public/images/projects/_r/` |
 | FAQ (composed from existing copy only) | `lib/faq.ts` |
@@ -55,13 +56,17 @@ Netlify builds with `npm run build` and publishes `out/` (see `netlify.toml`).
 - **Testimonials**: add real, attributed quotes to `lib/testimonials.ts`. The home page section appears automatically.
 - **FAQ**: edit `lib/faq.ts`. Answers should stay grounded in the positioning copy.
 - **Form fields**: change `components/ContactForm.tsx` and mirror the field in `public/__forms.html`.
-- **Found pictures**: the three Fernandina Beach pictures are Creative Commons (CC BY and CC BY-SA) from Wikimedia Commons and are credited in the footer. Keep the credit if you keep the picture.
+- **Found pictures**: the Fairbanks House, the lighthouse, and the Amelia Island sunrise are Creative Commons (CC BY and CC BY-SA) from Wikimedia Commons and are credited in the footer (`lib/credits.json`). Keep the credit if you keep the picture.
+- **Florida license**: put the GC number in `site.license.number` (`lib/site.ts`). The FAQ answer, the line beside the inquiry form, and the structured data appear on their own once it is set.
 - **Rooms behind the door**: `doorRooms` in `lib/home.ts`.
 
 ## Before launch
 
 - [ ] Florida domain chosen; update `site.url` in `lib/site.ts` and add it in Netlify
-- [ ] Florida phone and inbox; update `lib/site.ts`
+- [ ] Answer First 904 relay number; update `lib/site.ts` (Atlanta line shown until then)
+- [ ] Will to confirm admin@reddoorrevivals.com as the inbox (`lib/site.ts`, set Nov 2 per Steve)
+- [ ] Florida GC license number from the State; put it in `lib/site.ts` (nothing about licensing shows until then)
+- [ ] A bathroom photo from Red Door for the Bathroom Renovations section on `/services/` (the Look Book has none)
 - [x] Logo in `public/images/` (rendered from the vector EPS; reverse version for dark backgrounds)
 - [x] Look Book photos and trimmed video on Projects, Home, Process (`lib/projects.ts`; all Atlanta-area work)
 - [ ] Florida project photos, especially before/after, as projects complete

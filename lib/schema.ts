@@ -29,6 +29,16 @@ export function organization() {
     areaServed: site.serviceArea.map((name) => ({ "@type": "Place", name: `${name}, FL` })),
     founder: site.leadership.map((p) => ({ "@type": "Person", name: p.name, jobTitle: p.title })),
     award: site.awards.map((a) => `${a.name}, ${a.by}`),
+    ...(site.license.number
+      ? {
+          hasCredential: {
+            "@type": "EducationalOccupationalCredential",
+            credentialCategory: "license",
+            name: `${site.license.state} ${site.license.type}`,
+            identifier: site.license.number,
+          },
+        }
+      : {}),
     knowsAbout: services.map((s) => s.title),
     sameAs: [site.atlantaUrl, site.social.facebook, site.social.instagram],
   };

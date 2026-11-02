@@ -17,9 +17,12 @@ export const metadata = pageMeta({
 });
 
 // One lit photograph per service, text beside it, sides alternating.
+// Rental shows a bright, turnkey kitchen rather than a living room (Steve, Nov 2).
+// Bathrooms has no picture yet: the Look Book holds no bathroom photo. Add one from Red Door.
 const photos: Record<string, (typeof residential.gallery)[number] | undefined> = {
-  rental: residential.gallery[5],
-  investment: residential.gallery[0],"whole-property": residential.gallery[8],
+  rental: residential.gallery[10],
+  investment: residential.gallery[0],
+  "whole-property": residential.gallery[8],
   kitchens: residential.gallery[4],
   bathrooms: undefined,
 };
@@ -40,8 +43,8 @@ export default function Services() {
           </ul>
         </div>
         <Reveal className="shutter" data-rise style={{ "--i": 2 } as React.CSSProperties}>
-          <Picture photo={residential.gallery[5]} sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[4/3] overflow-hidden" imgClassName="h-full object-cover" priority />
-          <p className="small mt-3 text-muted">A living room in a Red Door project, {region}.</p>
+          <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[4/3] overflow-hidden" imgClassName="h-full object-cover" priority />
+          <p className="small mt-3 text-muted">A kitchen in a Red Door project, {region}.</p>
         </Reveal>
       </section>
 
@@ -92,8 +95,8 @@ export default function Services() {
 
       <section className="wrap mt-section grid12 items-end">
         <Reveal className="shutter col-span-12 md:col-span-7">
-          <Picture photo={found.centreStreet} sizes="(min-width: 768px) 58vw, 100vw" className="aspect-[16/10] overflow-hidden" imgClassName="h-full object-cover object-[50%_55%]" />
-          <p className="small mt-3 text-muted">Centre Street, Fernandina Beach. Picture via Wikimedia Commons, credited below.</p>
+          <Picture photo={found.sunrise} sizes="(min-width: 768px) 58vw, 100vw" className="aspect-[16/10] overflow-hidden" imgClassName="h-full object-cover object-[50%_60%]" />
+          <p className="small mt-3 text-muted">Sunrise on Amelia Island. Picture via Wikimedia Commons, credited below.</p>
         </Reveal>
         <Reveal delay={120} className="col-span-12 mt-8 md:col-span-4 md:col-start-9 md:mt-0">
           <p className="lead">Tell us about the property. We’ll tell you what we’d do first.</p>

@@ -1,17 +1,13 @@
 import ContactForm from "@/components/ContactForm";
 import JsonLd from "@/components/JsonLd";
 import FAQ from "@/components/FAQ";
-import { site } from "@/lib/site";
+import StepIcon from "@/components/StepIcons";
+import { licenseLine, site } from "@/lib/site";
 import { steps } from "@/lib/process";
-import { faqs } from "@/lib/faq";
+import { faqsContact } from "@/lib/faq";
 import { pageMeta } from "@/lib/seo";
-import { breadcrumbs, contactPage, graph } from "@/lib/schema";
-import Picture from "@/components/Picture";
+import { breadcrumbs, contactPage, faqPage, graph } from "@/lib/schema";
 import Reveal, { RevealGroup } from "@/components/Reveal";
-import { found } from "@/lib/found";
-import { region, residential } from "@/lib/projects";
-
-const stepPhotos = [residential.gallery[0], residential.feature.before, residential.gallery[3]];
 
 export const metadata = pageMeta({
   title: "Request a consultation",
@@ -21,9 +17,8 @@ export const metadata = pageMeta({
   imageAlt: "Living room with a fireplace, Red Door project",
 });
 
-const contactFaqs = faqs.filter((f) => /first|outside the area|Where do you work/.test(f.q));
-
 export default function Contact() {
+  const license = licenseLine();
   return (
     <>
       <section className="wrap grid12 pt-10 md:pt-16">
@@ -32,6 +27,7 @@ export default function Contact() {
           <p className="lead mt-8 text-muted" data-rise style={{ "--i": 1 } as React.CSSProperties}>
             {steps[0].intro[0]} {steps[0].listLead}
           </p>
+          {/* The facts owners check first: how to reach us, where we work, and the protections in place. */}
           <ul className="mt-10 space-y-1" data-rise style={{ "--i": 2 } as React.CSSProperties}>
             <li>
               <a href={`tel:${site.phone.tel}`} className="link inline-block py-2.5">{site.phone.display}</a>
@@ -40,48 +36,40 @@ export default function Contact() {
               <a href={`mailto:${site.email}`} className="link inline-block py-2.5">{site.email}</a>
             </li>
             <li>{site.serviceArea.join(", ")}, Florida</li>
+            <li>Bonded and insured</li>
+            {license && <li>{license}</li>}
           </ul>
-          <Reveal className="mt-12 grid grid-cols-2 gap-2">
-            <Picture photo={found.fairbanksHouse} sizes="20vw" className="aspect-[4/5] overflow-hidden" imgClassName="h-full object-cover object-[60%_30%]" />
-            <Picture photo={residential.feature.after} sizes="20vw" className="aspect-[4/5] overflow-hidden" imgClassName="h-full object-cover object-[40%_top]" />
-          </Reveal>
-          <p className="small mt-3 text-muted">The Fairbanks House, {site.city}, and Historic Marietta, a Red Door project in the {region}.</p>
           <p className="mt-12" data-rise style={{ "--i": 3 } as React.CSSProperties}>What happens next</p>
-          <RevealGroup as="ol" className="mt-3 max-w-[44ch] space-y-4 text-muted" stagger={90}>
-            {steps.slice(0, 3).map((s, i) => (
-              <li key={s.title} className="grid grid-cols-[72px_1fr] items-start gap-4">
-                <Picture photo={stepPhotos[i]} sizes="72px" className="aspect-square overflow-hidden" imgClassName="h-full object-cover" />
-                <span>
+          <RevealGroup as="ol" className="mt-4 max-w-[44ch] space-y-4 text-muted" stagger={70}>
+            {steps.map((s, i) => (
+              <li key={s.title} className="grid grid-cols-[44px_1fr] items-start gap-4">
+                <span className="flex size-11 items-center justify-center bg-surface text-ink" aria-hidden="true">
+                  <StepIcon index={i} size={22} />
+                </span>
+                <span className="pt-2">
                   <span className="text-ink">{s.title}.</span> {s.short}
                 </span>
               </li>
             ))}
           </RevealGroup>
-          <p className="small mt-3 text-muted">Red Door projects, {region}.</p>
         </div>
         <Reveal variant="fade" className="col-span-12 mt-12 md:col-span-6 md:col-start-7 md:mt-0">
           <ContactForm />
         </Reveal>
       </section>
 
-      <section className="wrap mt-section" aria-label="Fernandina Beach">
-        <Reveal className="shutter">
-          <Picture photo={found.centreStreet} sizes="100vw" className="aspect-[21/9] overflow-hidden" imgClassName="h-full object-cover object-[50%_55%]" />
-        </Reveal>
-        <p className="small mt-3 text-muted">Centre Street, {site.city}. Picture via Wikimedia Commons, credited below.</p>
-      </section>
-
-      <section className="wrap mt-section grid12">
+      <section className="wrap mt-section grid12" aria-labelledby="faq-h">
         <Reveal className="col-span-12 md:col-span-4">
-          <h2 className="head">Before we talk</h2>
-          <Picture photo={residential.gallery[3]} sizes="(min-width: 768px) 30vw, 100vw" className="mt-8 aspect-[4/3] overflow-hidden" imgClassName="h-full object-cover" />
-          <p className="small mt-3 text-muted">Kitchen, a Red Door project in the {region}.</p>
+          <h2 id="faq-h" className="head">Frequently asked questions</h2>
+          <p className="mt-6 max-w-[30ch] text-muted">
+            Not answered here? Call <a href={`tel:${site.phone.tel}`} className="link text-ink">{site.phone.display}</a>.
+          </p>
         </Reveal>
         <Reveal className="col-span-12 mt-8 md:col-span-7 md:col-start-6 md:mt-0">
-          <FAQ items={contactFaqs} />
+          <FAQ items={faqsContact} />
         </Reveal>
       </section>
-      <JsonLd data={graph(breadcrumbs([{ name: "Contact", path: "/contact/" }]), contactPage())} />
+      <JsonLd data={graph(breadcrumbs([{ name: "Contact", path: "/contact/" }]), contactPage(), faqPage(faqsContact))} />
     </>
   );
 }

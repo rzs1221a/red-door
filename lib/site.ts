@@ -12,10 +12,16 @@ export const site = {
   description:
     "Renovation, restoration, and turnkey project management for rental owners and residential investors in Fernandina Beach and Amelia Island. 30+ years of residential and commercial experience.",
 
-  // CONFIRM: Florida phone. This is the Atlanta main line from reddoorrevivals.com.
+  // CONFIRM: Florida phone. This is the Atlanta main line from reddoorrevivals.com; the Answer First
+  // 904 relay number replaces it when issued (Steve, Nov 2).
   phone: { display: "404.319.8088", tel: "+14043198088" },
-  // CONFIRM: Florida inbox (Will's address on reddoorrevivals.com). Form submissions go to Netlify.
-  email: "will@reddoorrevivals.com",
+  // Florida inbox, per Steve (Nov 2); Will to confirm. Form submissions go to Netlify.
+  email: "admin@reddoorrevivals.com",
+
+  // Florida general contractor license. Leave `number` empty until the State registration is
+  // issued: the FAQ answer, the line beside the inquiry form, and the structured data all appear
+  // only when it is set, so nothing claims a license before there is one.
+  license: { state: "Florida", type: "Certified General Contractor", number: "" as string },
 
   // CONFIRM: street address for Google Business Profile, or service-area only.
   // CONFIRM: the package names Fernandina Beach only; Amelia Island, Yulee, and Nassau County are unconfirmed.
@@ -35,6 +41,7 @@ export const site = {
   leadership: [
     { name: "Will Colley", title: "Principal" },
     { name: "Ken Parsons", title: "Principal" },
+    { name: "Steve Ruddy", title: "Principal" },
   ],
 
   awards: [
@@ -42,6 +49,10 @@ export const site = {
     { name: "Commercial Renovation of the Year", by: "Roswell Historical Society" },
   ],
 } as const;
+
+/** The license line, once the number is on file. */
+export const licenseLine = () =>
+  site.license.number ? `${site.license.state} ${site.license.type}, license ${site.license.number}` : null;
 
 export const nav = [
   { href: "/services/", label: "What we do" },
