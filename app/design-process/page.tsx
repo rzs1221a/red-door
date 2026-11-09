@@ -41,7 +41,7 @@ export default function DesignProcess() {
             <li key={s.title}>
               <Reveal className="grid grid-cols-[56px_1fr] gap-5 sm:grid-cols-[72px_1fr] sm:gap-6">
                 <div>
-                  <span className="flex size-14 items-center justify-center bg-surface text-ink" aria-hidden="true">
+                  <span className="flex size-14 items-center justify-center bg-accent text-accent-ink" aria-hidden="true">
                     <StepIcon index={i} size={28} />
                   </span>
                   <span className="small mt-2 block text-muted tabular-nums">{String(i + 1).padStart(2, "0")}</span>

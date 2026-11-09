@@ -43,7 +43,7 @@ export default function Contact() {
           <RevealGroup as="ol" className="mt-4 max-w-[44ch] space-y-4 text-muted" stagger={70}>
             {steps.map((s, i) => (
               <li key={s.title} className="grid grid-cols-[44px_1fr] items-start gap-4">
-                <span className="flex size-11 items-center justify-center bg-surface text-ink" aria-hidden="true">
+                <span className="flex size-11 items-center justify-center bg-accent text-accent-ink" aria-hidden="true">
                   <StepIcon index={i} size={22} />
                 </span>
                 <span className="pt-2">
